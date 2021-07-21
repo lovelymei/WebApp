@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AspNetCoreValidationLibrary;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuthorizationService.Dto
 {

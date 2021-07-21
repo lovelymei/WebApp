@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AuthorizationService.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace AuthorizationService

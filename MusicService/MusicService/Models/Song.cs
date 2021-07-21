@@ -63,14 +63,12 @@ namespace MusicService.Models
         /// </summary>
         public virtual Performer Performer { get; set; }
 
-        /// <summary>
-        /// Слушатель
-        /// </summary>
-        public virtual Listener Listener { get; set; }
+
+        //public virtual Listener Listener { get; set; }
 
         public Song()
         {
-            Listeners = new List<Listener>();
+            //Listeners = new List<Listener>();
             IsDeleted = false;
         }
 

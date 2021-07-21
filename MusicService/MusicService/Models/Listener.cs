@@ -22,16 +22,6 @@ namespace MusicService.Models
         public Guid ListenerId { get; set; }
 
         /// <summary>
-        /// Имя
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Фамилия
-        /// </summary>
-        public string Surname { get; set; }
-
-        /// <summary>
         /// Дата рождения
         /// </summary>
         public DateTime BirthDate { get; set; }
@@ -40,8 +30,6 @@ namespace MusicService.Models
         /// Добавленные песни
         /// </summary>
         public List<Song> Songs { get; set; }
-
-        public virtual List<Performer> Performers { get; set; }
 
         /// <summary>
         /// Добавленные альбомы

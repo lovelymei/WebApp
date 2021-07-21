@@ -1,6 +1,7 @@
 ﻿using AuthorizationService.Certificates;
 using AuthorizationService.Dto;
 using AuthorizationService.Models;
+using AuthorizationService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -99,7 +100,7 @@ namespace AuthorizationService.Controllers
         public async Task<ActionResult<RefreshToken[]>> GetAll()
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens();
-            if (tokens.Count == 0) return NoContent();
+            //if (tokens.Count == 0) return NoContent();
             return Ok(tokens);
         }
 
@@ -115,7 +116,7 @@ namespace AuthorizationService.Controllers
         public async Task<ActionResult<RefreshToken[]>> GetAll(Guid accountId)
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens(accountId);
-            if (tokens.Count == 0) return NoContent();
+            //if (tokens.Count == 0) return NoContent();
             return Ok(tokens);
         }
 

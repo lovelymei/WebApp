@@ -1,3 +1,4 @@
+using AuthorizationService.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,8 +28,8 @@ namespace AuthorizationService
             services.AddDbContext<AuthorizationDbContext>(options =>
                 options.UseSqlServer(connection));
 
-            services.AddScoped<IAccounts, AccountsInSQlRepository>();
-            services.AddScoped<IRefreshTokens, RefreshTokensInSqlRepository>();
+            //services.AddScoped<IAccounts, AccountsInSQlRepository>();
+            //services.AddScoped<IRefreshTokens, RefreshTokensInSqlRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

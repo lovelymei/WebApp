@@ -11,11 +11,8 @@ namespace MusicService.Models
     {
         public Performer()
         {
-            //  Listeners = new List<Listener>();
             Songs = new List<Song>();
-            IsDeleted = false;
         }
-
 
         /// <summary>
         /// Дата рождения
@@ -26,8 +23,6 @@ namespace MusicService.Models
         /// Песни
         /// </summary>
         public virtual List<Song> Songs { get; set; }
-
-        // public virtual List<Listener> Listeners { get; set; }
 
         /// <summary>
         /// Альбомы
