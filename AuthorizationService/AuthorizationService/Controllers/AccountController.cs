@@ -1,9 +1,11 @@
 ﻿using AuthorizationService.Dto;
+using AuthorizationService.Extensions;
 using AuthorizationService.Models;
 using AuthorizationService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,10 +18,12 @@ namespace AuthorizationService.Controllers
     [ProducesResponseType(StatusCodes.Status200OK)]
     public class AccountController : Controller
     {
+        private readonly AuthorizationDbContext _db;
         private readonly IAccounts _accounts;
 
-        public AccountController(IAccounts accounts)
+        public AccountController(IAccounts accounts, AuthorizationDbContext db)
         {
+            _db = db;
             _accounts = accounts;
         }
 
@@ -28,7 +32,7 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("all")]
-
+        //[AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AccountDto>>> GetAllAccounts()
         {
@@ -42,6 +46,7 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("allDeleted")]
+        [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AccountDto>>> GetAllDeletedAccounts()
         {
@@ -55,7 +60,7 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <param name="id">Идентификатор</param>
         /// <returns></returns>
-        [HttpGet("current")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AccountDto>> GetCurrentAccount(Guid id)
         {
@@ -104,6 +109,21 @@ namespace AuthorizationService.Controllers
             return createdPerformer;
         }
 
+
+        /// <summary>
+        /// Создать новый аккаунт для админа
+        /// </summary>
+        /// <param name="adminCreateDto"> Данные исполнителя </param>
+        /// <returns></returns>
+        [HttpPost("admin")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AccountDto>> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
+        {
+            var createdPerformer = await _accounts.RegisterAdminAccount(adminCreateDto);
+            return createdPerformer;
+        }
+
+
         /// <summary>
         /// Обновить аккаунт
         /// </summary>
@@ -111,7 +131,6 @@ namespace AuthorizationService.Controllers
         /// <param name="accounCreateDto"> Данные для обновления </param>
         /// <returns></returns>
         [HttpPut]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<bool>> UpdateAccount(Guid id, [FromBody] AccountCreateDto accounCreateDto)
         {
@@ -123,15 +142,33 @@ namespace AuthorizationService.Controllers
         /// <summary>
         /// Восстановить аккаунт
         /// </summary>
-        /// <param name="id"> Идентификатор </param>
+        /// <param name="deletedAccountId "> Идентификатор </param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPost("{deletedAccountId}")]
+        [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> RestoreAccount(Guid id)
+        public async Task<ActionResult<bool>> RestoreAccount(Guid deletedAccountId)
         {
-            var isRestored = await _accounts.RestoreAccount(id);
+            var isRestored = await _accounts.RestoreAccount(deletedAccountId);
 
             return Ok(isRestored);
+        }
+
+
+        /// <summary>
+        /// Создание ролей (временный метод!!!)
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("roles")]
+        public async Task<ActionResult> CreateRoles()
+        {
+            await _db.Roles.AddAsync(new Role { Name = "listener" });
+            await _db.Roles.AddAsync(new Role { Name = "performer" });
+            await _db.Roles.AddAsync(new Role { Name = "administrator" });
+            await _db.SaveChangesAsync();
+            await _db.DisposeAsync();
+
+            return Ok();
         }
     }
 }

@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace AuthorizationService.Dto
 {
-    public class AccountDto
+    public class AccountDtoForAuthorization
     {
-        public AccountDto(Account account)
+        public AccountDtoForAuthorization(Account account)
         {
+            Id = account.AccountId;
             NickName = account.NickName;
-            RoleId = account.RoleId;
+            RoleName = account.Role.Name;
         }
 
+        public Guid Id { get; set; }
         public string NickName { get; set; }
-        public Guid RoleId { get; set; }
-
+        public string RoleName { get; set; }
     }
 }

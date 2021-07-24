@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AuthorizationService.Services
 {
-    public abstract class AccountsInSQlRepository : IAccounts
+    public class AccountsInSQlRepository : IAccounts
     {
         private readonly AuthorizationDbContext _db;
         private readonly ILogger<AccountsInSQlRepository> _logger;
@@ -92,6 +92,14 @@ namespace AuthorizationService.Services
             return performerAccountDto;
         }
 
+        public async Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto)
+        {
+            Role accountRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "administrator");
+            var adminAccountDto = await CreateAccount(accountCreateDto, accountRole);
+
+            return adminAccountDto;
+        }
+
 
         public async Task<bool> UpdateAccount(Guid id, AccountCreateDto accountCreateDto)
         {
@@ -102,10 +110,15 @@ namespace AuthorizationService.Services
             var salt = GenerateSalt();
             var enteredPassHash = accountCreateDto.Password.ToPasswordHash(salt);
 
+            Login newLoginModel = new Login()
+            {
+                Email = accountCreateDto.Email,
+                Salt = Convert.ToBase64String(salt),
+                PasswordHash = Convert.ToBase64String(enteredPassHash),
+            };
+
             account.NickName = accountCreateDto.NickName;
-            account.Login.Email = accountCreateDto.Email;
-            account.Login.Salt = Convert.ToBase64String(salt);
-            account.Login.PasswordHash = Convert.ToBase64String(enteredPassHash);
+            account.Login = newLoginModel;
 
             _db.Accounts.Update(account);
             await _db.SaveChangesAsync();
@@ -168,13 +181,15 @@ namespace AuthorizationService.Services
 
         public async Task<Account> Authenticate(string email, string password)
         {
-            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.Login.Email == email);
+            var login = await _db.Logins.FirstOrDefaultAsync(c => c.Email == email);
 
-            if (account == null) return null;
+            if (login == null) return null;
 
-            var enteredPassHash = password.ToPasswordHash(Convert.FromBase64String(account.Login.Salt));
+            var enteredPassHash = password.ToPasswordHash(Convert.FromBase64String(login.Salt));
 
-            var isValid = Convert.ToBase64String(enteredPassHash) == account.Login.PasswordHash;
+            var isValid = Convert.ToBase64String(enteredPassHash) == login.PasswordHash;
+
+            var account = await _db.Accounts.Include(p => p.Role).FirstOrDefaultAsync(c => c.AccountId == login.AccountId);
 
             return isValid ? account : null;
 

@@ -13,14 +13,14 @@ namespace AuthorizationService
         public AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options)
             : base(options)
         {
-            ////при изменении бд
+            //при изменении бд
             //Database.EnsureDeleted();
             //Database.EnsureCreated();
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Login> Login { get; set; }
+        public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         internal object GetCollection<T>()
         {
@@ -36,12 +36,12 @@ namespace AuthorizationService
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasOne(e => e.Role)
                     .WithMany(e => e.Accounts)
-                    .HasForeignKey(e => e.RoleId)
-                    .HasConstraintName("Role/Accounts");
+                    .HasForeignKey(e => e.RoleId);
 
                 entity.HasOne(c => c.Login)
                     .WithOne(c => c.Account);
@@ -73,6 +73,15 @@ namespace AuthorizationService
                     .HasMaxLength(100)
                     .IsRequired();
             });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasOne(p => p.Account)
+                    .WithMany(p => p.RefreshTokens)
+                    .HasForeignKey(p => p.AccountId);
+            });
+
+         
 
             OnModelCreatingPartial(modelBuilder);
         }

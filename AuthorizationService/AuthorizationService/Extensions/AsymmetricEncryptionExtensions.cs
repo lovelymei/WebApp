@@ -15,12 +15,10 @@ namespace AuthorizationService.Extensions
             var issuerSigningCertificate = new SigningIssuerCertificate(config);
             RsaSecurityKey issuerSingningKey = await issuerSigningCertificate.GetIssuerSigningKey();
 
-            services.AddAuthentication(authOptions =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
             {
-                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
+                options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {

@@ -1,5 +1,6 @@
 ﻿using AuthorizationService.Certificates;
 using AuthorizationService.Dto;
+using AuthorizationService.Extensions;
 using AuthorizationService.Models;
 using AuthorizationService.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +41,6 @@ namespace AuthorizationService.Controllers
         /// <response code="500">Внутренняя ошибка сервера</response>
         [HttpPost("signin")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [AllowAnonymous]
         public async Task<ActionResult<TokenDto>> CreateToken([FromBody] SignIn signIn)
         {
             var account = await _accounts.Authenticate(signIn.Email, signIn.Password);
@@ -51,7 +51,7 @@ namespace AuthorizationService.Controllers
 
             var refresh = await _refreshTokens.CreateRefreshToken(account, 864000); //TODO В конфиг
 
-            var token = await BuildToken(account, refresh.RefreshTokenId, expiresSec);
+            var token = await BuildToken(new AccountDtoForAuthorization(account), refresh.RefreshTokenId, expiresSec);
 
             return Ok(token);
         }
@@ -65,7 +65,6 @@ namespace AuthorizationService.Controllers
         [HttpPost("refreshId={id}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [AllowAnonymous]
         public async Task<ActionResult<TokenDto>> RefreshToken(Guid id)
         {
             //var tokenIp = HttpContext.User.GetAccountLastIp();
@@ -83,7 +82,7 @@ namespace AuthorizationService.Controllers
             var account = await _accounts.GetAccount(newRefreshToken.AccountId);
             if (account == null) return Forbid();
 
-            var token = await BuildToken(account, newRefreshToken.RefreshTokenId, expiresSec);
+            var token = await BuildToken(new AccountDtoForAuthorization(account), newRefreshToken.RefreshTokenId, expiresSec);
             return Ok(token);
         }
 
@@ -94,6 +93,7 @@ namespace AuthorizationService.Controllers
         /// <response code = "204" > Список RefreshToken пуст</response>
 
         [HttpGet]
+        [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         //[AuthorizeEnum(Roles.Administrator, Roles.SuperAdministrator)]
@@ -110,6 +110,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         /// <response code="204">Список RefreshToken пуст</response>
         [HttpGet("accountId={accountId}")]
+        [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         //[AuthorizeEnum(Roles.Administrator, Roles.SuperAdministrator)]
@@ -126,7 +127,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpDelete("tokenId={tokenId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[AuthorizeEnum(Roles.Administrator, Roles.SuperAdministrator)]
+        [AuthorizeEnum(Roles.administratior)]
         public async Task<ActionResult<RefreshToken[]>> DeleteToken(Guid tokenId)
         {
             bool isDeleted = await _refreshTokens.DeleteRefreshToken(tokenId);
@@ -139,14 +140,14 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpDelete("accountId={accountId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[AuthorizeEnum(Roles.Administrator, Roles.SuperAdministrator)]
+        [AuthorizeEnum(Roles.administratior)]
         public ActionResult<RefreshToken[]> DeleteTokensForAccount(Guid accountId)
         {
             //_refreshTokens.DeleteRefreshTokensForAccount(accountId);
             return Ok();
         }
 
-        private async Task<TokenDto> BuildToken(Account account, Guid refreshId, int expiresSec)
+        private async Task<TokenDto> BuildToken(AccountDtoForAuthorization account, Guid refreshId, int expiresSec)
         {
             //время создания токена
             var expiresDt = GetCurrentDtFunc.Invoke().AddSeconds(expiresSec);
@@ -154,8 +155,8 @@ namespace AuthorizationService.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, account.NickName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, account.Role.ToString()),
-                new Claim(ClaimTypes.PrimarySid, account.AccountId.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, account.RoleName.ToString()),
+                new Claim(ClaimTypes.PrimarySid, account.Id.ToString()),
             };
 
             SigningAudienceCertificate signingAudienceCertificate = new SigningAudienceCertificate(_config);
