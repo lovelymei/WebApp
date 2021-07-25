@@ -18,9 +18,9 @@
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.GetCurrentAccount(System.Guid)">
             <summary>
-            Получить текущий аккаунт
+            Получить аккаунт по id
             </summary>
-            <param name="id">Идентификатор</param>
+            <param name = "id">Идентификатор</param>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.DeleteAccount(System.Guid)">
@@ -68,7 +68,7 @@
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.CreateRoles">
             <summary>
-            Временный метод !!!
+            Создание ролей (временный метод!!!)
             </summary>
             <returns></returns>
         </member>
@@ -115,7 +115,7 @@
         </member>
         <member name="P:AuthorizationService.Dto.AccountCreateDto.NickName">
             <summary>
-            псевдоним
+            имя
             </summary>
         </member>
         <member name="P:AuthorizationService.Dto.AccountCreateDto.Email">
@@ -124,6 +124,16 @@
             </summary>
         </member>
         <member name="P:AuthorizationService.Dto.AccountCreateDto.Password">
+            <summary>
+            пароль
+            </summary>
+        </member>
+        <member name="P:AuthorizationService.Dto.SignIn.Email">
+            <summary>
+            почта
+            </summary>
+        </member>
+        <member name="P:AuthorizationService.Dto.SignIn.Password">
             <summary>
             пароль
             </summary>

@@ -40,9 +40,7 @@ namespace AuthorizationService.Services
 
         public async Task<Account> GetAccount(Guid id)
         {
-            var accounts = await _db.Accounts.ToListAsync();
-
-            var account = accounts.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == false);
+            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == id && c.IsDeleted == false);
 
             if (account == null) return null;
 
@@ -104,23 +102,22 @@ namespace AuthorizationService.Services
         public async Task<bool> UpdateAccount(Guid id, AccountCreateDto accountCreateDto)
         {
             var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == id);
+            var login = await _db.Logins.FirstOrDefaultAsync(c => c.AccountId == id);
 
-            if (account == null) return false;
+
+            if (account == null || login == null) return false;
 
             var salt = GenerateSalt();
             var enteredPassHash = accountCreateDto.Password.ToPasswordHash(salt);
 
-            Login newLoginModel = new Login()
-            {
-                Email = accountCreateDto.Email,
-                Salt = Convert.ToBase64String(salt),
-                PasswordHash = Convert.ToBase64String(enteredPassHash),
-            };
+            login.Email = accountCreateDto.Email;
+            login.Salt = Convert.ToBase64String(salt);
+            login.PasswordHash = Convert.ToBase64String(enteredPassHash);
 
             account.NickName = accountCreateDto.NickName;
-            account.Login = newLoginModel;
 
             _db.Accounts.Update(account);
+            _db.Logins.Update(login);
             await _db.SaveChangesAsync();
             await _db.DisposeAsync();
 
@@ -189,7 +186,7 @@ namespace AuthorizationService.Services
 
             var isValid = Convert.ToBase64String(enteredPassHash) == login.PasswordHash;
 
-            var account = await _db.Accounts.Include(p => p.Role).FirstOrDefaultAsync(c => c.AccountId == login.AccountId);
+            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == login.AccountId);
 
             return isValid ? account : null;
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace AuthorizationService.Controllers
@@ -56,13 +57,13 @@ namespace AuthorizationService.Controllers
 
 
         /// <summary>
-        /// Получить текущий аккаунт
+        /// Получить аккаунт по id
         /// </summary>
-        /// <param name="id">Идентификатор</param>
+        /// <param name = "id">Идентификатор</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountDto>> GetCurrentAccount(Guid id)
+        public async Task<ActionResult<AccountDto>> GetCurrentAccount([Required] Guid id)
         {
             var account = await _accounts.GetAccount(id);
             if (account == null) return NotFound();
@@ -77,7 +78,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeleteAccount(Guid id)
+        public async Task<ActionResult> DeleteAccount([Required] Guid id)
         {
             var isDeleted = await _accounts.DeleteAccount(id);
             return isDeleted ? Ok() : NotFound();
@@ -132,7 +133,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> UpdateAccount(Guid id, [FromBody] AccountCreateDto accounCreateDto)
+        public async Task<ActionResult<bool>> UpdateAccount([Required] Guid id, [FromBody] AccountCreateDto accounCreateDto)
         {
             var isUpdated = await _accounts.UpdateAccount(id, accounCreateDto);
 
@@ -147,7 +148,7 @@ namespace AuthorizationService.Controllers
         [HttpPost("{deletedAccountId}")]
         [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> RestoreAccount(Guid deletedAccountId)
+        public async Task<ActionResult<bool>> RestoreAccount([Required] Guid deletedAccountId)
         {
             var isRestored = await _accounts.RestoreAccount(deletedAccountId);
 

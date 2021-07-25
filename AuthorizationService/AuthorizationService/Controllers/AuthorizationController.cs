@@ -67,14 +67,6 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<TokenDto>> RefreshToken(Guid id)
         {
-            //var tokenIp = HttpContext.User.GetAccountLastIp();
-            //var currentIp = HttpContext.Connection.RemoteIpAddress.ToString();
-
-            //if (tokenIp != HttpContext.Connection.RemoteIpAddress.ToString())
-            //{
-            //    _log.Warn($"Client ip address does not match the address in the JWT. jwt ip=[{tokenIp}] current=[{currentIp}]");
-            //}
-
             var expiresSec = int.Parse(_config["Jwt:ExpiresSec"]);
             var newRefreshToken = await _refreshTokens.ReCreateRefreshToken(id, 864000); //TODO В конфиг
             if (newRefreshToken == null) return Unauthorized();
@@ -96,11 +88,12 @@ namespace AuthorizationService.Controllers
         [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[AuthorizeEnum(Roles.Administrator, Roles.SuperAdministrator)]
         public async Task<ActionResult<RefreshToken[]>> GetAll()
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens();
-            //if (tokens.Count == 0) return NoContent();
+
+            if (tokens.Count == 0) return NoContent();
+
             return Ok(tokens);
         }
 
@@ -113,11 +106,12 @@ namespace AuthorizationService.Controllers
         [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[AuthorizeEnum(Roles.Administrator, Roles.SuperAdministrator)]
         public async Task<ActionResult<RefreshToken[]>> GetAll(Guid accountId)
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens(accountId);
-            //if (tokens.Count == 0) return NoContent();
+
+            if (tokens.Count == 0) return NoContent();
+
             return Ok(tokens);
         }
 
@@ -141,10 +135,10 @@ namespace AuthorizationService.Controllers
         [HttpDelete("accountId={accountId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [AuthorizeEnum(Roles.administratior)]
-        public ActionResult<RefreshToken[]> DeleteTokensForAccount(Guid accountId)
+        public async Task<ActionResult> DeleteTokensForAccount(Guid accountId)
         {
-            //_refreshTokens.DeleteRefreshTokensForAccount(accountId);
-            return Ok();
+            bool isDeleted = await _refreshTokens.DeleteRefreshTokensForAccount(accountId);
+            return isDeleted ? Ok() : NoContent();
         }
 
         private async Task<TokenDto> BuildToken(AccountDtoForAuthorization account, Guid refreshId, int expiresSec)

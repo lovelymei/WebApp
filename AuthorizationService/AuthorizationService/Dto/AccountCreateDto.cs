@@ -6,7 +6,7 @@ namespace AuthorizationService.Dto
     public class AccountCreateDto
     {
         /// <summary>
-        /// псевдоним
+        /// имя
         /// </summary>
         [Required]
         [Length(MinLen = 1, MaxLen = 100, ErrMes = "must be in range")]

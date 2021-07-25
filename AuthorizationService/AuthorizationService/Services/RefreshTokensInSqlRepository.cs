@@ -59,7 +59,7 @@ namespace AuthorizationService.Services
             await _db.RefreshTokens.AddAsync(entity);
             _db.RefreshTokens.Remove(prevRefreshToken);
             await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+           // await _db.DisposeAsync();
 
             return entity;
         }
@@ -77,9 +77,17 @@ namespace AuthorizationService.Services
             return true;
         }
 
-        public async Task DeleteRefreshTokensForAccount(Guid accountId)
+        public async Task<bool> DeleteRefreshTokensForAccount(Guid accountId)
         {
-            await Task.CompletedTask;
+            var refreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(t => t.AccountId == accountId);
+
+            if (refreshToken == null) return false;
+
+            _db.RefreshTokens.Remove(refreshToken);
+            await _db.SaveChangesAsync();
+            await _db.DisposeAsync();
+
+            return true;
         }
 
         public async Task<List<RefreshTokenDto>> GetAllRefreshTokens()
