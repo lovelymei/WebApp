@@ -22,8 +22,8 @@ namespace AuthorizationService.Extensions
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
@@ -31,7 +31,7 @@ namespace AuthorizationService.Extensions
                     ValidAudience = config["Jwt:Issuer"],
                     IssuerSigningKey = issuerSingningKey
                 };
-            });
+            });     
             return services;
         }
     }

@@ -85,7 +85,7 @@ namespace AuthorizationService.Controllers
         }
 
         /// <summary>
-        /// Создать новый аккаунт для слушателя
+        /// Создать аккаунт для слушателя
         /// </summary>
         /// <param name="listenerCreateDto"> Данные слушателя </param>
         /// <returns></returns>
@@ -98,7 +98,7 @@ namespace AuthorizationService.Controllers
         }
 
         /// <summary>
-        /// Создать новый аккаунт для исполнителя
+        /// Создать аккаунт для исполнителя
         /// </summary>
         /// <param name="performerCreateDto"> Данные исполнителя </param>
         /// <returns></returns>
@@ -112,7 +112,7 @@ namespace AuthorizationService.Controllers
 
 
         /// <summary>
-        /// Создать новый аккаунт для админа
+        /// Создать аккаунт для админа
         /// </summary>
         /// <param name="adminCreateDto"> Данные исполнителя </param>
         /// <returns></returns>
@@ -155,21 +155,5 @@ namespace AuthorizationService.Controllers
             return Ok(isRestored);
         }
 
-
-        /// <summary>
-        /// Создание ролей (временный метод!!!)
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("roles")]
-        public async Task<ActionResult> CreateRoles()
-        {
-            await _db.Roles.AddAsync(new Role { Name = "listener" });
-            await _db.Roles.AddAsync(new Role { Name = "performer" });
-            await _db.Roles.AddAsync(new Role { Name = "administrator" });
-            await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
-
-            return Ok();
-        }
     }
 }

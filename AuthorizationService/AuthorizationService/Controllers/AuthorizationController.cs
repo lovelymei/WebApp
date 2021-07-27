@@ -85,7 +85,7 @@ namespace AuthorizationService.Controllers
         /// <response code = "204" > Список RefreshToken пуст</response>
 
         [HttpGet]
-        [AuthorizeEnum(Roles.administratior)]
+        [AuthorizeEnum(Roles.listener)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<RefreshToken[]>> GetAll()
@@ -149,7 +149,7 @@ namespace AuthorizationService.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, account.NickName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, account.RoleName.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, account.Role),
                 new Claim(ClaimTypes.PrimarySid, account.Id.ToString()),
             };
 

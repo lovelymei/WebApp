@@ -6,7 +6,7 @@ namespace AuthorizationService
 {
     public partial class AuthorizationDbContext : DbContext
     {
-        public AuthorizationDbContext()
+        public AuthorizationDbContext() 
         {
 
         }
@@ -19,7 +19,6 @@ namespace AuthorizationService
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         internal object GetCollection<T>()
@@ -38,10 +37,7 @@ namespace AuthorizationService
         {
 
             modelBuilder.Entity<Account>(entity =>
-            {
-                entity.HasOne(e => e.Role)
-                    .WithMany(e => e.Accounts)
-                    .HasForeignKey(e => e.RoleId);
+            { 
 
                 entity.HasOne(c => c.Login)
                     .WithOne(c => c.Account);
@@ -64,13 +60,6 @@ namespace AuthorizationService
                     .IsRequired();
 
                 entity.Property(p => p.Salt)
-                    .IsRequired();
-            });
-
-            modelBuilder.Entity<Role>(entity =>
-            {
-                entity.Property(p => p.Name)
-                    .HasMaxLength(100)
                     .IsRequired();
             });
 

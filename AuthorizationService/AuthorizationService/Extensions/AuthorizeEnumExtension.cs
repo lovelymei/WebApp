@@ -26,28 +26,6 @@ namespace AuthorizationService.Extensions
             this.Roles = string.Join(",", roles.Select(r => Enum.GetName(r.GetType(), r)));
         }
     }
-
-    /// <summary>
-    /// Роли пользователей
-    /// </summary>
-    public enum Roles
-    {
-        /// <summary>
-        /// Слушатель
-        /// </summary>
-        listener,
-
-        /// <summary>
-        /// Исполнитель
-        /// </summary>
-        performer = 100,
-
-        /// <summary>
-        /// Администратор 
-        /// </summary>
-        administratior = 110,
-
-    }
 }
 
 

@@ -23,6 +23,7 @@ namespace AuthorizationService.Certificates
         public async Task<RsaSecurityKey> GetIssuerSigningKey()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
+            var fullPath = Path.Combine(path, _config["Jwt:rsaPublicKeyXml"]);
             var publicKeyXml = await File.ReadAllTextAsync(Path.Combine(path, _config["Jwt:rsaPublicKeyXml"]));
             _rsa.FromXmlString(publicKeyXml);
 

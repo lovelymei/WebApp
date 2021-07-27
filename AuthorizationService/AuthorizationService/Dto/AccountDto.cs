@@ -11,11 +11,11 @@ namespace AuthorizationService.Dto
         public AccountDto(Account account)
         {
             NickName = account.NickName;
-            RoleId = account.RoleId;
+            Role = account.Role.ToString();
         }
 
         public string NickName { get; set; }
-        public Guid RoleId { get; set; }
+        public string Role { get; set; }
 
     }
 }

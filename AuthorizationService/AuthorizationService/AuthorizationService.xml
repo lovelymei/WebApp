@@ -32,21 +32,21 @@
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RegisterListenerAccount(AuthorizationService.Dto.AccountCreateDto)">
             <summary>
-            Создать новый аккаунт для слушателя
+            Создать аккаунт для слушателя
             </summary>
             <param name="listenerCreateDto"> Данные слушателя </param>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RegisterPerformerAccount(AuthorizationService.Dto.AccountCreateDto)">
             <summary>
-            Создать новый аккаунт для исполнителя
+            Создать аккаунт для исполнителя
             </summary>
             <param name="performerCreateDto"> Данные исполнителя </param>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RegisterAdminAccount(AuthorizationService.Dto.AccountCreateDto)">
             <summary>
-            Создать новый аккаунт для админа
+            Создать аккаунт для админа
             </summary>
             <param name="adminCreateDto"> Данные исполнителя </param>
             <returns></returns>
@@ -64,12 +64,6 @@
             Восстановить аккаунт
             </summary>
             <param name="deletedAccountId "> Идентификатор </param>
-            <returns></returns>
-        </member>
-        <member name="M:AuthorizationService.Controllers.AccountController.CreateRoles">
-            <summary>
-            Создание ролей (временный метод!!!)
-            </summary>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.CreateToken(AuthorizationService.Dto.SignIn)">
@@ -150,22 +144,27 @@
             <param name="roles"></param>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="T:AuthorizationService.Extensions.Roles">
+        <member name="T:AuthorizationService.Models.Roles">
             <summary>
             Роли пользователей
             </summary>
         </member>
-        <member name="F:AuthorizationService.Extensions.Roles.listener">
+        <member name="F:AuthorizationService.Models.Roles.NoAuthorized">
+            <summary>
+            Не авторизован
+            </summary>
+        </member>
+        <member name="F:AuthorizationService.Models.Roles.listener">
             <summary>
             Слушатель
             </summary>
         </member>
-        <member name="F:AuthorizationService.Extensions.Roles.performer">
+        <member name="F:AuthorizationService.Models.Roles.performer">
             <summary>
             Исполнитель
             </summary>
         </member>
-        <member name="F:AuthorizationService.Extensions.Roles.administratior">
+        <member name="F:AuthorizationService.Models.Roles.administratior">
             <summary>
             Администратор 
             </summary>

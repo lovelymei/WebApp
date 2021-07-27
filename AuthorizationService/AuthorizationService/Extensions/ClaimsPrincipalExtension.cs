@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuthorizationService.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -15,13 +16,13 @@ namespace AuthorizationService.Extensions
             return claim?.Value;
         }
 
-        //public static Roles GetAccountRole(this ClaimsPrincipal claimsPrincipal)
-        //{
-        //    var claim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType);
-        //    if (claim == null) return Roles.NoAuthorized;
-        //    Enum.TryParse(claim.Value, out Roles role);
-        //    return role;
-        //}
+        public static Roles GetAccountRole(this ClaimsPrincipal claimsPrincipal)
+        {
+            var claim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType);
+            if (claim == null) return Roles.NoAuthorized;
+            Enum.TryParse(claim.Value, out Roles role);
+            return role;
+        }
 
         public static Guid GetAccountId(this ClaimsPrincipal claimsPrincipal)
         {

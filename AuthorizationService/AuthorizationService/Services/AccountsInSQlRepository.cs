@@ -47,7 +47,8 @@ namespace AuthorizationService.Services
             return account;
         }
 
-        private async Task<AccountDto> CreateAccount(AccountCreateDto accountCreateDto, Role role)
+
+        private async Task<AccountDto> CreateAccount(AccountCreateDto accountCreateDto, Roles role)
         {
             var salt = GenerateSalt();
             var enteredPassHash = accountCreateDto.Password.ToPasswordHash(salt);
@@ -76,25 +77,19 @@ namespace AuthorizationService.Services
 
         public async Task<AccountDto> RegisterListenerAccount(AccountCreateDto accountCreateDto)
         {
-            Role accountRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "listener");
-            var listenerAccontDto = await CreateAccount(accountCreateDto, accountRole);
-
+            var listenerAccontDto = await CreateAccount(accountCreateDto, Roles.listener);
             return listenerAccontDto;
         }
 
         public async Task<AccountDto> RegisterPerformerAccount(AccountCreateDto accountCreateDto)
         {
-            Role accountRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "performer");
-            var performerAccountDto = await CreateAccount(accountCreateDto, accountRole);
-
+            var performerAccountDto = await CreateAccount(accountCreateDto, Roles.performer);
             return performerAccountDto;
         }
 
         public async Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto)
         {
-            Role accountRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "administrator");
-            var adminAccountDto = await CreateAccount(accountCreateDto, accountRole);
-
+            var adminAccountDto = await CreateAccount(accountCreateDto, Roles.administratior);
             return adminAccountDto;
         }
 
@@ -186,7 +181,7 @@ namespace AuthorizationService.Services
 
             var isValid = Convert.ToBase64String(enteredPassHash) == login.PasswordHash;
 
-            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == login.AccountId);
+            var account = await GetAccount(login.AccountId);
 
             return isValid ? account : null;
 
