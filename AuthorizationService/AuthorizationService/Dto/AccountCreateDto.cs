@@ -26,5 +26,7 @@ namespace AuthorizationService.Dto
         [Length(MinLen = 1, MaxLen = 100, ErrMes = "must be in range")]
         public string Password { get; set; }
 
+
+
     }
 }

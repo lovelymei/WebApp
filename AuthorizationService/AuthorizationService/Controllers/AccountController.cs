@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 
 namespace AuthorizationService.Controllers
 {
-    //[Produces("application/json")]
+
+    /// <response code="200">Операция проведена успешно</response>
+    /// <response code="500">Внутренняя ошибка сервера</response>
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -31,27 +33,38 @@ namespace AuthorizationService.Controllers
         /// <summary>
         /// Получить все аккаунты
         /// </summary>
+        /// <response code="404">Не найдено ни одного зарегистрированного аккаунта</response>
+        /// <response code="401">Доступ только для администратора</response>
         /// <returns></returns>
         [HttpGet("all")]
-        //[AuthorizeEnum(Roles.administratior)]
+        [AuthorizeEnum(Roles.administratior)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AccountDto>>> GetAllAccounts()
         {
             var accounts = await _accounts.GetAllAccounts();
-            if (accounts == null) return NotFound();
+
+            if (accounts.Count == 0) return NotFound();
+
             return Ok(accounts);
         }
 
         /// <summary>
         /// Получить все удаленные аккаунты
         /// </summary>
+        /// <response code="404">Не найдено ни одного удаленного аккаунта</response>
+        /// <response code="401">Доступ только для администратора</response>
         /// <returns></returns>
         [HttpGet("allDeleted")]
         [AuthorizeEnum(Roles.administratior)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AccountDto>>> GetAllDeletedAccounts()
         {
             var deletedAccounts = await _accounts.GetAllDeletedAccounts();
+
+            if (deletedAccounts.Count == 0) return NotFound();
+
             return Ok(deletedAccounts);
         }
 
@@ -60,13 +73,16 @@ namespace AuthorizationService.Controllers
         /// Получить аккаунт по id
         /// </summary>
         /// <param name = "id">Идентификатор</param>
+        /// <response code="404">Аккаунт не найден</response> 
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AccountDto>> GetCurrentAccount([Required] Guid id)
         {
             var account = await _accounts.GetAccount(id);
+
             if (account == null) return NotFound();
+
             return new AccountDto(account);
         }
 
@@ -75,6 +91,7 @@ namespace AuthorizationService.Controllers
         /// Удалить аккаунт
         /// </summary>
         /// <param name="id">Идентификатор</param>
+        /// <response code="404">Аккаунт не найден</response> 
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -90,11 +107,10 @@ namespace AuthorizationService.Controllers
         /// <param name="listenerCreateDto"> Данные слушателя </param>
         /// <returns></returns>
         [HttpPost("listener")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AccountDto>> RegisterListenerAccount([FromBody] AccountCreateDto listenerCreateDto)
         {
             var createdListener = await _accounts.RegisterListenerAccount(listenerCreateDto);
-            return createdListener;
+            return Ok(createdListener);
         }
 
         /// <summary>
@@ -103,25 +119,24 @@ namespace AuthorizationService.Controllers
         /// <param name="performerCreateDto"> Данные исполнителя </param>
         /// <returns></returns>
         [HttpPost("performer")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AccountDto>> RegisterPerformerAccount([FromBody] AccountCreateDto performerCreateDto)
         {
             var createdPerformer = await _accounts.RegisterPerformerAccount(performerCreateDto);
-            return createdPerformer;
+            return Ok(createdPerformer);
         }
 
 
         /// <summary>
         /// Создать аккаунт для админа
         /// </summary>
-        /// <param name="adminCreateDto"> Данные исполнителя </param>
+        /// <param name="adminCreateDto">Данные исполнителя</param>
         /// <returns></returns>
         [HttpPost("admin")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<AccountDto>> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
         {
             var createdPerformer = await _accounts.RegisterAdminAccount(adminCreateDto);
-            return createdPerformer;
+            return Ok(createdPerformer);
         }
 
 
@@ -130,13 +145,13 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <param name="id"> Идентификатор</param>
         /// <param name="accounCreateDto"> Данные для обновления </param>
+        /// <response code="404">Аккаунт не найден</response> 
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> UpdateAccount([Required] Guid id, [FromBody] AccountCreateDto accounCreateDto)
+        public async Task<ActionResult> UpdateAccount([Required] Guid id, [FromBody] AccountCreateDto accounCreateDto)
         {
             var isUpdated = await _accounts.UpdateAccount(id, accounCreateDto);
-
             return isUpdated ? Ok() : NotFound();
         }
 
@@ -144,15 +159,18 @@ namespace AuthorizationService.Controllers
         /// Восстановить аккаунт
         /// </summary>
         /// <param name="deletedAccountId "> Идентификатор </param>
+        /// <response code="404">Аккаунт не найден</response> 
+        /// <response code="401">Доступ только для администратора</response>
         /// <returns></returns>
         [HttpPost("{deletedAccountId}")]
         [AuthorizeEnum(Roles.administratior)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> RestoreAccount([Required] Guid deletedAccountId)
+        public async Task<ActionResult> RestoreAccount([Required] Guid deletedAccountId)
         {
             var isRestored = await _accounts.RestoreAccount(deletedAccountId);
 
-            return Ok(isRestored);
+            return isRestored ? Ok() : NotFound();
         }
 
     }

@@ -4,16 +4,24 @@
         <name>AuthorizationService</name>
     </assembly>
     <members>
+        <member name="T:AuthorizationService.Controllers.AccountController">
+            <response code="200">Операция проведена успешно</response>
+            <response code="500">Внутренняя ошибка сервера</response>
+        </member>
         <member name="M:AuthorizationService.Controllers.AccountController.GetAllAccounts">
             <summary>
             Получить все аккаунты
             </summary>
+            <response code="404">Не найдено ни одного зарегистрированного аккаунта</response>
+            <response code="401">Доступ только для администратора</response>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.GetAllDeletedAccounts">
             <summary>
             Получить все удаленные аккаунты
             </summary>
+            <response code="404">Не найдено ни одного удаленного аккаунта</response>
+            <response code="401">Доступ только для администратора</response>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.GetCurrentAccount(System.Guid)">
@@ -21,6 +29,7 @@
             Получить аккаунт по id
             </summary>
             <param name = "id">Идентификатор</param>
+            <response code="404">Аккаунт не найден</response> 
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.DeleteAccount(System.Guid)">
@@ -28,6 +37,7 @@
             Удалить аккаунт
             </summary>
             <param name="id">Идентификатор</param>
+            <response code="404">Аккаунт не найден</response> 
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RegisterListenerAccount(AuthorizationService.Dto.AccountCreateDto)">
@@ -48,7 +58,7 @@
             <summary>
             Создать аккаунт для админа
             </summary>
-            <param name="adminCreateDto"> Данные исполнителя </param>
+            <param name="adminCreateDto">Данные исполнителя</param>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.UpdateAccount(System.Guid,AuthorizationService.Dto.AccountCreateDto)">
@@ -57,6 +67,7 @@
             </summary>
             <param name="id"> Идентификатор</param>
             <param name="accounCreateDto"> Данные для обновления </param>
+            <response code="404">Аккаунт не найден</response> 
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RestoreAccount(System.Guid)">
@@ -64,14 +75,19 @@
             Восстановить аккаунт
             </summary>
             <param name="deletedAccountId "> Идентификатор </param>
+            <response code="404">Аккаунт не найден</response> 
+            <response code="401">Доступ только для администратора</response>
             <returns></returns>
+        </member>
+        <member name="T:AuthorizationService.Controllers.AuthorizationController">
+            <response code="200">Операция проведена успешно</response>
+            <response code="500">Внутренняя ошибка сервера</response>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.CreateToken(AuthorizationService.Dto.SignIn)">
             <summary>
             Создание JWT
             </summary>
             <response code="401">Не верные логин/пароль</response>
-            <response code="500">Внутренняя ошибка сервера</response>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.RefreshToken(System.Guid)">
             <summary>
@@ -79,14 +95,14 @@
             </summary>
             <response code="401">Токен просрочен. Вход по логину и паролю (/api/Token/signin)</response>
             <response code="403">Аккаунт деактивирован</response>
-            <response code="500">Внутренняя ошибка сервера</response>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.GetAll">
             <summary>
             Получить список всех RefreshToken 
             </summary>
             <returns></returns>
-            <response code = "204" > Список RefreshToken пуст</response>
+            <response code = "204"> Список RefreshToken пуст</response>
+            <response code="401">Доступ только для администратора</response>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.GetAll(System.Guid)">
             <summary>
@@ -94,18 +110,21 @@
             </summary>
             <returns></returns>
             <response code="204">Список RefreshToken пуст</response>
+            <response code="401">Доступ только для администратора</response>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.DeleteToken(System.Guid)">
             <summary>
             Удалить RefreshToken 
             </summary>
             <returns></returns>
+            <response code="401">Доступ только для администратора</response>
         </member>
         <member name="M:AuthorizationService.Controllers.AuthorizationController.DeleteTokensForAccount(System.Guid)">
             <summary>
             Удалить RefreshToken для аккаунта
             </summary>
             <returns></returns>
+            <response code="401">Доступ только для администратора</response>
         </member>
         <member name="P:AuthorizationService.Dto.AccountCreateDto.NickName">
             <summary>
@@ -167,6 +186,11 @@
         <member name="F:AuthorizationService.Models.Roles.administratior">
             <summary>
             Администратор 
+            </summary>
+        </member>
+        <member name="T:AuthorizationService.SwaggerFilters.SwaggerAddEnumDescriptions">
+            <summary>
+            https://stackoverflow.com/questions/36452468/swagger-ui-web-api-documentation-present-enums-as-strings
             </summary>
         </member>
     </members>

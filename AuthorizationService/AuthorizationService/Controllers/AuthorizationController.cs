@@ -16,8 +16,12 @@ using System.Threading.Tasks;
 
 namespace AuthorizationService.Controllers
 {
+    /// <response code="200">Операция проведена успешно</response>
+    /// <response code="500">Внутренняя ошибка сервера</response>
     [Route("identity/[controller]")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public class AuthorizationController : ControllerBase
     {
         public Func<DateTime> GetCurrentDtFunc = () => DateTime.Now;
@@ -38,7 +42,6 @@ namespace AuthorizationService.Controllers
         /// Создание JWT
         /// </summary>
         /// <response code="401">Не верные логин/пароль</response>
-        /// <response code="500">Внутренняя ошибка сервера</response>
         [HttpPost("signin")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<TokenDto>> CreateToken([FromBody] SignIn signIn)
@@ -61,7 +64,6 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <response code="401">Токен просрочен. Вход по логину и паролю (/api/Token/signin)</response>
         /// <response code="403">Аккаунт деактивирован</response>
-        /// <response code="500">Внутренняя ошибка сервера</response>
         [HttpPost("refreshId={id}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -82,10 +84,10 @@ namespace AuthorizationService.Controllers
         /// Получить список всех RefreshToken 
         /// </summary>
         /// <returns></returns>
-        /// <response code = "204" > Список RefreshToken пуст</response>
-
+        /// <response code = "204"> Список RefreshToken пуст</response>
+        /// <response code="401">Доступ только для администратора</response>
         [HttpGet]
-        [AuthorizeEnum(Roles.listener)]
+        [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<RefreshToken[]>> GetAll()
@@ -102,6 +104,7 @@ namespace AuthorizationService.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="204">Список RefreshToken пуст</response>
+        /// <response code="401">Доступ только для администратора</response>
         [HttpGet("accountId={accountId}")]
         [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -119,6 +122,7 @@ namespace AuthorizationService.Controllers
         /// Удалить RefreshToken 
         /// </summary>
         /// <returns></returns>
+        /// <response code="401">Доступ только для администратора</response>
         [HttpDelete("tokenId={tokenId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [AuthorizeEnum(Roles.administratior)]
@@ -132,6 +136,7 @@ namespace AuthorizationService.Controllers
         /// Удалить RefreshToken для аккаунта
         /// </summary>
         /// <returns></returns>
+        /// <response code="401">Доступ только для администратора</response>
         [HttpDelete("accountId={accountId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [AuthorizeEnum(Roles.administratior)]
@@ -143,7 +148,6 @@ namespace AuthorizationService.Controllers
 
         private async Task<TokenDto> BuildToken(AccountDtoForAuthorization account, Guid refreshId, int expiresSec)
         {
-            //время создания токена
             var expiresDt = GetCurrentDtFunc.Invoke().AddSeconds(expiresSec);
 
             var claims = new List<Claim>
@@ -162,6 +166,8 @@ namespace AuthorizationService.Controllers
                 claims,
                 expires: expiresDt,
                 signingCredentials: creds);
+
+
 
             return new TokenDto()
             {

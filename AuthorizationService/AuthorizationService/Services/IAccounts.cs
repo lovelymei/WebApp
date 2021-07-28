@@ -11,7 +11,7 @@ namespace AuthorizationService.Services
         Task<Account> Authenticate(string email, string password);
         Task<bool> DeleteAccount(Guid id);
         Task<Account> GetAccount(Guid id);
-        Task<IEnumerable<AccountDto>> GetAllAccounts();
+        Task<List<AccountDto>> GetAllAccounts();
         Task<List<AccountDto>> GetAllDeletedAccounts();
         Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto);
         Task<AccountDto> RegisterListenerAccount(AccountCreateDto accountCreateDto);

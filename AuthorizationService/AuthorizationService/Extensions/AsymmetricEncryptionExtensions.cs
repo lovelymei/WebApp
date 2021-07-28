@@ -22,8 +22,8 @@ namespace AuthorizationService.Extensions
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,

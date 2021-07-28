@@ -23,7 +23,7 @@ namespace AuthorizationService.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
+        public async Task<List<AccountDto>> GetAllAccounts()
         {
             var accounts = await _db.Accounts.Where(c => c.IsDeleted == false).ToListAsync();
 
