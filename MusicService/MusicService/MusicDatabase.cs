@@ -49,14 +49,16 @@ namespace MusicService
             {
                 entity.ToTable("Performer");
 
-                //TODO: add birthdate
+                entity.Property(e => e.BirthDate);
+         
             });
 
             modelBuilder.Entity<Listener>(entity =>
             {
                 entity.ToTable("Listener");
 
-                //TODO: add birthdate
+                entity.Property(e => e.BirthDate);
+             
             });
 
             modelBuilder.Entity<Song>(entity =>

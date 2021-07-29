@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AuthorizationService.Extensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,10 @@ namespace AuthorizationService.Certificates
             _rsa = RSA.Create();
         }
 
-        public async Task<RsaSecurityKey> GetIssuerSigningKey()
+        public RsaSecurityKey GetIssuerSigningKey()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
-            var fullPath = Path.Combine(path, _config["Jwt:rsaPublicKeyXml"]);
-            var publicKeyXml = await File.ReadAllTextAsync(Path.Combine(path, _config["Jwt:rsaPublicKeyXml"]));
+            var publicKeyXml = File.ReadAllText(Path.Combine(path, _config["Jwt:rsaPublicKeyXml"]));
             _rsa.FromXmlString(publicKeyXml);
 
             return new RsaSecurityKey(_rsa);

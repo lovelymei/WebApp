@@ -21,6 +21,5 @@ namespace MusicService.Models
         public string Title { get; set; }
         public long DurationMs { get; set; }
         public DateTime ProductionDate { get; set; }
-        public TimeSpan Duration => TimeSpan.FromMilliseconds(DurationMs);
     }
 }

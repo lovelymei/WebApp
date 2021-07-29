@@ -17,7 +17,6 @@ namespace MusicService.Models
         }
 
         public DateTime BirthDate { get; set; }
-        public virtual List<PerformerDto> Performers { get; set; }
     }
 }
 

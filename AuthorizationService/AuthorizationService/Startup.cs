@@ -32,7 +32,7 @@ namespace AuthorizationService
 
         public IConfiguration Configuration { get; }
 
-        public async void ConfigureServices(IServiceCollection services)
+        public  void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("AuthorizationDatabase");
             services.AddDbContext<AuthorizationDbContext>(options =>
@@ -52,7 +52,7 @@ namespace AuthorizationService
                  options.IncludeXmlComments(xmlPath, true);
              });
 
-            await services.AddAsymmetricAuthentication(Configuration);
+            services.AddAsymmetricAuthentication(Configuration);
 
 
           

@@ -10,10 +10,10 @@ namespace AuthorizationService.Extensions
 {
     public static class AsymmetricEncryptionExtensions
     {
-        public static async Task<IServiceCollection> AddAsymmetricAuthentication(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddAsymmetricAuthentication(this IServiceCollection services, IConfiguration config)
         {
             var issuerSigningCertificate = new SigningIssuerCertificate(config);
-            RsaSecurityKey issuerSingningKey = await issuerSigningCertificate.GetIssuerSigningKey();
+            RsaSecurityKey issuerSingningKey = issuerSigningCertificate.GetIssuerSigningKey();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

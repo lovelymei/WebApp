@@ -52,7 +52,7 @@ namespace AuthorizationService.Controllers
 
             var expiresSec = int.Parse(_config["Jwt:ExpiresSec"]);
 
-            var refresh = await _refreshTokens.CreateRefreshToken(account, 864000); //TODO В конфиг
+            var refresh = await _refreshTokens.CreateRefreshToken(account, 864000); 
 
             var token = await BuildToken(new AccountDtoForAuthorization(account), refresh.RefreshTokenId, expiresSec);
 
