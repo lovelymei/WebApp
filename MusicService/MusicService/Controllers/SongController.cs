@@ -20,13 +20,18 @@ namespace MusicService.Controllers
             _songs = songs;
         }
 
+
         /// <summary>
         /// Получить все песни
         /// </summary>
+        /// <response code="200"> Успешно </response>
+        /// <response code="404"> Песни не найдены </response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<SongDto>>> GetAllSongs()
         {
             var songs = await _songs.GetAllSongs();
@@ -44,10 +49,14 @@ namespace MusicService.Controllers
         /// Получить песню
         /// </summary>
         /// <param name="id">Идентификатор</param>
+        /// <response code="200"> Успешно</response>
+        /// <response code="404"> Песня не найдена </response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SongDto>> GetSong(Guid id)
         {
             var song = await _songs.GetSong(id);
@@ -62,9 +71,12 @@ namespace MusicService.Controllers
         /// </summary>
         /// <param name="title">Название</param>
         /// <param name="duration">Длительность</param>
+        /// <response code="200"> Успешно</response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> AddSong(string title, long duration)
         {
             var isAdded = await _songs.AddSong(title, duration);
@@ -75,10 +87,14 @@ namespace MusicService.Controllers
         /// Удалить песню
         /// </summary>
         /// <param name="id"> Идентификатор песни</param>
+        /// <response code="200"> Успешно</response>
+        /// <response code="404"> Песня не найдена </response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteSong(Guid id)
         {
             var isDeleted = await _songs.DeleteSong(id);

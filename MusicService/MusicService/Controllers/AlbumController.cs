@@ -23,10 +23,14 @@ namespace MusicService.Controllers
         /// <summary>
         /// Получить все альбомы
         /// </summary>
+        /// <response code="200"> Успешно </response>
+        /// <response code="404"> Альбомы не найдены </response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<AlbumDto>>> GetAllAlbums()
         {
             var albums = await _albums.GetAllAlbums();
@@ -44,10 +48,14 @@ namespace MusicService.Controllers
         /// Получить альбом по идентификатору
         /// </summary>
         /// <param name="id"> Идентификатор альбома</param>
+        /// <response code="200"> Успешно </response>
+        /// <response code="404"> Альбом не найден</response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AlbumDto>> GetAlbum(Guid id)
         {
             var album = await _albums.GetAlbum(id);
@@ -62,9 +70,12 @@ namespace MusicService.Controllers
         /// Добавить альбом
         /// </summary>
         /// <param name="title"> Название альбома </param>
+        /// <response code="200"> Успешно</response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AlbumDto>> AddAlbum(string title)
         {
             var album = await _albums.AddAlbum(title);
@@ -80,6 +91,7 @@ namespace MusicService.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> DeleteAlbum(Guid id)
         {
             var isDeleted = await _albums.DeleteAlbum(id);
@@ -90,10 +102,14 @@ namespace MusicService.Controllers
         /// Восстановить альбом
         /// </summary>
         /// <param name="id"> Идентификатор альбома </param>
+        /// <response code="200"> Успешно</response>
+        /// <response code="404"> Альбом не найден</response>
+        /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPut("isDeleted/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> RestoreAlbum(Guid id)
         {
             var isRestored = await _albums.RestoreAlbum(id);
@@ -104,10 +120,14 @@ namespace MusicService.Controllers
         /// <summary>
         /// Получить все удаленные альбомы
         /// </summary>
+        ///  <response code="200"> Успешно</response>
+        ///  <response code="404"> Не найдено ни одного удаленного альбома</response>
+        ///   <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet("isDeleted")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<AlbumDto>>> GetAllDeletedAlbums()
         {
             var albums = await _albums.GetAllDeletedAlbums();
