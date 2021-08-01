@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MusicService.Services
 {
     public class ListenersInSQLRepository : IListeners
-    {
+    { 
         MusicDatabase _db;
 
         public ListenersInSQLRepository(MusicDatabase db)
@@ -18,7 +18,7 @@ namespace MusicService.Services
 
         public async Task<List<Song>> GetAllListenerSongs(Guid id)
         {
-            var user = await _db.Listeners.Include(c => c.Songs).FirstOrDefaultAsync(c => c.ListenerId == id && c.IsDeleted == false);
+            var user = await _db.Listeners.Include(c => c.Songs).FirstOrDefaultAsync(c => c.AccountId == id && c.IsDeleted == false);
 
             return user.Songs.ToList();
         }

@@ -10,16 +10,16 @@ namespace MusicService.Models
     {
         public Listener()
         {
-            //Performers = new List<Performer>();
             Albums = new List<Album>();
             Songs = new List<Song>();
             IsDeleted = false;
         }
 
+        //TODO:поменять на AccountBase
         /// <summary>
         /// Идентификатор слушателя
         /// </summary>
-        public Guid ListenerId { get; set; }
+        public Guid AccountId { get; set; }
 
         /// <summary>
         /// Дата рождения

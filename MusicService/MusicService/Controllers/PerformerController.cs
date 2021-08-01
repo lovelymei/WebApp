@@ -46,7 +46,7 @@ namespace MusicService.Controllers
         /// <param name="performerId"> Идентификатор исполнителя</param>
         /// <param name="songId"> Идентификатор песни</param>
         /// <response code="200"> Успешно</response>
-        /// <response code="404"> Не найден исполнитель или песня</response>
+        /// <response code="404"> Не найден исполнитель или песня </response>
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPut("{performerId}/{songId}")]
