@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class PerformersInSQLRepository : IPerformers
+    public class PerformersInSQLRepository : RepositoryBase<Performer>, IPerformers
     {
         MusicDatabase _db;
 
-        public PerformersInSQLRepository(MusicDatabase db)
+        public PerformersInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;
         }

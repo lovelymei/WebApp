@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntitiesLibrary;
+using Microsoft.EntityFrameworkCore;
 using MusicService.Models;
 using System;
 using System.Collections.Generic;
@@ -7,30 +8,30 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class AlbumsInSQLRepository : IAlbums
+    public class AlbumsInSQLRepository : RepositoryBase<Album>, IAlbums
     {
         private readonly MusicDatabase _db;
 
-        public AlbumsInSQLRepository(MusicDatabase db)
+        public AlbumsInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;
         }
 
-        public async Task<List<Album>> GetAllAlbums()
-        {
-            await Task.CompletedTask;
-            return _db.Albums.Where(c => c.IsDeleted == false).ToList();
-        }
-        public async Task<Album> GetAlbum(Guid id)
-        {
-            var albums = await _db.Albums.ToListAsync();
+        //public async Task<List<Album>> GetAllAlbums()
+        //{
+        //    await Task.CompletedTask;
+        //    return _db.Albums.Where(c => c.IsDeleted == false).ToList();
+        //}
+        //public async Task<Album> GetAlbum(Guid id)
+        //{
+        //    var albums = await _db.Albums.ToListAsync();
 
-            var album = albums.FirstOrDefault(c => c.AlbumId == id && c.IsDeleted == false);
+        //    var album = albums.FirstOrDefault(c => c.AlbumId == id && c.IsDeleted == false);
 
-            if (album == null) return null;
+        //    if (album == null) return null;
 
-            return album;
-        }
+        //    return album;
+        //}
 
         public async Task<Album> AddAlbum(string title)
         {
@@ -48,19 +49,19 @@ namespace MusicService.Services
             return newAlbum;
         }
 
-        public async Task<bool> DeleteAlbum(Guid id)
-        {
-            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AlbumId == id);
+        //public async Task<bool> DeleteAlbum(Guid id)
+        //{
+        //    var album = await _db.Albums.FirstOrDefaultAsync(c => c.AlbumId == id);
 
-            if (album == null) return false;
+        //    if (album == null) return false;
 
-            album.IsDeleted = true;
+        //    album.IsDeleted = true;
 
-            await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+        //    await _db.SaveChangesAsync();
+        //    await _db.DisposeAsync();
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public async Task<bool> AttachMusicSong(Guid albumId, Guid songId)
         {
@@ -77,24 +78,24 @@ namespace MusicService.Services
             return true;
         }
 
-        public async Task<List<Album>> GetAllDeletedAlbums()
-        {
-            await Task.CompletedTask;
-            return _db.Albums.Where(a => a.IsDeleted == true).ToList();
-        }
+        //public async Task<List<Album>> GetAllDeletedAlbums()
+        //{
+        //    await Task.CompletedTask;
+        //    return _db.Albums.Where(a => a.IsDeleted == true).ToList();
+        //}
 
-        public async Task<bool> RestoreAlbum(Guid id)
-        {
-            var album = await _db.Albums.FirstOrDefaultAsync(a => a.AlbumId == id);
+        //public async Task<bool> RestoreAlbum(Guid id)
+        //{
+        //    var album = await _db.Albums.FirstOrDefaultAsync(a => a.AlbumId == id);
 
-            if (album == null) return false;
+        //    if (album == null) return false;
 
-            album.IsDeleted = false;
+        //    album.IsDeleted = false;
 
-            await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+        //    await _db.SaveChangesAsync();
+        //    await _db.DisposeAsync();
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AuthorizationService.Dto;
+using AuthorizationService.Extensions;
 using AuthorizationService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,8 @@ namespace AuthorizationService.Services
 
         public async Task<RefreshToken> CreateRefreshToken(Account account, int expiresSec)
         {
+            _logger.Info($"using {nameof(CreateRefreshToken)} for {account.NickName}");
+
             if (expiresSec <= 0) throw new ArgumentOutOfRangeException(nameof(expiresSec));
 
             var currentDt = GetDtFunc();
@@ -34,21 +37,26 @@ namespace AuthorizationService.Services
             await _db.SaveChangesAsync();
             await _db.DisposeAsync();
 
-            //var deleted = col.DeleteMany(c => c.AccountId == account.Id && c.ExpiresDt < currentDt); ??
-
             return entity;
         }
         public async Task<RefreshToken> ReCreateRefreshToken(Guid previousRefreshId, int expiresSec)
         {
+            _logger.Info($"using {nameof(ReCreateRefreshToken)}");
 
             var prevRefreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(t => t.RefreshTokenId == previousRefreshId);
 
-            if (prevRefreshToken == null) return null;
+            if (prevRefreshToken == null)
+            {
+                _logger.Warn($"{nameof(prevRefreshToken)} with id = {previousRefreshId} doesn't exist");
+                return null;
+            }
 
             var currentDt = GetDtFunc();
 
             if (prevRefreshToken.ExpiresDate < currentDt) //Истек
             {
+
+                _logger.Warn($"{nameof(prevRefreshToken)} with id = {previousRefreshId} is expired");
                 _db.RefreshTokens.Remove(prevRefreshToken);
                 await _db.SaveChangesAsync();
                 await _db.DisposeAsync();
@@ -59,16 +67,22 @@ namespace AuthorizationService.Services
             await _db.RefreshTokens.AddAsync(entity);
             _db.RefreshTokens.Remove(prevRefreshToken);
             await _db.SaveChangesAsync();
-           // await _db.DisposeAsync();
+           await _db.DisposeAsync();
 
             return entity;
         }
 
         public async Task<bool> DeleteRefreshToken(Guid id)
         {
+            _logger.Info($"using {nameof(DeleteRefreshToken)} for id = {id}");
+
             var refreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(t => t.RefreshTokenId == id);
 
-            if (refreshToken == null) return false;
+            if (refreshToken == null)
+            {
+                _logger.Warn($"{nameof(refreshToken)} with id = {id} doesn't exist");
+                return false;
+            }
 
             _db.RefreshTokens.Remove(refreshToken);
             await _db.SaveChangesAsync();
@@ -79,9 +93,15 @@ namespace AuthorizationService.Services
 
         public async Task<bool> DeleteRefreshTokensForAccount(Guid accountId)
         {
+            _logger.Info($"using {nameof(DeleteRefreshTokensForAccount)} {accountId}");
+
             var refreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(t => t.AccountId == accountId);
 
-            if (refreshToken == null) return false;
+            if (refreshToken == null)
+            {
+                _logger.Warn($"{nameof(refreshToken)} with id = {accountId} doesn't exist");
+                return false;
+            }
 
             _db.RefreshTokens.Remove(refreshToken);
             await _db.SaveChangesAsync();
@@ -92,8 +112,15 @@ namespace AuthorizationService.Services
 
         public async Task<List<RefreshTokenDto>> GetAllRefreshTokens()
         {
+            _logger.Info($"using {nameof(GetAllRefreshTokens)}");
 
             var refreshTokens = await _db.RefreshTokens.ToListAsync();
+
+            if (!refreshTokens.Any())
+            {
+                _logger.Warn($"{nameof(refreshTokens)}'s list is void");
+                return null;
+            }
 
             List<RefreshTokenDto> refreshTokensDto = new List<RefreshTokenDto>();
 
@@ -107,7 +134,15 @@ namespace AuthorizationService.Services
 
         public async Task<List<RefreshTokenDto>> GetAllRefreshTokens(Guid accountId)
         {
+            _logger.Info($"using {nameof(GetAllRefreshTokens)} for id = {accountId}");
+
             var refreshTokens = await _db.RefreshTokens.Where(r => r.AccountId == accountId).ToListAsync();
+
+            if (!refreshTokens.Any())
+            {
+                _logger.Warn($"{nameof(refreshTokens)}'s list is void");
+                return null;
+            }
 
             List<RefreshTokenDto> refreshTokensDto = new List<RefreshTokenDto>();
 

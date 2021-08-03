@@ -17,23 +17,23 @@ namespace MusicService.Services
             _db = db;
         }
 
-        public async Task<DbSet<T>> GetAllEntities()
+        public async Task<List<T>> GetAllEntities()
         {
             await Task.CompletedTask;
             var collection = (DbSet<T>)_db.GetCollection<T>();
-            return collection;
+            return collection.Where(c => c.IsDeleted == false).ToList();
         }
 
-        public async Task<T> GetByIdEntity(Guid id)
+        public async Task<T> GetEntity(Guid id)
         {
             var collection = await GetAllEntities();
             var item = collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == false);
             return item;
         }
 
-        public async Task<bool> DeleteByIdEntity(Guid id)
+        public async Task<bool> DeleteEntity(Guid id)
         {
-            var item = await GetByIdEntity(id);
+            var item = await GetEntity(id);
 
             if (item == null) return false;
 
@@ -41,15 +41,15 @@ namespace MusicService.Services
             return true;
         }
 
-        public async Task<DbSet<T>> GetAllDeletedEntities()
+        public async Task<List<T>> GetAllDeletedEntities()
         {
             var collection = await GetAllEntities();
-            return (DbSet<T>)collection.Where(c => c.IsDeleted == true);
+            return collection.Where(c => c.IsDeleted == true).ToList();
         }
 
         public async Task<bool> RestoreEntity(Guid id)
         {
-            var collection = await GetAllEntities();
+            var collection = await GetAllDeletedEntities();
             var item = collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == true);
             item.IsDeleted = false;
             return true;

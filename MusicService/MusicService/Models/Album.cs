@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EntitiesLibrary;
+using System;
 using System.Collections.Generic;
 
 namespace MusicService.Models
 {
-    public class Album
+    public class Album : AccountBase
     {
         /// <summary>
         /// Идентификатор

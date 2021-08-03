@@ -9,6 +9,7 @@ namespace AuthorizationService.Services
     public interface IAccounts
     {
         Task<Account> Authenticate(string email, string password);
+        Task<bool> CheckNameEquality(string name);
         Task<bool> DeleteAccount(Guid id);
         Task<Account> GetAccount(Guid id);
         Task<List<AccountDto>> GetAllAccounts();
