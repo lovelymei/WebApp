@@ -7,30 +7,30 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class SongsInSQLRepository : ISongs
+    public class SongsInSQLRepository : RepositoryBase<Song>, ISongs
     {
         private readonly MusicDatabase _db;
-        public SongsInSQLRepository(MusicDatabase db)
+        public SongsInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;
         }
 
-        public async Task<List<Song>> GetAllSongs()
-        {
-            await Task.CompletedTask;
-            return _db.Songs.Where(c => c.IsDeleted == false).ToList();
-        }
+        //public async Task<List<Song>> GetAllSongs()
+        //{
+        //    await Task.CompletedTask;
+        //    return _db.Songs.Where(c => c.IsDeleted == false).ToList();
+        //}
 
-        public async Task<Song> GetSong(Guid id)
-        {
-            var songs = await _db.Songs.ToListAsync();
+        //public async Task<Song> GetSong(Guid id)
+        //{
+        //    var songs = await _db.Songs.ToListAsync();
 
-            var song = songs.FirstOrDefault(c => c.SongId == id && c.IsDeleted == false);
+        //    var song = songs.FirstOrDefault(c => c.SongId == id && c.IsDeleted == false);
 
-            if (song == null) return null;
+        //    if (song == null) return null;
 
-            return song;
-        }
+        //    return song;
+        //}
 
         public async Task<Song> GetSongByTitle(string title)
         {
@@ -64,18 +64,18 @@ namespace MusicService.Services
             return true;
         }
 
-        public async Task<bool> DeleteSong(Guid id)
-        {
-            var song = await _db.Songs.FirstOrDefaultAsync(c => c.SongId == id);
+        //public async Task<bool> DeleteSong(Guid id)
+        //{
+        //    var song = await _db.Songs.FirstOrDefaultAsync(c => c.SongId == id);
 
-            if (song == null) return false;
+        //    if (song == null) return false;
 
-            song.IsDeleted = true;
+        //    song.IsDeleted = true;
 
-            await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+        //    await _db.SaveChangesAsync();
+        //    await _db.DisposeAsync();
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

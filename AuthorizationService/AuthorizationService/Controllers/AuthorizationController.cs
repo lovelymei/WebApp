@@ -87,14 +87,14 @@ namespace AuthorizationService.Controllers
         /// <response code = "204"> Список RefreshToken пуст</response>
         /// <response code="401">Доступ только для администратора</response>
         [HttpGet]
-        [AuthorizeEnum(Roles.administratior)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<RefreshToken[]>> GetAll()
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens();
 
-            if (tokens.Count == 0) return NoContent();
+            if (tokens == null) return NoContent();
 
             return Ok(tokens);
         }
@@ -106,14 +106,14 @@ namespace AuthorizationService.Controllers
         /// <response code="204">Список RefreshToken пуст</response>
         /// <response code="401">Доступ только для администратора</response>
         [HttpGet("accountId={accountId}")]
-        [AuthorizeEnum(Roles.administratior)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<RefreshToken[]>> GetAll(Guid accountId)
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens(accountId);
 
-            if (tokens.Count == 0) return NoContent();
+            if (tokens == null) return NoContent();
 
             return Ok(tokens);
         }
@@ -125,11 +125,11 @@ namespace AuthorizationService.Controllers
         /// <response code="401">Доступ только для администратора</response>
         [HttpDelete("tokenId={tokenId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [AuthorizeEnum(Roles.administratior)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         public async Task<ActionResult<RefreshToken[]>> DeleteToken(Guid tokenId)
         {
             bool isDeleted = await _refreshTokens.DeleteRefreshToken(tokenId);
-            return isDeleted ? Ok() : NoContent();
+            return isDeleted ? Ok() : NotFound();
         }
 
         /// <summary>
@@ -139,11 +139,11 @@ namespace AuthorizationService.Controllers
         /// <response code="401">Доступ только для администратора</response>
         [HttpDelete("accountId={accountId}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [AuthorizeEnum(Roles.administratior)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         public async Task<ActionResult> DeleteTokensForAccount(Guid accountId)
         {
             bool isDeleted = await _refreshTokens.DeleteRefreshTokensForAccount(accountId);
-            return isDeleted ? Ok() : NoContent();
+            return isDeleted ? Ok() : NotFound();
         }
 
         private async Task<TokenDto> BuildToken(AccountDtoForAuthorization account, Guid refreshId, int expiresSec)

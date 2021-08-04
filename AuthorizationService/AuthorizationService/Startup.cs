@@ -1,5 +1,6 @@
 using AuthorizationService.Certificates;
 using AuthorizationService.Extensions;
+using AuthorizationService.Models;
 using AuthorizationService.Services;
 using AuthorizationService.SwaggerFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,12 +32,12 @@ namespace AuthorizationService
         }
 
         public IConfiguration Configuration { get; }
-
         public  void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("AuthorizationDatabase");
             services.AddDbContext<AuthorizationDbContext>(options =>
                 options.UseSqlServer(connection));
+
 
             services.AddScoped<IAccounts, AccountsInSQlRepository>();
             services.AddScoped<IRefreshTokens, RefreshTokensInSqlRepository>();
@@ -119,6 +120,8 @@ namespace AuthorizationService
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            // app.UseMiddleware<CreateSuperAdminMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

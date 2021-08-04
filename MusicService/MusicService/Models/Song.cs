@@ -1,11 +1,12 @@
-﻿using System;
+﻿using EntitiesLibrary;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
 namespace MusicService.Models
 {
-    public class Song
+    public class Song : AccountBase
     {
 
         /// <summary>

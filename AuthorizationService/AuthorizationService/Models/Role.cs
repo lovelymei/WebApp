@@ -31,5 +31,10 @@ namespace AuthorizationService.Models
         /// </summary>
         administratior = 120,
 
+        /// <summary>
+        /// Суперадминистратор
+        /// </summary>
+        superadministrator = 130,
+
     }
 }

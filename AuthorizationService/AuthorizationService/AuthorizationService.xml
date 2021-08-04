@@ -45,6 +45,7 @@
             Создать аккаунт для слушателя
             </summary>
             <param name="listenerCreateDto"> Данные слушателя </param>
+            <response code="409">Аккаунт с таким именем уже существует</response>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RegisterPerformerAccount(AuthorizationService.Dto.AccountCreateDto)">
@@ -52,6 +53,7 @@
             Создать аккаунт для исполнителя
             </summary>
             <param name="performerCreateDto"> Данные исполнителя </param>
+            <response code="409">Аккаунт с таким именем уже существует</response>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RegisterAdminAccount(AuthorizationService.Dto.AccountCreateDto)">
@@ -59,6 +61,7 @@
             Создать аккаунт для админа
             </summary>
             <param name="adminCreateDto">Данные исполнителя</param>
+            <response code="409">Аккаунт с таким именем уже существует</response>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.UpdateAccount(System.Guid,AuthorizationService.Dto.AccountCreateDto)">
@@ -68,6 +71,7 @@
             <param name="id"> Идентификатор</param>
             <param name="accounCreateDto"> Данные для обновления </param>
             <response code="404">Аккаунт не найден</response> 
+            <response code="409">Аккаунт с таким именем уже существует</response>
             <returns></returns>
         </member>
         <member name="M:AuthorizationService.Controllers.AccountController.RestoreAccount(System.Guid)">
@@ -186,6 +190,11 @@
         <member name="F:AuthorizationService.Models.Roles.administratior">
             <summary>
             Администратор 
+            </summary>
+        </member>
+        <member name="F:AuthorizationService.Models.Roles.superadministrator">
+            <summary>
+            Суперадминистратор
             </summary>
         </member>
         <member name="T:AuthorizationService.SwaggerFilters.SwaggerAddEnumDescriptions">
