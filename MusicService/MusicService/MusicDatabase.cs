@@ -36,7 +36,7 @@ namespace MusicService
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=WIN-C8HRCMG8G6A\\SQLEXPRESS;Database=MyDatabase;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=WIN-C8HRCMG8G6A\\SQLEXPRESS;Database=MusicDatabase;Trusted_Connection=True;");
             }
         }
 
@@ -53,6 +53,8 @@ namespace MusicService
          
             });
 
+            modelBuilder.Entity<Performer>().HasKey(e => e.AccountId).HasName("PK_Performer_AccountId");
+
             modelBuilder.Entity<Listener>(entity =>
             {
                 entity.ToTable("Listener");
@@ -60,6 +62,9 @@ namespace MusicService
                 entity.Property(e => e.BirthDate);
              
             });
+
+            modelBuilder.Entity<Listener>().HasKey(e=>e.AccountId).HasName("PK_Listener_AccountId");
+
 
             modelBuilder.Entity<Song>(entity =>
             {
