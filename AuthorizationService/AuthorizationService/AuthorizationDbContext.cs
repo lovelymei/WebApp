@@ -14,8 +14,8 @@ namespace AuthorizationService
             : base(options)
         {
             //при изменении бд
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
         }
 
         public virtual DbSet<Account> Accounts { get; set; }

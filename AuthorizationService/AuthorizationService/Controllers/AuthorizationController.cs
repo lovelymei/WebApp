@@ -94,8 +94,6 @@ namespace AuthorizationService.Controllers
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens();
 
-            if (tokens == null) return NoContent();
-
             return Ok(tokens);
         }
 
@@ -112,8 +110,6 @@ namespace AuthorizationService.Controllers
         public async Task<ActionResult<RefreshToken[]>> GetAll(Guid accountId)
         {
             var tokens = await _refreshTokens.GetAllRefreshTokens(accountId);
-
-            if (tokens == null) return NoContent();
 
             return Ok(tokens);
         }
