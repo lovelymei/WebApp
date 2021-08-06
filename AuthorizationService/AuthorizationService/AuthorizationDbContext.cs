@@ -14,10 +14,10 @@ namespace AuthorizationService
             : base(options)
         {
             //при изменении бд
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+           // Database.EnsureDeleted();
+           // Database.EnsureCreated();
         }
-
+        
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }

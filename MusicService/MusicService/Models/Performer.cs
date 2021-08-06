@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace MusicService.Models
 {
-    public partial class Performer : AccountBase
+    public class Performer : AccountBase
     {
         public Performer()
         {

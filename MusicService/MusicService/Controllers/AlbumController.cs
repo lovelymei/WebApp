@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthorizationService.Extensions;
+using AuthorizationService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicService.Dto;
@@ -29,6 +31,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet]
+        [AuthorizeEnum(Roles.administratior)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

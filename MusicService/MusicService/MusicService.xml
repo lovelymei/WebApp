@@ -4,10 +4,50 @@
         <name>MusicService</name>
     </assembly>
     <members>
+        <member name="T:AuthorizationService.Extensions.AuthorizeEnumAttribute">
+            <summary>
+            Атрибут, для установки разрешенных ролей на методы Api
+            </summary>
+        </member>
+        <member name="M:AuthorizationService.Extensions.AuthorizeEnumAttribute.#ctor(System.Object[])">
+            <summary>
+            Атрибут для проверки ролей при обращении к методам API
+            </summary>
+            <param name="roles"></param>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="T:AuthorizationService.Models.Roles">
+            <summary>
+            Роли пользователей
+            </summary>
+        </member>
+        <member name="F:AuthorizationService.Models.Roles.NoAuthorized">
+            <summary>
+            Не авторизован
+            </summary>
+        </member>
+        <member name="F:AuthorizationService.Models.Roles.listener">
+            <summary>
+            Слушатель
+            </summary>
+        </member>
+        <member name="F:AuthorizationService.Models.Roles.performer">
+            <summary>
+            Исполнитель
+            </summary>
+        </member>
+        <member name="F:AuthorizationService.Models.Roles.administratior">
+            <summary>
+            Администратор 
+            </summary>
+        </member>
         <member name="M:MusicService.Controllers.AlbumController.GetAllAlbums">
             <summary>
             Получить все альбомы
             </summary>
+            <response code="200"> Успешно </response>
+            <response code="404"> Альбомы не найдены </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.AlbumController.GetAlbum(System.Guid)">
@@ -15,6 +55,9 @@
             Получить альбом по идентификатору
             </summary>
             <param name="id"> Идентификатор альбома</param>
+            <response code="200"> Успешно </response>
+            <response code="404"> Альбом не найден</response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.AlbumController.AddAlbum(System.String)">
@@ -22,6 +65,8 @@
             Добавить альбом
             </summary>
             <param name="title"> Название альбома </param>
+            <response code="200"> Успешно</response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.AlbumController.DeleteAlbum(System.Guid)">
@@ -36,18 +81,28 @@
             Восстановить альбом
             </summary>
             <param name="id"> Идентификатор альбома </param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Альбом не найден</response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.AlbumController.GetAllDeletedAlbums">
             <summary>
             Получить все удаленные альбомы
             </summary>
+             <response code="200"> Успешно</response>
+             <response code="404"> Не найдено ни одного удаленного альбома</response>
+              <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.ListenerController.GetAllUsersSongs(System.Guid)">
             <summary>
             Получить все песни пользователя
             </summary>
+            <param name="id"> Идентификатор пользователя </param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Слушатель не найден </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.ListenerController.AttachSongToListener(System.Guid,System.Guid)">
@@ -56,6 +111,9 @@
             </summary>
             <param name="listenerId"> Идентификатор слушателя </param>
             <param name="songId"> Идентификатор песни </param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Не найден слушатель или песня</response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.ListenerController.AttachAlbumToListener(System.Guid,System.Guid)">
@@ -64,6 +122,9 @@
             </summary>
             <param name="listenerId"> Идентификатор слушателя </param>
             <param name="albumId"> Идентификатор альбома </param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Не найден слушатель / альбом </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.PerformerController.GetAllPerformersSongs(System.Guid)">
@@ -79,6 +140,9 @@
             </summary>
             <param name="performerId"> Идентификатор исполнителя</param>
             <param name="songId"> Идентификатор песни</param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Не найден исполнитель или песня </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.PerformerController.AttachAlbumToPerformer(System.Guid,System.Guid)">
@@ -87,12 +151,18 @@
             </summary>
             <param name="performerId"> Идентификатор исполнителя</param>
             <param name="albumId"> Идентификатор альбома</param>
+            <response code="200"> Успешно </response>
+            <response code="404"> Не найден исполнитель или альбом </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.SongController.GetAllSongs">
             <summary>
             Получить все песни
             </summary>
+            <response code="200"> Успешно </response>
+            <response code="404"> Песни не найдены </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.SongController.GetSong(System.Guid)">
@@ -100,6 +170,9 @@
             Получить песню
             </summary>
             <param name="id">Идентификатор</param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Песня не найдена </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.SongController.AddSong(System.String,System.Int64)">
@@ -108,6 +181,8 @@
             </summary>
             <param name="title">Название</param>
             <param name="duration">Длительность</param>
+            <response code="200"> Успешно</response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.SongController.DeleteSong(System.Guid)">
@@ -115,6 +190,9 @@
             Удалить песню
             </summary>
             <param name="id"> Идентификатор песни</param>
+            <response code="200"> Успешно</response>
+            <response code="404"> Песня не найдена </response>
+            <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="P:MusicService.Models.Album.AlbumId">
@@ -155,11 +233,6 @@
         <member name="P:MusicService.Models.Album.Listeners">
             <summary>
             Слушатели
-            </summary>
-        </member>
-        <member name="P:MusicService.Models.Listener.ListenerId">
-            <summary>
-            Идентификатор слушателя
             </summary>
         </member>
         <member name="P:MusicService.Models.Listener.BirthDate">
@@ -339,6 +412,39 @@
             </summary>
             <param name="accountId"> Идентификатор исполнителя </param>
             <param name="albumId"> Идентификатор альбома </param>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.ICrud`1.DeleteByIdEntity(System.Guid)">
+            <summary>
+            Удаление по id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.ICrud`1.GetAllDeletedEntities">
+            <summary>
+            Получение всех удаленных сущностей
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.ICrud`1.GetAllEntities">
+            <summary>
+            Получение всех сущностей
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.ICrud`1.GetByIdEntity(System.Guid)">
+            <summary>
+            Получение сущности по идентификатору
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.ICrud`1.RestoreEntity(System.Guid)">
+            <summary>
+            Восстановление сущности
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:MusicService.Services.ISongs.AddSong(System.String,System.Int64)">

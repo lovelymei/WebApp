@@ -88,7 +88,6 @@ namespace AuthorizationService
                 });
                c.DocumentFilter<SwaggerAddEnumDescriptions>();
                c.OperationFilter<ReqiuredRolesDescriptionFilter>();
-
             });
         }
 
