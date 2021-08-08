@@ -10,17 +10,12 @@ namespace MusicService.Models
     {
 
         /// <summary>
-        /// Идентификатор песни
+        /// Идентификатор аккаунта (внешний ключ)
         /// </summary>
-        public Guid SongId { get; set; }
+        public Guid FK_AccountId { get; set; }
 
         /// <summary>
-        /// Идентификатор аккаунта
-        /// </summary>
-        public Guid AccountId { get; set; }
-
-        /// <summary>
-        /// Возможный идентификатор Альбома 
+        /// Возможный идентификатор Альбома (внешний ключ)
         /// </summary>
         public Guid? AlbumId { get; set; }
 
@@ -45,11 +40,6 @@ namespace MusicService.Models
         public DateTime ProductionDate { get; set; }
 
         /// <summary>
-        /// Не удалена ли песня
-        /// </summary>
-        public bool IsDeleted { get; set; }
-
-        /// <summary>
         /// Идентификатор исполнителя
         /// </summary>
         public Guid PerformerId { get; set; }
@@ -64,12 +54,8 @@ namespace MusicService.Models
         /// </summary>
         public virtual Performer Performer { get; set; }
 
-
-        //public virtual Listener Listener { get; set; }
-
         public Song()
         {
-            //Listeners = new List<Listener>();
             IsDeleted = false;
         }
 

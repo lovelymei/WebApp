@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class PerformersInSQLRepository : RepositoryBase<Performer>, IPerformers
+    public class PerformersInSQLRepository : RepositoryBase<Performer,PerformerDto> , IPerformers
     {
         MusicDatabase _db;
 
@@ -43,7 +43,7 @@ namespace MusicService.Services
         {
             var performer = await _db.Performers.FirstOrDefaultAsync(c => c.AccountId == accountId);
 
-            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AlbumId == albumId);
+            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AccountId == albumId);
 
             if (performer == null || album == null) return false;
 

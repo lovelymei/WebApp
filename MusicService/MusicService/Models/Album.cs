@@ -6,10 +6,6 @@ namespace MusicService.Models
 {
     public class Album : AccountBase
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid AlbumId { get; set; }
 
         /// <summary>
         /// Название
@@ -22,14 +18,9 @@ namespace MusicService.Models
         public DateTime ProductionDate { get; set; }
 
         /// <summary>
-        /// Удален ли альбом
+        /// Идентификатор пользователя (внешний ключ)
         /// </summary>
-        public bool IsDeleted { get; set; }
-
-        /// <summary>
-        /// Идентификатор пользователя
-        /// </summary>
-        public Guid AccountId { get; set; }
+        public Guid FK_AccountId { get; set; }
 
         /// <summary>
         /// Исполнитель

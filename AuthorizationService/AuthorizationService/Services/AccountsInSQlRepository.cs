@@ -23,26 +23,17 @@ namespace AuthorizationService.Services
             _logger = logger;
         }
 
+        //IEnumerable 
+        // yeld return
         public async Task<List<AccountDto>> GetAllAccounts()
         {
-            _logger.Info($"using {nameof(GetAllAccounts)}");
+            _logger.LogTrace($"using {nameof(GetAllAccounts)}");
 
-            var accounts = await _db.Accounts.Where(c => c.IsDeleted == false).ToListAsync();
+            return await _db.Accounts
+                .Where(c => c.IsDeleted == false)
+                .Select(c => new AccountDto(c))
+                .ToListAsync();
 
-            if (!accounts.Any())
-            {
-                _logger.Warn($"{nameof(accounts)}'s list is void");
-                return null;
-            }
-
-            List<AccountDto> accountsDto = new List<AccountDto>();
-
-            foreach (var account in accounts)
-            {
-                accountsDto.Add(new AccountDto(account));
-            }
-
-            return accountsDto;
         }
 
 

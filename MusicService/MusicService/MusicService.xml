@@ -41,25 +41,6 @@
             Администратор 
             </summary>
         </member>
-        <member name="M:MusicService.Controllers.AlbumController.GetAllAlbums">
-            <summary>
-            Получить все альбомы
-            </summary>
-            <response code="200"> Успешно </response>
-            <response code="404"> Альбомы не найдены </response>
-            <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Controllers.AlbumController.GetAlbum(System.Guid)">
-            <summary>
-            Получить альбом по идентификатору
-            </summary>
-            <param name="id"> Идентификатор альбома</param>
-            <response code="200"> Успешно </response>
-            <response code="404"> Альбом не найден</response>
-            <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
         <member name="M:MusicService.Controllers.AlbumController.AddAlbum(System.String)">
             <summary>
             Добавить альбом
@@ -67,32 +48,6 @@
             <param name="title"> Название альбома </param>
             <response code="200"> Успешно</response>
             <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Controllers.AlbumController.DeleteAlbum(System.Guid)">
-            <summary>
-            Удалить альбом
-            </summary>
-            <param name="id"> Идентификатор альбома </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Controllers.AlbumController.RestoreAlbum(System.Guid)">
-            <summary>
-            Восстановить альбом
-            </summary>
-            <param name="id"> Идентификатор альбома </param>
-            <response code="200"> Успешно</response>
-            <response code="404"> Альбом не найден</response>
-            <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Controllers.AlbumController.GetAllDeletedAlbums">
-            <summary>
-            Получить все удаленные альбомы
-            </summary>
-             <response code="200"> Успешно</response>
-             <response code="404"> Не найдено ни одного удаленного альбома</response>
-              <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.ListenerController.GetAllUsersSongs(System.Guid)">
@@ -156,25 +111,6 @@
             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Controllers.SongController.GetAllSongs">
-            <summary>
-            Получить все песни
-            </summary>
-            <response code="200"> Успешно </response>
-            <response code="404"> Песни не найдены </response>
-            <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Controllers.SongController.GetSong(System.Guid)">
-            <summary>
-            Получить песню
-            </summary>
-            <param name="id">Идентификатор</param>
-            <response code="200"> Успешно</response>
-            <response code="404"> Песня не найдена </response>
-            <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
         <member name="M:MusicService.Controllers.SongController.AddSong(System.String,System.Int64)">
             <summary>
             Добавить новую песню
@@ -182,16 +118,6 @@
             <param name="title">Название</param>
             <param name="duration">Длительность</param>
             <response code="200"> Успешно</response>
-            <response code="500"> Ошибка сервера </response>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Controllers.SongController.DeleteSong(System.Guid)">
-            <summary>
-            Удалить песню
-            </summary>
-            <param name="id"> Идентификатор песни</param>
-            <response code="200"> Успешно</response>
-            <response code="404"> Песня не найдена </response>
             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
@@ -319,168 +245,6 @@
             <summary>
             Исполнитель
             </summary>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.AddAlbum(System.String)">
-            <summary>
-            Добавить альбом
-            </summary>
-            <param name="title"> Название</param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.AttachMusicSong(System.Guid,System.Guid)">
-            <summary>
-            Прикрепить песню к альбому
-            </summary>
-            <param name="albumId"> Идентификатор альбома </param>
-            <param name="songId"> Идентификатор песни </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.DeleteAlbum(System.Guid)">
-            <summary>
-            Удалить альбом
-            </summary>
-            <param name="id"> Идентификатор альбома </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.GetAlbum(System.Guid)">
-            <summary>
-            Получить альбом
-            </summary>
-            <param name="id"> Идентификатор альбома </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.GetAllAlbums">
-            <summary>
-            Получить все альбомы
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.GetAllDeletedAlbums">
-            <summary>
-            Получить все удаленные альбомы
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IAlbums.RestoreAlbum(System.Guid)">
-            <summary>
-            Восстановить альбом
-            </summary>
-            <param name="id"> Идентификатор альбома </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IListeners.GetAllListenerSongs(System.Guid)">
-            <summary>
-            Получить все песни слушателя
-            </summary>
-            <param name="id"> Идентификатор слушателя </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IListeners.AttachSong(System.Guid,System.Guid)">
-            <summary>
-            Прикрепить песню
-            </summary>
-            <param name="accountId"> Идентификатор слушателя </param>
-            <param name="songId"> Идентификатор песни </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IListeners.AttachAlbum(System.Guid,System.Guid)">
-            <summary>
-            Прикрепить альбом
-            </summary>
-            <param name="accountId"> Идентификатор слушателя </param>
-            <param name="albumId"> Идентификатор альбома </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IPerformers.GetAllPerformerSongs(System.Guid)">
-            <summary>
-            Получить все песни исполнителя
-            </summary>
-            <param name="id"> Идентификатор исполнителя </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IPerformers.AttachSong(System.Guid,System.Guid)">
-            <summary>
-            Прикрепить песню
-            </summary>
-            <param name="accountId"> Идентификатор исполнителя </param>
-            <param name="songId"> Идентификатор песни </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.IPerformers.AttachAlbum(System.Guid,System.Guid)">
-            <summary>
-            Прикрепить альбом
-            </summary>
-            <param name="accountId"> Идентификатор исполнителя </param>
-            <param name="albumId"> Идентификатор альбома </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ICrud`1.DeleteByIdEntity(System.Guid)">
-            <summary>
-            Удаление по id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ICrud`1.GetAllDeletedEntities">
-            <summary>
-            Получение всех удаленных сущностей
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ICrud`1.GetAllEntities">
-            <summary>
-            Получение всех сущностей
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ICrud`1.GetByIdEntity(System.Guid)">
-            <summary>
-            Получение сущности по идентификатору
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ICrud`1.RestoreEntity(System.Guid)">
-            <summary>
-            Восстановление сущности
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ISongs.AddSong(System.String,System.Int64)">
-            <summary>
-            Добавить песню
-            </summary>
-            <param name="title"> Название песни </param>
-            <param name="duration"> Длительность </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ISongs.DeleteSong(System.Guid)">
-            <summary>
-            Удалить песню
-            </summary>
-            <param name="id"> Идентификатор </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ISongs.GetAllSongs">
-            <summary>
-            Получить все песни
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ISongs.GetSong(System.Guid)">
-            <summary>
-            Получить песню
-            </summary>
-            <param name="id"> Идентификатор песни </param>
-            <returns></returns>
-        </member>
-        <member name="M:MusicService.Services.ISongs.GetSongByTitle(System.String)">
-            <summary>
-            Получить песню по названию
-            </summary>
-            <param name="title"> Название </param>
-            <returns></returns>
         </member>
     </members>
 </doc>

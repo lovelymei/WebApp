@@ -77,7 +77,7 @@ namespace MusicService
 
                 entity.HasOne(e => e.Performer)
                    .WithMany(e => e.Songs)
-                   .HasForeignKey(e => e.AccountId)
+                   .HasForeignKey(e => e.FK_AccountId) //AccountId
                    .HasConstraintName("Performer/Songs");
 
                 entity.HasMany(d => d.Listeners)
@@ -92,7 +92,7 @@ namespace MusicService
 
                 entity.HasOne(e => e.Performer)
                     .WithMany(e => e.Albums)
-                    .HasForeignKey(e => e.AccountId)
+                    .HasForeignKey(e => e.FK_AccountId) //AccountId
                     .HasConstraintName("Performer/Albums");
 
                 entity.HasMany(d => d.Listeners)

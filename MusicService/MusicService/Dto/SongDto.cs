@@ -17,6 +17,7 @@ namespace MusicService.Models
             DurationMs = song.DurationMs;
             ProductionDate = song.ProductionDate;
         }
+
         [Required]
         public string Title { get; set; }
         public long DurationMs { get; set; }

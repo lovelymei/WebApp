@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class ListenersInSQLRepository : RepositoryBase<Listener>, IListeners
+    public class ListenersInSQLRepository  : IListeners
     {
         MusicDatabase _db;
 
-        public ListenersInSQLRepository(MusicDatabase db) : base(db)
+        public ListenersInSQLRepository(MusicDatabase db)
         {
             _db = db;
         }
@@ -27,7 +27,7 @@ namespace MusicService.Services
         {
             var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.AccountId == accountId);
 
-            var song = await _db.Songs.FirstOrDefaultAsync(c => c.SongId == songId);
+            var song = await _db.Songs.FirstOrDefaultAsync(c => c.AccountId == songId);
 
             if (listener == null || song == null) return false;
 
@@ -42,7 +42,7 @@ namespace MusicService.Services
         {
             var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.AccountId == accountId);
 
-            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AlbumId == albumId);
+            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AccountId == albumId);
 
             if (listener == null || album == null) return false;
 
@@ -51,6 +51,31 @@ namespace MusicService.Services
             await _db.DisposeAsync();
 
             return true;
+        }
+
+        public Task<bool> DeleteEntity(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Listener>> GetAllDeletedEntities()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Listener>> GetAllEntities()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Listener> GetEntity(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RestoreEntity(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 

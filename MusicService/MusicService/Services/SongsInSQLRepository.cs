@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class SongsInSQLRepository : RepositoryBase<Song>, ISongs
+    public class SongsInSQLRepository : ISongs
     {
         private readonly MusicDatabase _db;
-        public SongsInSQLRepository(MusicDatabase db) : base(db)
+        public SongsInSQLRepository(MusicDatabase db) 
         {
             _db = db;
         }
@@ -62,6 +62,31 @@ namespace MusicService.Services
             await _db.DisposeAsync();
 
             return true;
+        }
+
+        public Task<bool> DeleteEntity(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Song>> GetAllDeletedEntities()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Song>> GetAllEntities()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Song> GetEntity(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RestoreEntity(Guid id)
+        {
+
         }
 
         //public async Task<bool> DeleteSong(Guid id)
