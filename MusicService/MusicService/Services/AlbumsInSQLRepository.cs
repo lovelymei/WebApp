@@ -18,7 +18,13 @@ namespace MusicService.Services
             _db = db;
         }
 
- 
+
+        public override DbSet<Album> GetDbSet()
+        {
+            return _db.Albums;
+        }
+
+
         public async Task<Album> AddAlbum(string title)
         {
             var random = new Random();

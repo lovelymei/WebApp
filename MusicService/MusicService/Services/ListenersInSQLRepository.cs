@@ -16,6 +16,12 @@ namespace MusicService.Services
             _db = db;
         }
 
+        public override DbSet<Listener> GetDbSet()
+        {
+            return _db.Listeners;
+        }
+
+
         public async Task<List<Song>> GetAllListenerSongs(Guid id)
         {
             var user = await _db.Listeners.Include(c => c.Songs).FirstOrDefaultAsync(c => c.AccountId == id && c.IsDeleted == false);

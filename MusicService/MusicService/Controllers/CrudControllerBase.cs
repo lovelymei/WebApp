@@ -13,8 +13,7 @@ using System.Threading.Tasks;
 namespace MusicService.Controllers
 {
 
-    public abstract class CrudControllerBase<T>
-        : ControllerBase
+    public abstract class CrudControllerBase<T> : ControllerBase
         where T : AccountBaseDto
     {
         protected readonly IRepositoryBase<T> _crud;

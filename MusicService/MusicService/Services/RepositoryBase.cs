@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace MusicService.Services
 {
     public abstract class RepositoryBase<TEntity, TDto> : IRepositoryBase<TDto> 
+        where TEntity : AccountBase
         where TDto : AccountBaseDto
     {
         private readonly MusicDatabase _db;
@@ -20,6 +21,7 @@ namespace MusicService.Services
             _db = db;
         }
 
+        public abstract DbSet<TEntity> GetDbSet();
 
         private TDto TransformToDto(TEntity account)
         {
@@ -44,21 +46,21 @@ namespace MusicService.Services
             throw new NotSupportedException();
         }
 
+
         public virtual async Task<IEnumerable<TDto>> GetAllEntities()
         {
-            //public abstract GetDbset()
             await Task.CompletedTask;
 
-            var collection = (DbSet<TDto>)_db
-                .GetCollection<TEntity>();
+            var collection = GetDbSet();
 
             return collection
-                .Where(c => c.IsDeleted == false);
+                .Where(c => c.IsDeleted == false)
+                .Select(c => TransformToDto(c));
         }
 
         public virtual async Task<TDto> GetEntity(Guid id)
         {
-            var collection = await GetAllEntities(); //IEnumerable<TDto>
+            var collection = await GetAllEntities(); 
 
             return collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == false);
         }

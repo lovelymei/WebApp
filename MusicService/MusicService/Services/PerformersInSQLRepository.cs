@@ -11,6 +11,10 @@ namespace MusicService.Services
     {
         MusicDatabase _db;
 
+        public override DbSet<Performer> GetDbSet()
+        {
+            return _db.Performers;
+        }
         public PerformersInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;

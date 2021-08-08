@@ -15,6 +15,11 @@ namespace MusicService.Services
             _db = db;
         }
 
+        public override DbSet<Song> GetDbSet()
+        {
+            return _db.Songs;
+        }
+
         public async Task<Song> GetSongByTitle(string title)
         {
             var songs = await _db.Songs.ToListAsync();
