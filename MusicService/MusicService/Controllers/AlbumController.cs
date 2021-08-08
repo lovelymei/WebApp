@@ -14,46 +14,13 @@ namespace MusicService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlbumController : CrudControllerBase<Album, AlbumDto>
+    public class AlbumController : CrudControllerBase<AlbumDto>
     {
         private readonly IAlbums _albums;
 
-        public AlbumController(IRepositoryBase<Album> crud) : base(crud)
+        public AlbumController(IRepositoryBase<AlbumDto> crud) : base(crud)
         {
             
-        }
-
-        /// <summary>
-        /// Получить все альбомы
-        /// </summary>
-        /// <response code="200"> Успешно </response>
-        /// <response code="404"> Альбомы не найдены </response>
-        /// <response code="500"> Ошибка сервера </response>
-        /// <returns></returns>
-        [HttpGet]
-        [AuthorizeEnum(Roles.administratior)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public override async Task<ActionResult<List<AlbumDto>>> GetAllAlbums()
-        {
-
-        }
-
-        /// <summary>
-        /// Получить альбом по идентификатору
-        /// </summary>
-        /// <param name="id"> Идентификатор альбома</param>
-        /// <response code="200"> Успешно </response>
-        /// <response code="404"> Альбом не найден</response>
-        /// <response code="500"> Ошибка сервера </response>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AlbumDto>> GetAlbum(Guid id)
-        {
         }
 
 
@@ -73,62 +40,6 @@ namespace MusicService.Controllers
             return new AlbumDto(album);
         }
 
-        /// <summary>
-        /// Удалить альбом
-        /// </summary>
-        /// <param name="id"> Идентификатор альбома </param>
-        /// <returns></returns>
-        [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteAlbum(Guid id)
-        {
-            var isDeleted = await _albums.DeleteAlbum(id);
-            return isDeleted ? Ok() : NotFound();
-        }
 
-        ///// <summary>
-        ///// Восстановить альбом
-        ///// </summary>
-        ///// <param name="id"> Идентификатор альбома </param>
-        ///// <response code="200"> Успешно</response>
-        ///// <response code="404"> Альбом не найден</response>
-        ///// <response code="500"> Ошибка сервера </response>
-        ///// <returns></returns>
-        //[HttpPut("isDeleted/{id}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<ActionResult> RestoreAlbum(Guid id)
-        //{
-        //    var isRestored = await _albums.RestoreAlbum(id);
-
-        //    return isRestored ? Ok() : NotFound(new { errorMessage = "Проверьте id" });
-        //}
-
-        ///// <summary>
-        ///// Получить все удаленные альбомы
-        ///// </summary>
-        /////  <response code="200"> Успешно</response>
-        /////  <response code="404"> Не найдено ни одного удаленного альбома</response>
-        /////   <response code="500"> Ошибка сервера </response>
-        ///// <returns></returns>
-        //[HttpGet("isDeleted")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<ActionResult<List<AlbumDto>>> GetAllDeletedAlbums()
-        //{
-        //    var albums = await _albums.GetAllDeletedAlbums();
-        //    List<AlbumDto> albumsDto = new List<AlbumDto>();
-
-        //    foreach (var album in albums)
-        //    {
-        //        albumsDto.Add(new AlbumDto(album));
-        //    }
-
-        //    return Ok(albumsDto);
-        //}
     }
 }

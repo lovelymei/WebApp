@@ -10,13 +10,13 @@ namespace MusicService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PerformerController : ControllerBase
+    public class PerformerController : CrudControllerBase<PerformerDto>
     {
         IPerformers _performers;
 
-        public PerformerController(IPerformers performers)
+        public PerformerController(IRepositoryBase<PerformerDto> performers) : base(performers)
         {
-            _performers = performers;
+
         }
 
         /// <summary>

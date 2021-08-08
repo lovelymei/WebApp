@@ -50,6 +50,51 @@
             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
+        <member name="M:MusicService.Controllers.CrudControllerBase`1.GetAll">
+            <summary>
+            Получить все 
+            </summary>
+            <response code="200"> Успешно </response>
+            <response code="404"> не найдены </response>
+            <response code="500"> Ошибка сервера </response>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Controllers.CrudControllerBase`1.Delete(System.Guid)">
+            <summary>
+            Удалить 
+            </summary>
+            <param name="id"> Идентификатор </param>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Controllers.CrudControllerBase`1.Get(System.Guid)">
+            <summary>
+            Получить  по идентификатору
+            </summary>
+            <param name="id"> Идентификатор </param>
+            <response code="200"> Успешно </response>
+            <response code="404"> не найден</response>
+            <response code="500"> Ошибка сервера </response>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Controllers.CrudControllerBase`1.Restore(System.Guid)">
+            <summary>
+            Восстановить
+            </summary>
+            <param name="id"> Идентификатор </param>
+            <response code="200"> Успешно</response>
+            <response code="404"> не найден</response>
+            <response code="500"> Ошибка сервера </response>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Controllers.CrudControllerBase`1.GetAllDeleted">
+            <summary>
+            Получить все удаленные 
+            </summary>
+             <response code="200"> Успешно</response>
+             <response code="404"> Не найдено ни одного удаленного </response>
+              <response code="500"> Ошибка сервера </response>
+            <returns></returns>
+        </member>
         <member name="M:MusicService.Controllers.ListenerController.GetAllUsersSongs(System.Guid)">
             <summary>
             Получить все песни пользователя
@@ -121,11 +166,6 @@
             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
-        <member name="P:MusicService.Models.Album.AlbumId">
-            <summary>
-            Идентификатор
-            </summary>
-        </member>
         <member name="P:MusicService.Models.Album.Name">
             <summary>
             Название
@@ -136,14 +176,9 @@
             Дата публикации
             </summary>
         </member>
-        <member name="P:MusicService.Models.Album.IsDeleted">
+        <member name="P:MusicService.Models.Album.FK_AccountId">
             <summary>
-            Удален ли альбом
-            </summary>
-        </member>
-        <member name="P:MusicService.Models.Album.AccountId">
-            <summary>
-            Идентификатор пользователя
+            Идентификатор пользователя (внешний ключ)
             </summary>
         </member>
         <member name="P:MusicService.Models.Album.Performer">
@@ -191,19 +226,14 @@
             Альбомы
             </summary>
         </member>
-        <member name="P:MusicService.Models.Song.SongId">
+        <member name="P:MusicService.Models.Song.FK_AccountId">
             <summary>
-            Идентификатор песни
-            </summary>
-        </member>
-        <member name="P:MusicService.Models.Song.AccountId">
-            <summary>
-            Идентификатор аккаунта
+            Идентификатор аккаунта (внешний ключ)
             </summary>
         </member>
         <member name="P:MusicService.Models.Song.AlbumId">
             <summary>
-            Возможный идентификатор Альбома 
+            Возможный идентификатор Альбома (внешний ключ)
             </summary>
         </member>
         <member name="P:MusicService.Models.Song.Album">
@@ -226,11 +256,6 @@
             Дата выпуска
             </summary>
         </member>
-        <member name="P:MusicService.Models.Song.IsDeleted">
-            <summary>
-            Не удалена ли песня
-            </summary>
-        </member>
         <member name="P:MusicService.Models.Song.PerformerId">
             <summary>
             Идентификатор исполнителя
@@ -245,6 +270,39 @@
             <summary>
             Исполнитель
             </summary>
+        </member>
+        <member name="M:MusicService.Services.IRepositoryBase`1.DeleteEntity(System.Guid)">
+            <summary>
+            Удаление 
+            </summary>
+            <param name="id"> Идентификатор </param>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.IRepositoryBase`1.GetAllDeletedEntities">
+            <summary>
+            Получение всех удаленных записей
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.IRepositoryBase`1.GetAllEntities">
+            <summary>
+            Получение всех записей 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.IRepositoryBase`1.GetEntity(System.Guid)">
+            <summary>
+            Получение записи по идентификатору
+            </summary>
+            <param name="id"> Идентификатор </param>
+            <returns></returns>
+        </member>
+        <member name="M:MusicService.Services.IRepositoryBase`1.RestoreEntity(System.Guid)">
+            <summary>
+            Восстановление записи
+            </summary>
+            <param name="id"> Идентификатор </param>
+            <returns></returns>
         </member>
     </members>
 </doc>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public interface IListeners : IRepositoryBase<Listener>
+    public interface IListeners
     {
         Task<bool> AttachAlbum(Guid accountId, Guid albumId);
         Task<bool> AttachSong(Guid accountId, Guid songId);

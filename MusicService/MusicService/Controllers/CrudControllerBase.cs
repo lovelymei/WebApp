@@ -13,14 +13,13 @@ using System.Threading.Tasks;
 namespace MusicService.Controllers
 {
 
-    public abstract class CrudControllerBase<TEntity,TDto>
+    public abstract class CrudControllerBase<T>
         : ControllerBase
-        where TEntity : AccountBase
-        where TDto : AccountBaseDto, new()
+        where T : AccountBaseDto
     {
-        protected readonly IRepositoryBase<TEntity,TDto> _crud;
+        protected readonly IRepositoryBase<T> _crud;
 
-        protected CrudControllerBase(IRepositoryBase<TEntity,TDto> crud)
+        protected CrudControllerBase(IRepositoryBase<T> crud)
         {
             _crud = crud;
         }
@@ -38,7 +37,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<TDto>>> GetAll()
+        public virtual async Task<ActionResult<List<T>>> GetAll()
         {
             return Ok(await _crud.GetAllEntities());
         }
@@ -52,7 +51,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Delete(Guid id)
+        public virtual async Task<ActionResult> Delete(Guid id)
         {
             var isDeleted = await _crud.DeleteEntity(id);
 
@@ -71,13 +70,13 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TDto>> Get(Guid id)
+        public virtual async Task<ActionResult<T>> Get(Guid id)
         {
             var entity = await _crud.GetEntity(id);
 
             if (entity == null) return NotFound();
 
-            return await TransformToDto(entity);
+            return Ok(entity);
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Restore(Guid id)
+        public virtual async Task<ActionResult> Restore(Guid id)
         {
             var isRestored = await _crud.RestoreEntity(id);
 
@@ -110,16 +109,9 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<TDto>>> GetAllDeleted()
+        public virtual async Task<ActionResult<List<T>>> GetAllDeleted()
         {
-            var items = await _crud.GetAllDeletedEntities();
-            List<TDto> itemsDto = new List<TDto>();
-
-            foreach (var item in items)
-            {
-                itemsDto.Add(await TransformToDto(item));
-            }
-            return Ok(itemsDto);
+            return Ok(await _crud.GetAllDeletedEntities());
         }
 
     }

@@ -10,9 +10,8 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public abstract class RepositoryBase<TEntity,TDto> : IRepositoryBase<TEntity, TDto> 
-        where TEntity : AccountBase
-        where TDto: AccountBaseDto
+    public abstract class RepositoryBase<TEntity, TDto> : IRepositoryBase<TDto> 
+        where TDto : AccountBaseDto
     {
         private readonly MusicDatabase _db;
 
@@ -45,49 +44,49 @@ namespace MusicService.Services
             throw new NotSupportedException();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllEntities()
+        public virtual async Task<IEnumerable<TDto>> GetAllEntities()
         {
             //public abstract GetDbset()
             await Task.CompletedTask;
-            var collection = (DbSet<TEntity>)_db
+
+            var collection = (DbSet<TDto>)_db
                 .GetCollection<TEntity>();
 
-
-            return (IEnumerable<TEntity>)collection
-                .Where(c => c.IsDeleted == false)
-                .Select(c=> TransformToDto(c));
+            return collection
+                .Where(c => c.IsDeleted == false);
         }
 
-        public async Task<TEntity> GetEntity(Guid id)
+        public virtual async Task<TDto> GetEntity(Guid id)
         {
-            var collection = await GetAllEntities();
-            var item = collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == false);
-            return item;
+            var collection = await GetAllEntities(); //IEnumerable<TDto>
+
+            return collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == false);
         }
 
-        public async Task<bool> DeleteEntity(Guid id)
+        public virtual async Task<bool> DeleteEntity(Guid id)
         {
             var item = await GetEntity(id);
 
             if (item == null) return false;
 
             item.IsDeleted = true;
+
             return true;
         }
 
-        public async Task<List<TEntity>> GetAllDeletedEntities()
+        public virtual async Task<List<TDto>> GetAllDeletedEntities()
         {
             var collection = await GetAllEntities();
+
             return collection.Where(c => c.IsDeleted == true).ToList();
         }
 
-        public async Task<bool> RestoreEntity(Guid id)
+        public virtual async Task<bool> RestoreEntity(Guid id)
         {
             var collection = await GetAllDeletedEntities();
             var item = collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == true);
             item.IsDeleted = false;
             return true;
         }
-
     }
 }

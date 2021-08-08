@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class ListenersInSQLRepository  : IListeners
+    public class ListenersInSQLRepository  : RepositoryBase<Listener, ListenerDto>, IListeners
     {
         MusicDatabase _db;
 
-        public ListenersInSQLRepository(MusicDatabase db)
+        public ListenersInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;
         }
@@ -51,31 +51,6 @@ namespace MusicService.Services
             await _db.DisposeAsync();
 
             return true;
-        }
-
-        public Task<bool> DeleteEntity(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Listener>> GetAllDeletedEntities()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Listener>> GetAllEntities()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Listener> GetEntity(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> RestoreEntity(Guid id)
-        {
-            throw new NotImplementedException();
         }
     }
 

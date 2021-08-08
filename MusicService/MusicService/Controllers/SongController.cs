@@ -11,59 +11,14 @@ namespace MusicService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SongController : ControllerBase
+    public class SongController : CrudControllerBase<SongDto>
     {
         private readonly ISongs _songs;
 
-        public SongController(ISongs songs)
+        public SongController(IRepositoryBase<SongDto> crud) : base(crud)
         {
-            _songs = songs;
+
         }
-
-        //    /// <summary>
-        //    /// Получить все песни
-        //    /// </summary>
-        //    /// <response code="200"> Успешно </response>
-        //    /// <response code="404"> Песни не найдены </response>
-        //    /// <response code="500"> Ошибка сервера </response>
-        //    /// <returns></returns>
-        //    [HttpGet]
-        //    [ProducesResponseType(StatusCodes.Status200OK)]
-        //    [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //    public async Task<ActionResult<List<SongDto>>> GetAllSongs()
-        //    {
-        //        var songs = await _songs.GetAllSongs();
-        //        List<SongDto> songsDto = new List<SongDto>();
-
-        //        foreach (var song in songs)
-        //        {
-        //            songsDto.Add(new SongDto(song));
-        //        }
-
-        //        return Ok(songsDto);
-        //    }
-
-        //    /// <summary>
-        //    /// Получить песню
-        //    /// </summary>
-        //    /// <param name="id">Идентификатор</param>
-        //    /// <response code="200"> Успешно</response>
-        //    /// <response code="404"> Песня не найдена </response>
-        //    /// <response code="500"> Ошибка сервера </response>
-        //    /// <returns></returns>
-        //    [HttpGet("{id}")]
-        //    [ProducesResponseType(StatusCodes.Status200OK)]
-        //    [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //    public async Task<ActionResult<SongDto>> GetSong(Guid id)
-        //    {
-        //        var song = await _songs.GetSong(id);
-
-        //        if (song == null) return NotFound();
-
-        //        return new SongDto(song);
-        //    }
 
         /// <summary>
         /// Добавить новую песню
@@ -81,25 +36,5 @@ namespace MusicService.Controllers
             var isAdded = await _songs.AddSong(title, duration);
             return isAdded ? Ok() : NotFound();
         }
-
-        //    /// <summary>
-        //    /// Удалить песню
-        //    /// </summary>
-        //    /// <param name="id"> Идентификатор песни</param>
-        //    /// <response code="200"> Успешно</response>
-        //    /// <response code="404"> Песня не найдена </response>
-        //    /// <response code="500"> Ошибка сервера </response>
-        //    /// <returns></returns>
-        //    [HttpDelete]
-        //    [ProducesResponseType(StatusCodes.Status200OK)]
-        //    [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //    public async Task<ActionResult> DeleteSong(Guid id)
-        //    {
-        //        var isDeleted = await _songs.DeleteSong(id);
-        //        return isDeleted ? Ok() : NotFound();
-        //    }
-
-        //}
     }
 }

@@ -11,12 +11,12 @@ namespace MusicService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ListenerController : CrudControllerBase<Listener, ListenerDto>,IListeners
+    public class ListenerController : CrudControllerBase<ListenerDto>
     {
         private readonly IListeners _listeners;
-        public ListenerController(IRepositoryBase<Listener> listeners) : base(listeners)
+        public ListenerController(IRepositoryBase<ListenerDto> listeners) : base(listeners)
         {
-            _listeners = (IListeners)listeners;
+
         }
 
         /// <summary>

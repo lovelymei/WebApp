@@ -14,10 +14,10 @@ namespace MusicService.Models
     [Length]
     public partial class PerformerDto : AccountBaseDto
     {
-        public PerformerDto(Performer performer) 
+        public PerformerDto(Performer user) : base(user)
         {
-            BirthDate = performer.BirthDate;
-            Songs = performer.Songs
+            BirthDate = user.BirthDate;
+            Songs = user.Songs
                 .Select(c => new SongDto(c))
                 .ToList();
         }

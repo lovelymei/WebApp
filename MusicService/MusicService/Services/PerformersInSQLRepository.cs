@@ -27,7 +27,7 @@ namespace MusicService.Services
         {
             var performer = await _db.Performers.FirstOrDefaultAsync(c => c.AccountId == accountId);
 
-            var song = await _db.Songs.FirstOrDefaultAsync(c => c.SongId == songId);
+            var song = await _db.Songs.FirstOrDefaultAsync(c => c.AccountId == songId);
 
             if (performer == null || song == null) return false;
 

@@ -1,4 +1,5 @@
 ﻿using AspNetCoreValidationLibrary;
+using MusicService.Dto;
 using System;
 using System.Collections.Generic;
 
@@ -9,9 +10,9 @@ namespace MusicService.Models
     [DateFormat]
     [OnlyLatin]
     [Length]
-    public class ListenerDto
+    public class ListenerDto : AccountBaseDto
     {
-        public ListenerDto(Listener user)
+        public ListenerDto(Listener user) : base(user)
         {
             BirthDate = user.BirthDate;
         }
