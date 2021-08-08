@@ -21,47 +21,72 @@ namespace AuthorizationService.Services
         {
             _db = db;
             _logger = logger;
+            _logger.LogTrace($"using AccountsInSQlRepositoryConstructor");
+            CreateSuperAdmin();
         }
 
-        //IEnumerable 
-        // yeld return
-        public async Task<List<AccountDto>> GetAllAccounts()
+
+        private async void CreateSuperAdmin()
         {
+            _logger.LogTrace($"using {nameof(CreateSuperAdmin)}");
+            
+            if (!_db.Accounts.Any())
+            {
+                _logger.Warn("SuperAdmin has been created by default");
+
+                string password = "123";
+                var salt = GenerateSalt();
+
+                var superLogin = new Login()
+                {
+                    Email = "superAdminAndrewst@bk.ru",
+                    Salt = Convert.ToBase64String(salt),
+                    PasswordHash = Convert.ToBase64String(password.ToPasswordHash(salt)),
+                };
+
+                var account = new Account
+                {
+                    NickName = "superAdminAndrewst",
+                    Role = Roles.superadministrator,
+                    Login = superLogin
+                };
+
+                await _db.Accounts.AddAsync(account);
+                await _db.SaveChangesAsync();
+                await _db.DisposeAsync();
+            }
+        }
+
+
+        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
+        {
+            await Task.CompletedTask;
             _logger.LogTrace($"using {nameof(GetAllAccounts)}");
 
-            return await _db.Accounts
+            return _db.Accounts
                 .Where(c => c.IsDeleted == false)
-                .Select(c => new AccountDto(c))
-                .ToListAsync();
-
+                .Select(c => new AccountDto(c));
         }
 
 
         public async Task<Account> GetAccount(Guid id)
         {
-            _logger.Info($"using {nameof(GetAccount)}");
+            _logger.LogTrace($"using {nameof(GetAccount)}");
 
             var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == id && c.IsDeleted == false);
 
-            if (account == null)
-            {
-                _logger.Warn($"{nameof(account)} doesn't exist");
-                return null;
-            }
+            if (account == null) return null;
 
             return account;
         }
 
         public async Task<bool> CheckNameEquality(string name)
         {
+            _logger.LogTrace($"using {nameof(CheckNameEquality)}");
             var existAccounts = await GetAllAccounts();
             var existAccount = existAccounts.FirstOrDefault(a => a.NickName == name);
 
-            if (existAccount != null)
-            {
-                _logger.Warn($"{nameof(existAccount)} has the entered name '{name}'");
-                return true;
-            }
+            if (existAccount != null) return true;
 
             return false;
         }
@@ -95,21 +120,21 @@ namespace AuthorizationService.Services
 
         public async Task<AccountDto> RegisterListenerAccount(AccountCreateDto accountCreateDto)
         {
-            _logger.Info($"using {nameof(RegisterListenerAccount)}");
+            _logger.LogTrace($"using {nameof(RegisterListenerAccount)}");
             var listenerAccontDto = await CreateAccount(accountCreateDto, Roles.listener);
             return listenerAccontDto;
         }
 
         public async Task<AccountDto> RegisterPerformerAccount(AccountCreateDto accountCreateDto)
         {
-            _logger.Info($"using {nameof(RegisterPerformerAccount)}");
+            _logger.LogTrace($"using {nameof(RegisterPerformerAccount)}");
             var performerAccountDto = await CreateAccount(accountCreateDto, Roles.performer);
             return performerAccountDto;
         }
 
         public async Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto)
         {
-            _logger.Info($"using {nameof(RegisterAdminAccount)}");
+            _logger.LogTrace($"using {nameof(RegisterAdminAccount)}");
             var adminAccountDto = await CreateAccount(accountCreateDto, Roles.administratior);
             return adminAccountDto;
         }
@@ -117,16 +142,12 @@ namespace AuthorizationService.Services
 
         public async Task<bool> UpdateAccount(Guid id, AccountCreateDto accountCreateDto)
         {
-            _logger.Info($"using {nameof(UpdateAccount)}");
+            _logger.LogTrace($"using {nameof(UpdateAccount)}");
 
             var account = await _db.Accounts.Include(a => a.Login)
                                            .FirstOrDefaultAsync(c => c.AccountId == id);
 
-            if (account == null)
-            {
-                _logger.Warn($"{nameof(account)} doesn't exist");
-                return false;
-            }
+            if (account == null) return false;
 
             var salt = GenerateSalt();
             var enteredPassHash = accountCreateDto.Password.ToPasswordHash(salt);
@@ -146,15 +167,11 @@ namespace AuthorizationService.Services
 
         public async Task<bool> DeleteAccount(Guid id)
         {
-            _logger.Info($"using {nameof(DeleteAccount)}");
+            _logger.LogTrace($"using {nameof(DeleteAccount)}");
 
             var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == id);
 
-            if (account == null)
-            {
-                _logger.Warn($"{nameof(account)} doesn't exist");
-                return false;
-            }
+            if (account == null) return false;
 
             account.IsDeleted = true;
 
@@ -164,39 +181,23 @@ namespace AuthorizationService.Services
             return true;
         }
 
-        public async Task<List<AccountDto>> GetAllDeletedAccounts()
+        public async Task<IEnumerable<AccountDto>> GetAllDeletedAccounts()
         {
-            _logger.Info($"using {nameof(GetAllDeletedAccounts)}");
+            await Task.CompletedTask;
+            _logger.LogTrace($"using {nameof(GetAllDeletedAccounts)}");
 
-            var deletedAccounts = await _db.Accounts.Where(c => c.IsDeleted == true).ToListAsync();
-
-            if (!deletedAccounts.Any())
-            {
-                _logger.Warn($"{nameof(deletedAccounts)}'s list is void");
-                return null;
-            }
-
-            List<AccountDto> accountsDto = new List<AccountDto>();
-
-            foreach (var account in deletedAccounts)
-            {
-                accountsDto.Add(new AccountDto(account));
-            }
-
-            return accountsDto;
+            return _db.Accounts
+                .Where(c => c.IsDeleted == true)
+                .Select(c => new AccountDto(c));
         }
 
         public async Task<bool> RestoreAccount(Guid id)
         {
-            _logger.Info($"using {nameof(RestoreAccount)}");
+            _logger.LogTrace($"using {nameof(RestoreAccount)}");
 
             var account = await _db.Accounts.FirstOrDefaultAsync(l => l.AccountId == id);
 
-            if (account == null)
-            {
-                _logger.Warn($"{nameof(account)} doesn't exist");
-                return false;
-            }
+            if (account == null) return false;
 
             account.IsDeleted = false;
 
@@ -217,15 +218,9 @@ namespace AuthorizationService.Services
 
         public async Task<Account> Authenticate(string email, string password)
         {
-            _logger.Info($"using {nameof(Authenticate)}");
+            _logger.LogTrace($"using {nameof(Authenticate)}");
 
             var login = await _db.Logins.FirstOrDefaultAsync(c => c.Email == email);
-
-            if (login == null)
-            {
-                _logger.Warn($"{nameof(login)} doesn't exist");
-                return null;
-            }
 
             var enteredPassHash = password.ToPasswordHash(Convert.FromBase64String(login.Salt));
 

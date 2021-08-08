@@ -121,8 +121,6 @@ namespace AuthorizationService
 
             app.UseAuthorization();
 
-            // app.UseMiddleware<CreateSuperAdminMiddleware>();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

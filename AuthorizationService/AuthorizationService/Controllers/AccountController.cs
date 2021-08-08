@@ -44,8 +44,6 @@ namespace AuthorizationService.Controllers
         {
             var accounts = await _accounts.GetAllAccounts();
 
-            if (accounts == null) return NoContent();
-
             return Ok(accounts);
         }
 
@@ -62,8 +60,6 @@ namespace AuthorizationService.Controllers
         public async Task<ActionResult<List<AccountDto>>> GetAllDeletedAccounts()
         {
             var deletedAccounts = await _accounts.GetAllDeletedAccounts();
-
-            if (deletedAccounts == null) return NoContent();
 
             return Ok(deletedAccounts);
         }

@@ -12,8 +12,8 @@ namespace AuthorizationService.Services
         Task<bool> CheckNameEquality(string name);
         Task<bool> DeleteAccount(Guid id);
         Task<Account> GetAccount(Guid id);
-        Task<List<AccountDto>> GetAllAccounts();
-        Task<List<AccountDto>> GetAllDeletedAccounts();
+        Task<IEnumerable<AccountDto>> GetAllAccounts();
+        Task<IEnumerable<AccountDto>> GetAllDeletedAccounts();
         Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto);
         Task<AccountDto> RegisterListenerAccount(AccountCreateDto accountCreateDto);
         Task<AccountDto> RegisterPerformerAccount(AccountCreateDto accountCreateDto);
