@@ -31,7 +31,7 @@ namespace AuthorizationService.Services
 
             var currentDt = GetDtFunc();
 
-            var entity = new RefreshToken(account.AccountId, currentDt, expiresSec);
+            var entity = new RefreshToken(account.EntityId, currentDt, expiresSec);
 
             await _db.RefreshTokens.AddAsync(entity);
             await _db.SaveChangesAsync();

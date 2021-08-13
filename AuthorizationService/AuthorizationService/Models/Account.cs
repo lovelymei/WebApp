@@ -1,10 +1,9 @@
-﻿using EntitiesLibrary;
-using System;
+﻿using NewEntityLibrary;
 using System.Collections.Generic;
 
 namespace AuthorizationService.Models
 {
-    public class Account : AccountBase
+    public class Account : EntityBase
     {
         public string NickName { get; set; }
         public Login Login { get; set; }

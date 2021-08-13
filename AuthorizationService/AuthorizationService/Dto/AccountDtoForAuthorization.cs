@@ -10,7 +10,7 @@ namespace AuthorizationService.Dto
     {
         public AccountDtoForAuthorization(Account account)
         {
-            Id = account.AccountId;
+            Id = account.EntityId;
             NickName = account.NickName;
             Role = account.Role.ToString(); 
         }
