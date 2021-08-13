@@ -15,9 +15,9 @@ namespace MusicService.Controllers
     {
         private readonly ISongs _songs;
 
-        public SongController(IRepositoryBase<SongDto> crud) : base(crud)
+        public SongController(ISongs songs, IStorage<SongDto> crud) : base(crud)
         {
-
+            _songs = songs;
         }
 
         /// <summary>

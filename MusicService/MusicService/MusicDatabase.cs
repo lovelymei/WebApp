@@ -53,7 +53,7 @@ namespace MusicService
          
             });
 
-            modelBuilder.Entity<Performer>().HasKey(e => e.AccountId).HasName("PK_Performer_AccountId");
+            modelBuilder.Entity<Performer>().HasKey(e => e.EntityId).HasName("PK_Performer_AccountId");
 
             modelBuilder.Entity<Listener>(entity =>
             {
@@ -63,7 +63,7 @@ namespace MusicService
              
             });
 
-            modelBuilder.Entity<Listener>().HasKey(e=>e.AccountId).HasName("PK_Listener_AccountId");
+            modelBuilder.Entity<Listener>().HasKey(e=>e.EntityId).HasName("PK_Listener_AccountId");
 
 
             modelBuilder.Entity<Song>(entity =>

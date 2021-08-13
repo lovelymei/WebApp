@@ -1,12 +1,12 @@
-﻿using MusicService.Dto;
+﻿using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public interface IRepositoryBase<TDto> 
-        where TDto : AccountBaseDto
+    public interface IStorage<TDto> 
+        where TDto : EntityBaseDto
     {
         /// <summary>
         /// Удаление 

@@ -18,9 +18,9 @@ namespace MusicService.Controllers
     {
         private readonly IAlbums _albums;
 
-        public AlbumController(IRepositoryBase<AlbumDto> crud) : base(crud)
+        public AlbumController(IAlbums albums, IStorage<AlbumDto> crud) : base(crud)
         {
-            
+            _albums = albums;
         }
 
 

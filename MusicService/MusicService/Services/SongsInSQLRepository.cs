@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicService.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,7 +40,7 @@ namespace MusicService.Services
                 ProductionDate = DateTime.MinValue.Add(TimeSpan.FromTicks((long)(random.NextDouble() * DateTime.MaxValue.Ticks)))
             };
 
-            var performer = await _db.Performers.FirstOrDefaultAsync(c => c.AccountId == newSong.PerformerId);
+            var performer = await _db.Performers.FirstOrDefaultAsync(c => c.EntityId == newSong.PerformerId);
 
             if (performer == null) return false;
 

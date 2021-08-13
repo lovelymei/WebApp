@@ -14,9 +14,9 @@ namespace MusicService.Controllers
     public class ListenerController : CrudControllerBase<ListenerDto>
     {
         private readonly IListeners _listeners;
-        public ListenerController(IRepositoryBase<ListenerDto> listeners) : base(listeners)
+        public ListenerController(IListeners listeners, IStorage<ListenerDto> crud) : base(crud)
         {
-
+            _listeners = listeners;
         }
 
         /// <summary>

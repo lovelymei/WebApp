@@ -1,5 +1,4 @@
 using AuthorizationService.Extensions;
-using EntitiesLibrary;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using MusicService.Dto;
-using MusicService.Models;
 using MusicService.Services;
+using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +30,8 @@ namespace MusicService
             services.AddDbContext<MusicDatabase>(options =>
                 options.UseSqlServer(connection));
 
+            services.AddScoped<IStorage<EntityBaseDto>, RepositoryBase<EntityBase, EntityBaseDto>>();
+            
             services.AddScoped<IAlbums, AlbumsInSQLRepository>();
             services.AddScoped<IListeners, ListenersInSQLRepository>();
             services.AddScoped<IPerformers, PerformersInSQLRepository>();

@@ -1,5 +1,4 @@
-﻿
-using EntitiesLibrary;
+﻿using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 
 namespace MusicService.Models
 {
-    public class Performer : AccountBase
+    public class Performer : EntityBase
     {
         public Performer()
         {

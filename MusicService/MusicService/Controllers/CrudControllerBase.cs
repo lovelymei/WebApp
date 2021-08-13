@@ -1,24 +1,19 @@
-﻿using EntitiesLibrary;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MusicService.Dto;
-using MusicService.Models;
 using MusicService.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MusicService.Controllers
 {
 
     public abstract class CrudControllerBase<T> : ControllerBase
-        where T : AccountBaseDto
+        where T : NewEntityLibrary.EntityBaseDto
     {
-        protected readonly IRepositoryBase<T> _crud;
+        protected readonly IStorage<T> _crud;
 
-        protected CrudControllerBase(IRepositoryBase<T> crud)
+        protected CrudControllerBase(IStorage<T> crud)
         {
             _crud = crud;
         }

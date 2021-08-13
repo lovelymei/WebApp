@@ -1,9 +1,10 @@
 ﻿using MusicService.Models;
+using NewEntityLibrary;
 using System;
 
 namespace MusicService.Dto
 {
-    public class AlbumDto : AccountBaseDto
+    public class AlbumDto : EntityBaseDto
     {
         public AlbumDto(Album entity) : base(entity)
         {

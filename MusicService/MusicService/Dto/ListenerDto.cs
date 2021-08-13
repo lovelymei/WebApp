@@ -1,7 +1,6 @@
 ﻿using AspNetCoreValidationLibrary;
-using MusicService.Dto;
+using NewEntityLibrary;
 using System;
-using System.Collections.Generic;
 
 #nullable disable
 
@@ -10,7 +9,7 @@ namespace MusicService.Models
     [DateFormat]
     [OnlyLatin]
     [Length]
-    public class ListenerDto : AccountBaseDto
+    public class ListenerDto : EntityBaseDto
     {
         public ListenerDto(Listener user) : base(user)
         {

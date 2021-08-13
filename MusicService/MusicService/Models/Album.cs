@@ -1,10 +1,10 @@
-﻿using EntitiesLibrary;
+﻿using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 
 namespace MusicService.Models
 {
-    public class Album : AccountBase
+    public class Album : EntityBase
     {
 
         /// <summary>

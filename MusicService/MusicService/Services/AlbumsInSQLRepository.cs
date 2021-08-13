@@ -1,10 +1,7 @@
-﻿using EntitiesLibrary;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MusicService.Dto;
 using MusicService.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MusicService.Services
@@ -44,9 +41,9 @@ namespace MusicService.Services
 
         public async Task<bool> AttachMusicSong(Guid albumId, Guid songId)
         {
-            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AccountId == albumId);
+            var album = await _db.Albums.FirstOrDefaultAsync(c => c.EntityId == albumId);
 
-            var song = await _db.Songs.FirstOrDefaultAsync(c => c.AccountId == songId);
+            var song = await _db.Songs.FirstOrDefaultAsync(c => c.EntityId == songId);
 
             if (album == null || song == null) return false;
 

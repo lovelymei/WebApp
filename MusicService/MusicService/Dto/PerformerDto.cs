@@ -1,5 +1,5 @@
 ﻿using AspNetCoreValidationLibrary;
-using MusicService.Dto;
+using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +12,7 @@ namespace MusicService.Models
     [DateFormat]
     [OnlyLatin]
     [Length]
-    public partial class PerformerDto : AccountBaseDto
+    public partial class PerformerDto : EntityBaseDto
     {
         public PerformerDto(Performer user) : base(user)
         {

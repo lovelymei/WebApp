@@ -14,9 +14,9 @@ namespace MusicService.Controllers
     {
         IPerformers _performers;
 
-        public PerformerController(IRepositoryBase<PerformerDto> performers) : base(performers)
+        public PerformerController(IPerformers performers, IStorage<PerformerDto> crud) : base(crud)
         {
-
+            _performers = performers;
         }
 
         /// <summary>

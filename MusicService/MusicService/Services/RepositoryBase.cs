@@ -1,7 +1,5 @@
-﻿using EntitiesLibrary;
-using Microsoft.EntityFrameworkCore;
-using MusicService.Dto;
-using MusicService.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +8,13 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public abstract class RepositoryBase<TEntity, TDto> : IRepositoryBase<TDto> 
-        where TEntity : AccountBase
-        where TDto : AccountBaseDto
+    //TODO: AccountBase - EntityBase
+    //TODO: AccountBaseDto replace to EntityLibrary
+    //TODO: mapper 
+    //MSSQLEFRepositoryBase
+    public abstract class RepositoryBase<TEntity, TDto> : IStorage<TDto> 
+        where TEntity : EntityBase
+        where TDto : EntityBaseDto
     {
         private readonly MusicDatabase _db;
 
@@ -29,7 +31,7 @@ namespace MusicService.Services
             Type type = typeof(TDto);
 
             //получаем открытый конструктор, в который надо передать объект типа AccountBase
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(AccountBase) });
+            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(EntityBase) });
 
             if (constructorInfo != null)
             {
@@ -62,7 +64,7 @@ namespace MusicService.Services
         {
             var collection = await GetAllEntities(); 
 
-            return collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == false);
+            return collection.FirstOrDefault(c => c.Id == id && c.IsDeleted == false);
         }
 
         public virtual async Task<bool> DeleteEntity(Guid id)
@@ -86,7 +88,7 @@ namespace MusicService.Services
         public virtual async Task<bool> RestoreEntity(Guid id)
         {
             var collection = await GetAllDeletedEntities();
-            var item = collection.FirstOrDefault(c => c.AccountId == id && c.IsDeleted == true);
+            var item = collection.FirstOrDefault(c => c.Id == id && c.IsDeleted == true);
             item.IsDeleted = false;
             return true;
         }

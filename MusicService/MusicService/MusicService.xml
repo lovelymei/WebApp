@@ -271,33 +271,33 @@
             Исполнитель
             </summary>
         </member>
-        <member name="M:MusicService.Services.IRepositoryBase`1.DeleteEntity(System.Guid)">
+        <member name="M:MusicService.Services.IStorage`1.DeleteEntity(System.Guid)">
             <summary>
             Удаление 
             </summary>
             <param name="id"> Идентификатор </param>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IRepositoryBase`1.GetAllDeletedEntities">
+        <member name="M:MusicService.Services.IStorage`1.GetAllDeletedEntities">
             <summary>
             Получение всех удаленных записей
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IRepositoryBase`1.GetAllEntities">
+        <member name="M:MusicService.Services.IStorage`1.GetAllEntities">
             <summary>
             Получение всех записей 
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IRepositoryBase`1.GetEntity(System.Guid)">
+        <member name="M:MusicService.Services.IStorage`1.GetEntity(System.Guid)">
             <summary>
             Получение записи по идентификатору
             </summary>
             <param name="id"> Идентификатор </param>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IRepositoryBase`1.RestoreEntity(System.Guid)">
+        <member name="M:MusicService.Services.IStorage`1.RestoreEntity(System.Guid)">
             <summary>
             Восстановление записи
             </summary>

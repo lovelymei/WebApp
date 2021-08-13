@@ -24,16 +24,16 @@ namespace MusicService.Services
 
         public async Task<List<Song>> GetAllListenerSongs(Guid id)
         {
-            var user = await _db.Listeners.Include(c => c.Songs).FirstOrDefaultAsync(c => c.AccountId == id && c.IsDeleted == false);
+            var user = await _db.Listeners.Include(c => c.Songs).FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
 
             return user.Songs.ToList();
         }
 
         public async Task<bool> AttachSong(Guid accountId, Guid songId)
         {
-            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.AccountId == accountId);
+            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId== accountId);
 
-            var song = await _db.Songs.FirstOrDefaultAsync(c => c.AccountId == songId);
+            var song = await _db.Songs.FirstOrDefaultAsync(c => c.EntityId == songId);
 
             if (listener == null || song == null) return false;
 
@@ -46,9 +46,9 @@ namespace MusicService.Services
 
         public async Task<bool> AttachAlbum(Guid accountId, Guid albumId)
         {
-            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.AccountId == accountId);
+            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId == accountId);
 
-            var album = await _db.Albums.FirstOrDefaultAsync(c => c.AccountId == albumId);
+            var album = await _db.Albums.FirstOrDefaultAsync(c => c.EntityId == albumId);
 
             if (listener == null || album == null) return false;
 

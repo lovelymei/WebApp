@@ -1,5 +1,5 @@
 ﻿using AspNetCoreValidationLibrary;
-using MusicService.Dto;
+using NewEntityLibrary;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,7 +10,7 @@ namespace MusicService.Models
     [DateFormat]
     [OnlyLatin]
     [Length]
-    public partial class SongDto : AccountBaseDto
+    public partial class SongDto : EntityBaseDto
     {
         public SongDto(Song entity) : base(entity)
         {
