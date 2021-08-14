@@ -111,7 +111,9 @@ namespace AuthorizationService.Controllers
 
             if (isEqual) return Conflict();
 
-            var createdListener = await _accounts.RegisterListenerAccount(listenerCreateDto);
+            //Мы не може переносить пароль в сыром виде на это нет соответствующего поля в моделях 
+            //В данном случае можно использовать автомаппер перенося пароль отдельно, но тогда это еще хуже и грязней 
+            var createdListener = await _accounts.CreateAccount(listenerCreateDto, Roles.listener);
 
             return Ok(createdListener);
         }
@@ -130,7 +132,7 @@ namespace AuthorizationService.Controllers
 
             if (isEqual) return Conflict();
 
-            var createdPerformer = await _accounts.RegisterPerformerAccount(performerCreateDto);
+            var createdPerformer = await _accounts.CreateAccount(performerCreateDto, Roles.performer);
 
             return Ok(createdPerformer);
         }
@@ -152,7 +154,7 @@ namespace AuthorizationService.Controllers
 
             if (isEqual) return Conflict();
 
-            var createdPerformer = await _accounts.RegisterAdminAccount(adminCreateDto);
+            var createdPerformer = await _accounts.CreateAccount(adminCreateDto, Roles.administratior);
 
             return Ok(createdPerformer);
         }
