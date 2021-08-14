@@ -73,7 +73,7 @@ namespace AuthorizationService.Services
         {
             _logger.LogTrace($"using {nameof(GetAccount)}");
 
-            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == id && c.IsDeleted == false);
+            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
 
             if (account == null) return null;
 
@@ -124,7 +124,7 @@ namespace AuthorizationService.Services
             _logger.LogTrace($"using {nameof(UpdateAccount)}");
 
             var account = await _db.Accounts.Include(a => a.Login)
-                                           .FirstOrDefaultAsync(c => c.AccountId == id);
+                                           .FirstOrDefaultAsync(c => c.EntityId == id);
 
             if (account == null) return false;
 
@@ -148,7 +148,7 @@ namespace AuthorizationService.Services
         {
             _logger.LogTrace($"using {nameof(DeleteAccount)}");
 
-            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.AccountId == id);
+            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.EntityId == id);
 
             if (account == null) return false;
 
@@ -174,7 +174,7 @@ namespace AuthorizationService.Services
         {
             _logger.LogTrace($"using {nameof(RestoreAccount)}");
 
-            var account = await _db.Accounts.FirstOrDefaultAsync(l => l.AccountId == id);
+            var account = await _db.Accounts.FirstOrDefaultAsync(l => l.EntityId == id);
 
             if (account == null) return false;
 
