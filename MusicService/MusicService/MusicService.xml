@@ -41,6 +41,16 @@
             Администратор 
             </summary>
         </member>
+        <member name="F:AuthorizationService.Models.Roles.superadministrator">
+            <summary>
+            Суперадминистратор
+            </summary>
+        </member>
+        <member name="T:AuthorizationService.SwaggerFilters.SwaggerAddEnumDescriptions">
+            <summary>
+            https://stackoverflow.com/questions/36452468/swagger-ui-web-api-documentation-present-enums-as-strings
+            </summary>
+        </member>
         <member name="M:MusicService.Controllers.AlbumController.AddAlbum(System.String)">
             <summary>
             Добавить альбом

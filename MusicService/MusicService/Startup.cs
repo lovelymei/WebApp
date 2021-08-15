@@ -1,4 +1,5 @@
 using AuthorizationService.Extensions;
+using AuthorizationService.SwaggerFilters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,7 @@ namespace MusicService
 
             services.AddAsymmetricAuthentication(Configuration);
 
+
             services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -87,10 +89,12 @@ namespace MusicService
                         new List<string>()
                     }
                 });
-
-                });
-            
+                c.DocumentFilter<SwaggerAddEnumDescriptions>();
+                c.OperationFilter<ReqiuredRolesDescriptionFilter>();
+            });
         }
+
+    
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

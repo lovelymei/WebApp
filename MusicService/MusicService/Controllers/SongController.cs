@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthorizationService.Extensions;
+using AuthorizationService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicService.Dto;
 using MusicService.Models;
@@ -30,6 +32,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPost]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator, Roles.performer)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> AddSong(string title, long duration)

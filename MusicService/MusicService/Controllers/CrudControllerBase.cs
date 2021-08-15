@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthorizationService.Extensions;
+using AuthorizationService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicService.Services;
+using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +12,7 @@ namespace MusicService.Controllers
 {
 
     public abstract class CrudControllerBase<T> : ControllerBase
-        where T : NewEntityLibrary.EntityBaseDto
+        where T : EntityBaseDto
     {
         protected readonly IStorage<T> _crud;
 
@@ -26,6 +29,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -40,6 +44,7 @@ namespace MusicService.Controllers
         /// <param name="id"> Идентификатор </param>
         /// <returns></returns>
         [HttpDelete]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -51,7 +56,7 @@ namespace MusicService.Controllers
         }
 
         /// <summary>
-        /// Получить  по идентификатору
+        /// Получить по идентификатору
         /// </summary>
         /// <param name="id"> Идентификатор </param>
         /// <response code="200"> Успешно </response>
@@ -80,6 +85,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPut("isDeleted/{id}")]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -98,6 +104,7 @@ namespace MusicService.Controllers
         ///   <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet("isDeleted")]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

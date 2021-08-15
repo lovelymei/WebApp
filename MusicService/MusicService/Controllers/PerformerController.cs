@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AuthorizationService.Extensions;
+using AuthorizationService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicService.Dto;
 using MusicService.Models;
@@ -26,6 +28,7 @@ namespace MusicService.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{Id}")]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator, Roles.performer)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -51,6 +54,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPut("{performerId}/{songId}")]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -70,6 +74,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPut("{performerId}/{albumId}")]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

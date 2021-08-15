@@ -32,6 +32,7 @@ namespace MusicService.Controllers
         /// <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpPost]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator, Roles.performer)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<AlbumDto>> AddAlbum(string title)
