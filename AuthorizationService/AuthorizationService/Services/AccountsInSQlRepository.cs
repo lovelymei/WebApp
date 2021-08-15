@@ -26,7 +26,7 @@ namespace AuthorizationService.Services
         }
 
 
-        private async void CreateSuperAdmin()
+        private void CreateSuperAdmin()
         {
             _logger.LogTrace($"using {nameof(CreateSuperAdmin)}");
 
@@ -51,9 +51,15 @@ namespace AuthorizationService.Services
                     Login = superLogin
                 };
 
-                await _db.Accounts.AddAsync(account);
-                await _db.SaveChangesAsync();
-                await _db.DisposeAsync();
+                _db.Accounts.Add(account);
+                _db.SaveChanges();
+                //_db.Dispose(); ????????????? Из-за этого ошибка
+                // await тоже не работает, 
+                //потому что скорее всего он не успевает выполнить задачу и перехходит к следующему запросу
+            }
+            else
+            {
+                _logger.Info("SuperAdmin has NOT been created");
             }
         }
 

@@ -13,9 +13,7 @@ namespace AuthorizationService
         public AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options)
             : base(options)
         {
-            //при изменении бд
-           // Database.EnsureDeleted();
-           // Database.EnsureCreated();
+            Database.EnsureCreated();
         }
         
         public virtual DbSet<Account> Accounts { get; set; }
@@ -35,6 +33,7 @@ namespace AuthorizationService
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Account>().HasKey(e => e.EntityId).HasName("PK_Account_EntityId");
 
             modelBuilder.Entity<Account>(entity =>
             { 
@@ -48,6 +47,8 @@ namespace AuthorizationService
 
                 entity.Property(p => p.IsDeleted)
                     .IsRequired();
+
+
             });
 
             modelBuilder.Entity<Login>(entity =>
