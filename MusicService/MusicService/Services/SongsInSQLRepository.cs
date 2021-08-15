@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicService.Dto;
 using MusicService.Models;
 using System;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class SongsInSQLRepository : RepositoryBase<Song,SongDto>, ISongs
+    public class SongsInSQLRepository : RepositoryBase<Song, SongDto>, ISongs
     {
         private readonly MusicDatabase _db;
         public SongsInSQLRepository(MusicDatabase db) : base(db)

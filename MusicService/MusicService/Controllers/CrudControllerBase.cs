@@ -18,8 +18,6 @@ namespace MusicService.Controllers
             _crud = crud;
         }
 
-
-
         /// <summary>
         /// Получить все 
         /// </summary>

@@ -1,10 +1,11 @@
 ﻿using AspNetCoreValidationLibrary;
+using MusicService.Models;
 using NewEntityLibrary;
 using System;
 
 #nullable disable
 
-namespace MusicService.Models
+namespace MusicService.Dto
 {
     [DateFormat]
     [OnlyLatin]

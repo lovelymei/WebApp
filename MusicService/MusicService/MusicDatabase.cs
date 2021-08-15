@@ -85,6 +85,8 @@ namespace MusicService
                     .UsingEntity(j => j.ToTable("ListenerSongLibrary"));
 
             });
+            
+            modelBuilder.Entity<Song>().HasKey(e => e.EntityId).HasName("PK_Song_EntityId");
 
             modelBuilder.Entity<Album>(entity =>
             {
@@ -99,6 +101,8 @@ namespace MusicService
                    .WithMany(d => d.Albums)
                    .UsingEntity(j => j.ToTable("ListenerAlbumLibrary"));
             });
+
+            modelBuilder.Entity<Album>().HasKey(e => e.EntityId).HasName("PK_Album_EntityId");
 
             OnModelCreatingPartial(modelBuilder);
         }

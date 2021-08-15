@@ -25,7 +25,7 @@ namespace MusicService.Services
 
         public abstract DbSet<TEntity> GetDbSet();
 
-        private TDto TransformToDto(TEntity account)
+        private static TDto TransformToDto(TEntity account)
         {
             //получаем тип TDto 
             Type type = typeof(TDto);

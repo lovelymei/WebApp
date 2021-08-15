@@ -1,4 +1,5 @@
 ﻿using AspNetCoreValidationLibrary;
+using MusicService.Models;
 using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 
 #nullable disable
 
-namespace MusicService.Models
+namespace MusicService.Dto
 {
     [DateFormat]
     [OnlyLatin]

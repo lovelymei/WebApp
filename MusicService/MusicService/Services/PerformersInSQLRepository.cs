@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicService.Dto;
 using MusicService.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class PerformersInSQLRepository : RepositoryBase<Performer,PerformerDto> , IPerformers
+    public class PerformersInSQLRepository : RepositoryBase<Performer, PerformerDto> , IPerformers
     {
         MusicDatabase _db;
 

@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MusicService.Dto;
+using MusicService.Models;
 using MusicService.Services;
 using NewEntityLibrary;
 using System;
@@ -24,14 +26,19 @@ namespace MusicService
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services) 
         {
             var connection = Configuration.GetConnectionString("MusicDatabase");
             services.AddDbContext<MusicDatabase>(options =>
                 options.UseSqlServer(connection));
 
-            services.AddScoped<IStorage<EntityBaseDto>, RepositoryBase<EntityBase, EntityBaseDto>>();
-            
+
+            services.AddScoped<IStorage<AlbumDto>, AlbumsInSQLRepository>();
+            services.AddScoped<IStorage<ListenerDto>, ListenersInSQLRepository>();
+            services.AddScoped<IStorage<PerformerDto>, PerformersInSQLRepository>();
+            services.AddScoped<IStorage<SongDto>, SongsInSQLRepository>();
+
+
             services.AddScoped<IAlbums, AlbumsInSQLRepository>();
             services.AddScoped<IListeners, ListenersInSQLRepository>();
             services.AddScoped<IPerformers, PerformersInSQLRepository>();

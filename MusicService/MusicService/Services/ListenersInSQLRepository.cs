@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicService.Dto;
 using MusicService.Models;
 using System;
 using System.Collections.Generic;
