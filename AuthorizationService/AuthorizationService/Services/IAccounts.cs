@@ -10,13 +10,11 @@ namespace AuthorizationService.Services
     {
         Task<Account> Authenticate(string email, string password);
         Task<bool> CheckNameEquality(string name);
+        Task<AccountDto> CreateAccount(AccountCreateDto accountCreateDto, Roles role);
         Task<bool> DeleteAccount(Guid id);
         Task<Account> GetAccount(Guid id);
         Task<IEnumerable<AccountDto>> GetAllAccounts();
         Task<IEnumerable<AccountDto>> GetAllDeletedAccounts();
-        Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto);
-        Task<AccountDto> RegisterListenerAccount(AccountCreateDto accountCreateDto);
-        Task<AccountDto> RegisterPerformerAccount(AccountCreateDto accountCreateDto);
         Task<bool> RestoreAccount(Guid id);
         Task<bool> UpdateAccount(Guid id, AccountCreateDto accountCreateDto);
     }

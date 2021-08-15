@@ -29,7 +29,7 @@ namespace AuthorizationService.Services
         private async void CreateSuperAdmin()
         {
             _logger.LogTrace($"using {nameof(CreateSuperAdmin)}");
-            
+
             if (!_db.Accounts.Any())
             {
                 _logger.Warn("SuperAdmin has been created by default");
@@ -91,7 +91,7 @@ namespace AuthorizationService.Services
             return false;
         }
 
-        private async Task<AccountDto> CreateAccount(AccountCreateDto accountCreateDto, Roles role)
+        public async Task<AccountDto> CreateAccount(AccountCreateDto accountCreateDto, Roles role)
         {
             var salt = GenerateSalt();
             var enteredPassHash = accountCreateDto.Password.ToPasswordHash(salt);
@@ -116,27 +116,6 @@ namespace AuthorizationService.Services
 
             return new AccountDto(account);
 
-        }
-
-        public async Task<AccountDto> RegisterListenerAccount(AccountCreateDto accountCreateDto)
-        {
-            _logger.LogTrace($"using {nameof(RegisterListenerAccount)}");
-            var listenerAccontDto = await CreateAccount(accountCreateDto, Roles.listener);
-            return listenerAccontDto;
-        }
-
-        public async Task<AccountDto> RegisterPerformerAccount(AccountCreateDto accountCreateDto)
-        {
-            _logger.LogTrace($"using {nameof(RegisterPerformerAccount)}");
-            var performerAccountDto = await CreateAccount(accountCreateDto, Roles.performer);
-            return performerAccountDto;
-        }
-
-        public async Task<AccountDto> RegisterAdminAccount(AccountCreateDto accountCreateDto)
-        {
-            _logger.LogTrace($"using {nameof(RegisterAdminAccount)}");
-            var adminAccountDto = await CreateAccount(accountCreateDto, Roles.administratior);
-            return adminAccountDto;
         }
 
 
