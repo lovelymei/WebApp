@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class AlbumsInSQLRepository : RepositoryBase<Album, AlbumDto>, IAlbums
+    public class AlbumsInSQLRepository : MsSqlEfRepositoryBase<Album, AlbumDto>, IAlbums
     {
         private readonly MusicDatabase _db;
 
-        public AlbumsInSQLRepository(MusicDatabase db) : base(db)
+        public AlbumsInSQLRepository(MusicDatabase db) : base()
         {
             _db = db;
         }

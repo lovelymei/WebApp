@@ -10,21 +10,6 @@ namespace MusicService.Models
     {
 
         /// <summary>
-        /// Идентификатор аккаунта (внешний ключ)
-        /// </summary>
-        public Guid FK_AccountId { get; set; }
-
-        /// <summary>
-        /// Возможный идентификатор Альбома (внешний ключ)
-        /// </summary>
-        public Guid? AlbumId { get; set; }
-
-        /// <summary>
-        /// Альбом
-        /// </summary>
-        public Album Album { get; set; }
-
-        /// <summary>
         /// Название
         /// </summary>
         public string Title { get; set; }
@@ -40,19 +25,30 @@ namespace MusicService.Models
         public DateTime ProductionDate { get; set; }
 
         /// <summary>
+        /// Возможный идентификатор Альбома (внешний ключ)
+        /// </summary>
+        public Guid? AlbumId { get; set; }
+
+        /// <summary>
+        /// Альбом
+        /// </summary>
+        public Album Album { get; set; }
+
+        /// <summary>
         /// Идентификатор исполнителя
         /// </summary>
-        public Guid PerformerId { get; set; }
+        public Guid? PerformerId { get; set; }
+
+
+        /// <summary>
+        /// Исполнитель
+        /// </summary>
+        public Performer Performer { get; set; }
 
         /// <summary>
         /// Слушатели
         /// </summary>
         public List<Listener> Listeners { get; set; }
-
-        /// <summary>
-        /// Исполнитель
-        /// </summary>
-        public virtual Performer Performer { get; set; }
 
         public Song()
         {

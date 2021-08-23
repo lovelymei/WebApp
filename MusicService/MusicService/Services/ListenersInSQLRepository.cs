@@ -1,42 +1,79 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AuthorizationService.Extensions;
+using Microsoft.EntityFrameworkCore;
 using MusicService.Dto;
 using MusicService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class ListenersInSQLRepository  : RepositoryBase<Listener, ListenerDto>, IListeners
+    public class ListenersInSQLRepository : IListeners
     {
         MusicDatabase _db;
 
-        public ListenersInSQLRepository(MusicDatabase db) : base(db)
+        public ListenersInSQLRepository(MusicDatabase db)
         {
             _db = db;
         }
 
-        public override DbSet<Listener> GetDbSet()
+        public async Task<IEnumerable<AlbumDto>> GetAllListenerAlbums(Guid listenerId)
         {
-            return _db.Listeners;
+            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId == listenerId);
+
+            if (listener == null)
+            {
+                listener = await CreateListener(listenerId);
+                return listener.Albums.Select(c => new AlbumDto(c));
+            }
+
+            return listener.Albums.Select(c => new AlbumDto(c));
+
+
         }
 
-
-        public async Task<List<Song>> GetAllListenerSongs(Guid id)
+        public async Task<IEnumerable<SongDto>> GetAllListenerSongs(Guid listenerId)
         {
-            var user = await _db.Listeners.Include(c => c.Songs).FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
+            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId == listenerId);
 
-            return user.Songs.ToList();
+            if (listener == null)
+            {
+                listener = await CreateListener(listenerId);
+                return listener.Songs.Select(c => new SongDto(c));
+            }
+
+            return listener.Songs.Select(c => new SongDto(c));
         }
 
-        public async Task<bool> AttachSong(Guid accountId, Guid songId)
+        private async Task<Listener> CreateListener(Guid listenerId)
         {
-            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId== accountId);
+            if (listenerId == Guid.Empty) throw new Exception();
+
+            var listener = new Listener()
+            {
+                EntityId = listenerId,
+            };
+
+            await _db.Listeners.AddAsync(listener);
+            await _db.SaveChangesAsync();
+
+            return listener;
+        }
+
+        public async Task<bool> AttachSong(Guid songId, Guid listenerId)
+        {
+            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId == listenerId);
+
+            if (listener == null)
+            {
+                listener = await CreateListener(listenerId);
+            }
 
             var song = await _db.Songs.FirstOrDefaultAsync(c => c.EntityId == songId);
 
-            if (listener == null || song == null) return false;
+            if (song == null) return false;
 
             listener.Songs.Add(song);
             await _db.SaveChangesAsync();
@@ -45,13 +82,19 @@ namespace MusicService.Services
             return true;
         }
 
-        public async Task<bool> AttachAlbum(Guid accountId, Guid albumId)
+
+        public async Task<bool> AttachAlbum(Guid albumId, Guid listenerId)
         {
-            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId == accountId);
+            var listener = await _db.Listeners.FirstOrDefaultAsync(c => c.EntityId == listenerId);
+
+            if (listener == null)
+            {
+                listener = await CreateListener(listenerId);
+            }
 
             var album = await _db.Albums.FirstOrDefaultAsync(c => c.EntityId == albumId);
 
-            if (listener == null || album == null) return false;
+            if (album == null) return false;
 
             listener.Albums.Add(album);
             await _db.SaveChangesAsync();

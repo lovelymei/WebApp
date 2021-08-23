@@ -20,7 +20,7 @@ namespace MusicService.Models
         /// <summary>
         /// Идентификатор пользователя (внешний ключ)
         /// </summary>
-        public Guid FK_AccountId { get; set; }
+        public Guid PerformerId { get; set; }
 
         /// <summary>
         /// Исполнитель

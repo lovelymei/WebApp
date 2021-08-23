@@ -109,7 +109,7 @@ namespace AuthorizationService.Controllers
         {
             var isEqual = await _accounts.CheckNameEquality(listenerCreateDto.NickName);
 
-            if (isEqual) return Conflict();
+            if (isEqual) return Conflict("Such name exists");
 
             //Мы не може переносить пароль в сыром виде на это нет соответствующего поля в моделях 
             //В данном случае можно использовать автомаппер перенося пароль отдельно, но тогда это еще хуже и грязней 
@@ -130,7 +130,7 @@ namespace AuthorizationService.Controllers
         {
             var isEqual = await _accounts.CheckNameEquality(performerCreateDto.NickName);
 
-            if (isEqual) return Conflict();
+            if (isEqual) return Conflict("Such name exists");
 
             var createdPerformer = await _accounts.CreateAccount(performerCreateDto, Roles.performer);
 
@@ -152,7 +152,7 @@ namespace AuthorizationService.Controllers
         {
             var isEqual = await _accounts.CheckNameEquality(adminCreateDto.NickName);
 
-            if (isEqual) return Conflict();
+            if (isEqual) return Conflict("Such name exists");
 
             var createdPerformer = await _accounts.CreateAccount(adminCreateDto, Roles.administratior);
 
@@ -175,7 +175,7 @@ namespace AuthorizationService.Controllers
         {
             var isEqual = await _accounts.CheckNameEquality(accounCreateDto.NickName);
 
-            if (isEqual) return Conflict();
+            if (isEqual) return Conflict("Such name exists");
 
             var isUpdated = await _accounts.UpdateAccount(id, accounCreateDto);
 

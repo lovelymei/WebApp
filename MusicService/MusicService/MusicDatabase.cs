@@ -48,8 +48,6 @@ namespace MusicService
             modelBuilder.Entity<Performer>(entity =>
             {
                 entity.ToTable("Performer");
-
-                entity.Property(e => e.BirthDate);
          
             });
 
@@ -58,8 +56,6 @@ namespace MusicService
             modelBuilder.Entity<Listener>(entity =>
             {
                 entity.ToTable("Listener");
-
-                entity.Property(e => e.BirthDate);
              
             });
 
@@ -75,10 +71,10 @@ namespace MusicService
                    .HasForeignKey(e => e.AlbumId)
                    .HasConstraintName("Album/Songs");
 
-                entity.HasOne(e => e.Performer)
-                   .WithMany(e => e.Songs)
-                   .HasForeignKey(e => e.FK_AccountId) //AccountId
-                   .HasConstraintName("Performer/Songs");
+                //entity.HasOne(e => e.Performer)
+                //   .WithMany(e => e.Songs)
+                //   .HasForeignKey(e => e.PerformerId) 
+                //   .HasConstraintName("Performer/Songs");
 
                 entity.HasMany(d => d.Listeners)
                     .WithMany(d => d.Songs)
@@ -94,7 +90,7 @@ namespace MusicService
 
                 entity.HasOne(e => e.Performer)
                     .WithMany(e => e.Albums)
-                    .HasForeignKey(e => e.FK_AccountId) //AccountId
+                    .HasForeignKey(e => e.PerformerId) //AccountId
                     .HasConstraintName("Performer/Albums");
 
                 entity.HasMany(d => d.Listeners)

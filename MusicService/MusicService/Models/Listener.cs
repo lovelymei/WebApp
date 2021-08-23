@@ -15,11 +15,6 @@ namespace MusicService.Models
         }
 
         /// <summary>
-        /// Дата рождения
-        /// </summary>
-        public DateTime BirthDate { get; set; }
-
-        /// <summary>
         /// Добавленные песни
         /// </summary>
         public List<Song> Songs { get; set; }

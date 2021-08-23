@@ -8,21 +8,12 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    //TODO: AccountBase - EntityBase
-    //TODO: AccountBaseDto replace to EntityLibrary
     //TODO: mapper 
     //MSSQLEFRepositoryBase
-    public abstract class RepositoryBase<TEntity, TDto> : IStorage<TDto> 
+    public abstract class MsSqlEfRepositoryBase<TEntity, TDto> : IStorage<TDto> 
         where TEntity : EntityBase
         where TDto : EntityBaseDto
     {
-        private readonly MusicDatabase _db;
-
-        protected RepositoryBase(MusicDatabase db)
-        {
-            _db = db;
-        }
-
         public abstract DbSet<TEntity> GetDbSet();
 
         private static TDto TransformToDto(TEntity account)

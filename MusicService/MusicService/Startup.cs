@@ -2,6 +2,7 @@ using AuthorizationService.Extensions;
 using AuthorizationService.SwaggerFilters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,12 +34,12 @@ namespace MusicService
             services.AddDbContext<MusicDatabase>(options =>
                 options.UseSqlServer(connection));
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IStorage<AlbumDto>, AlbumsInSQLRepository>();
-            services.AddScoped<IStorage<ListenerDto>, ListenersInSQLRepository>();
-            services.AddScoped<IStorage<PerformerDto>, PerformersInSQLRepository>();
             services.AddScoped<IStorage<SongDto>, SongsInSQLRepository>();
 
+            services.AddAutoMapper(typeof(ApiMappingProfile));
 
             services.AddScoped<IAlbums, AlbumsInSQLRepository>();
             services.AddScoped<IListeners, ListenersInSQLRepository>();
@@ -105,6 +106,8 @@ namespace MusicService
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MusicService v1"));
             }
+
+
 
             app.UseHttpsRedirection();
 

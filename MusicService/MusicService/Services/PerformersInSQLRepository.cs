@@ -1,42 +1,50 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AuthorizationService.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using MusicService.Dto;
 using MusicService.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class PerformersInSQLRepository : RepositoryBase<Performer, PerformerDto> , IPerformers
+    public class PerformersInSQLRepository : IPerformers
     {
-        MusicDatabase _db;
+        private readonly MusicDatabase _db;
 
-        public override DbSet<Performer> GetDbSet()
-        {
-            return _db.Performers;
-        }
-        public PerformersInSQLRepository(MusicDatabase db) : base(db)
+        public PerformersInSQLRepository(MusicDatabase db)
         {
             _db = db;
+
         }
 
-        public async Task<List<Song>> GetAllPerformerSongs(Guid id)
+        public async Task<IEnumerable<AlbumDto>> GetAllPerformerAlbums(Guid performerId)
         {
-            var performer = await _db.Performers.Include(c => c.Songs).FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
-
-            return performer.Songs.ToList();
+            await Task.CompletedTask;
+            return _db.Albums
+                .Where(c => c.PerformerId == performerId && c.IsDeleted == false)
+                .Select(c => new AlbumDto(c));
         }
 
-        public async Task<bool> AttachSong(Guid accountId, Guid songId)
+        public async Task<IEnumerable<SongDto>> GetAllPerformerSongs(Guid performerId)
         {
-            var performer = await _db.Performers.FirstOrDefaultAsync(c => c.EntityId == accountId);
+            await Task.CompletedTask;
+            return _db.Songs
+                .Where(c => c.PerformerId == performerId && c.IsDeleted == false)
+                .Select(c => new SongDto(c));
+        }
 
+        public async Task<bool> AttachSong(Guid songId, Guid performerId)
+        {
             var song = await _db.Songs.FirstOrDefaultAsync(c => c.EntityId == songId);
 
-            if (performer == null || song == null) return false;
+            if (song == null) return false;
 
-            performer.Songs.Add(song);
+            song.PerformerId = performerId;
             await _db.SaveChangesAsync();
             await _db.DisposeAsync();
 
@@ -44,15 +52,13 @@ namespace MusicService.Services
         }
 
 
-        public async Task<bool> AttachAlbum(Guid accountId, Guid albumId)
+        public async Task<bool> AttachAlbum(Guid albumId, Guid performerId)
         {
-            var performer = await _db.Performers.FirstOrDefaultAsync(c => c.EntityId == accountId);
-
             var album = await _db.Albums.FirstOrDefaultAsync(c => c.EntityId == albumId);
 
-            if (performer == null || album == null) return false;
+            if (album == null) return false;
 
-            performer.Albums.Add(album);
+            album.PerformerId = performerId;
             await _db.SaveChangesAsync();
             await _db.DisposeAsync();
 

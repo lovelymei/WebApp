@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    public class SongsInSQLRepository : RepositoryBase<Song, SongDto>, ISongs
+    public class SongsInSQLRepository : MsSqlEfRepositoryBase<Song, SongDto>, ISongs
     {
         private readonly MusicDatabase _db;
-        public SongsInSQLRepository(MusicDatabase db) : base(db)
+        public SongsInSQLRepository(MusicDatabase db) : base()
         {
             _db = db;
         }
@@ -40,10 +40,6 @@ namespace MusicService.Services
                 DurationMs = duration,
                 ProductionDate = DateTime.MinValue.Add(TimeSpan.FromTicks((long)(random.NextDouble() * DateTime.MaxValue.Ticks)))
             };
-
-            var performer = await _db.Performers.FirstOrDefaultAsync(c => c.EntityId == newSong.PerformerId);
-
-            if (performer == null) return false;
 
             await _db.Songs.AddAsync(newSong);
             await _db.SaveChangesAsync();
