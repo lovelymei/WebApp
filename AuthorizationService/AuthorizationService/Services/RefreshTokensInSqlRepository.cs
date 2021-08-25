@@ -53,7 +53,7 @@ namespace AuthorizationService.Services
             {
                 _db.RefreshTokens.Remove(prevRefreshToken);
                 await _db.SaveChangesAsync();
-                await _db.DisposeAsync();
+                //await _db.DisposeAsync();
                 return null;
             }
             var entity = new RefreshToken(prevRefreshToken.AccountId, currentDt, expiresSec);
@@ -61,7 +61,7 @@ namespace AuthorizationService.Services
             await _db.RefreshTokens.AddAsync(entity);
             _db.RefreshTokens.Remove(prevRefreshToken);
             await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+           // await _db.DisposeAsync();
 
             return entity;
         }

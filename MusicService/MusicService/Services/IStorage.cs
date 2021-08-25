@@ -19,7 +19,7 @@ namespace MusicService.Services
         /// Получение всех удаленных записей
         /// </summary>
         /// <returns></returns>
-        Task<List<TDto>> GetAllDeletedEntitiesDto();
+        Task<IEnumerable<TDto>> GetAllDeletedEntitiesDto();
 
         /// <summary>
         /// Получение всех записей 
@@ -32,7 +32,7 @@ namespace MusicService.Services
         /// </summary>
         /// <param name="id"> Идентификатор </param>
         /// <returns></returns>
-        Task<TDto> GetEntity(Guid id);
+        Task<TDto> GetEntityDto(Guid id);
 
         /// <summary>
         /// Восстановление записи

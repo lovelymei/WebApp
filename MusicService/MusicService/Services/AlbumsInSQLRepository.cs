@@ -10,7 +10,7 @@ namespace MusicService.Services
     {
         private readonly MusicDatabase _db;
 
-        public AlbumsInSQLRepository(MusicDatabase db) : base()
+        public AlbumsInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;
         }

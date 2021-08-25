@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace AuthorizationService.Controllers
 {
-
     /// <response code="200">Операция проведена успешно</response>
     /// <response code="500">Внутренняя ошибка сервера</response>
     [Route("api/[controller]")]

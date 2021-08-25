@@ -69,7 +69,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public virtual async Task<ActionResult<T>> Get(Guid id)
         {
-            var entity = await _crud.GetEntity(id);
+            var entity = await _crud.GetEntityDto(id);
 
             if (entity == null) return NotFound();
 

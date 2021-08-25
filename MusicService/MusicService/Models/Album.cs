@@ -20,7 +20,7 @@ namespace MusicService.Models
         /// <summary>
         /// Идентификатор пользователя (внешний ключ)
         /// </summary>
-        public Guid PerformerId { get; set; }
+        public Guid? PerformerId { get; set; }
 
         /// <summary>
         /// Исполнитель
@@ -37,11 +37,10 @@ namespace MusicService.Models
         /// </summary>
         public List<Listener> Listeners { get; set; }
 
-        public Album()
+        public Album() : base()
         {
             Listeners = new List<Listener>();
             Songs = new List<Song>();
         }
-
     }
 }

@@ -10,7 +10,7 @@ namespace MusicService.Services
     public class SongsInSQLRepository : MsSqlEfRepositoryBase<Song, SongDto>, ISongs
     {
         private readonly MusicDatabase _db;
-        public SongsInSQLRepository(MusicDatabase db) : base()
+        public SongsInSQLRepository(MusicDatabase db) : base(db)
         {
             _db = db;
         }

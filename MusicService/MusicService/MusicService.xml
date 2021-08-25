@@ -247,7 +247,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IStorage`1.GetEntity(System.Guid)">
+        <member name="M:MusicService.Services.IStorage`1.GetEntityDto(System.Guid)">
             <summary>
             Получение записи по идентификатору
             </summary>

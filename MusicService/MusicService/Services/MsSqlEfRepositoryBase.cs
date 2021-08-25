@@ -15,13 +15,19 @@ namespace MusicService.Services
         where TDto : EntityBaseDto
     {
         public abstract DbSet<TEntity> GetDbSet();
+        private readonly MusicDatabase _db;
+
+        protected MsSqlEfRepositoryBase(MusicDatabase db)
+        {
+            _db = db;
+        }
 
         private static TDto TransformToDto(TEntity account)
         {
             //получаем тип TDto 
             Type type = typeof(TDto);
 
-            //получаем открытый конструктор, в который надо передать объект типа AccountBase
+            //получаем открытый конструктор, в который надо передать объект типа EntityBase
             ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(EntityBase) });
 
             if (constructorInfo != null)
@@ -45,30 +51,30 @@ namespace MusicService.Services
 
             var collection = GetDbSet();
 
-            return collection
-                .Where(c => c.IsDeleted == false);
-                
+            return collection.Where(c => c.IsDeleted == false);    
         }
 
         public virtual async Task<IEnumerable<TDto>> GetAllEntitiesDto()
         {
             var collection = await GetAllEntities();
 
-            List<TDto> result = null;
-
-            foreach (var item in collection)
-            {
-                result.Add(TransformToDto(item));
-            }
-            return result;
+            return collection.Select(c=>TransformToDto(c));
         }
 
-        public virtual async Task<TDto> GetEntity(Guid id)
+        private async Task<TEntity> GetEntity(Guid id)
         {
             var collection = await GetAllEntities(); 
-            
 
             var entity =  collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
+
+            return entity;
+        }
+
+        public virtual async Task<TDto> GetEntityDto(Guid id)
+        {
+            var collection = await GetAllEntities();
+
+            var entity = collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
 
             return TransformToDto(entity);
         }
@@ -81,34 +87,42 @@ namespace MusicService.Services
 
             item.IsDeleted = true;
 
+            
+            await _db.SaveChangesAsync();
+            await _db.DisposeAsync();
+
             return true;
         }
 
-        public virtual async Task<List<TDto>> GetAllDeletedEntitiesDto()
+        public virtual async Task<IEnumerable<TDto>> GetAllDeletedEntitiesDto()
         {
             var collection = await GetAllDeletedEntities();
 
-            List<TDto> resultCollection = null;
-
-            foreach (var item in collection)
-            {
-                resultCollection.Add(TransformToDto(item));
-            }
-
-            return resultCollection;
+            return collection.Select(c => TransformToDto(c));
         }
 
-        private async Task<List<TEntity>> GetAllDeletedEntities()
+        private async Task<IEnumerable<TEntity>> GetAllDeletedEntities()
         {
-            var collection = await GetAllEntities();
-            return collection.Where(c => c.IsDeleted == true).ToList();
+            await Task.CompletedTask;
+
+            var collection =  GetDbSet();
+
+            return collection.Where(c => c.IsDeleted == true);
         }
 
         public virtual async Task<bool> RestoreEntity(Guid id)
         {
             var collection = await GetAllDeletedEntities();
-            var item = collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == true);
+
+            var item = collection.FirstOrDefault(c => c.EntityId == id);
+
+            if (item == null) return false;
+
             item.IsDeleted = false;
+
+            await _db.SaveChangesAsync();
+            await _db.DisposeAsync();
+
             return true;
         }
     }
