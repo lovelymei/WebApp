@@ -1,6 +1,6 @@
 ﻿using AspNetCoreValidationLibrary;
+using MusicService.Entity;
 using MusicService.Models;
-using NewEntityLibrary;
 using System;
 using System.ComponentModel.DataAnnotations;
 

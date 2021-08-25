@@ -11,7 +11,6 @@ using Microsoft.OpenApi.Models;
 using MusicService.Dto;
 using MusicService.Models;
 using MusicService.Services;
-using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -2,8 +2,8 @@
 using AuthorizationService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MusicService.Entity;
 using MusicService.Services;
-using NewEntityLibrary;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public virtual async Task<ActionResult<List<T>>> GetAll()
         {
-            return Ok(await _crud.GetAllEntities());
+            return Ok(await _crud.GetAllEntitiesDto());
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public virtual async Task<ActionResult<List<T>>> GetAllDeleted()
         {
-            return Ok(await _crud.GetAllDeletedEntities());
+            return Ok(await _crud.GetAllDeletedEntitiesDto());
         }
 
     }

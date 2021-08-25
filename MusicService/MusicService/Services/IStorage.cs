@@ -1,4 +1,4 @@
-﻿using NewEntityLibrary;
+﻿using MusicService.Entity;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,13 +19,13 @@ namespace MusicService.Services
         /// Получение всех удаленных записей
         /// </summary>
         /// <returns></returns>
-        Task<List<TDto>> GetAllDeletedEntities();
+        Task<List<TDto>> GetAllDeletedEntitiesDto();
 
         /// <summary>
         /// Получение всех записей 
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<TDto>> GetAllEntities();
+        Task<IEnumerable<TDto>> GetAllEntitiesDto();
 
         /// <summary>
         /// Получение записи по идентификатору
@@ -40,5 +40,6 @@ namespace MusicService.Services
         /// <param name="id"> Идентификатор </param>
         /// <returns></returns>
         Task<bool> RestoreEntity(Guid id);
+
     }
 }

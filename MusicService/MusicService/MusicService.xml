@@ -235,13 +235,13 @@
             <param name="id"> Идентификатор </param>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IStorage`1.GetAllDeletedEntities">
+        <member name="M:MusicService.Services.IStorage`1.GetAllDeletedEntitiesDto">
             <summary>
             Получение всех удаленных записей
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Services.IStorage`1.GetAllEntities">
+        <member name="M:MusicService.Services.IStorage`1.GetAllEntitiesDto">
             <summary>
             Получение всех записей 
             </summary>

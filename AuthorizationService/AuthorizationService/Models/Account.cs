@@ -1,4 +1,5 @@
-﻿using NewEntityLibrary;
+﻿
+using AuthorizationService.Entity;
 using System.Collections.Generic;
 
 namespace AuthorizationService.Models

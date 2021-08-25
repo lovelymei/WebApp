@@ -1,5 +1,5 @@
-﻿using MusicService.Models;
-using NewEntityLibrary;
+﻿using MusicService.Entity;
+using MusicService.Models;
 using System;
 
 namespace MusicService.Dto

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NewEntityLibrary;
+using MusicService.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,23 +39,38 @@ namespace MusicService.Services
             throw new NotSupportedException();
         }
 
-
-        public virtual async Task<IEnumerable<TDto>> GetAllEntities()
+        private async Task<IEnumerable<TEntity>> GetAllEntities()
         {
             await Task.CompletedTask;
 
             var collection = GetDbSet();
 
             return collection
-                .Where(c => c.IsDeleted == false)
-                .Select(c => TransformToDto(c));
+                .Where(c => c.IsDeleted == false);
+                
+        }
+
+        public virtual async Task<IEnumerable<TDto>> GetAllEntitiesDto()
+        {
+            var collection = await GetAllEntities();
+
+            List<TDto> result = null;
+
+            foreach (var item in collection)
+            {
+                result.Add(TransformToDto(item));
+            }
+            return result;
         }
 
         public virtual async Task<TDto> GetEntity(Guid id)
         {
             var collection = await GetAllEntities(); 
+            
 
-            return collection.FirstOrDefault(c => c.Id == id && c.IsDeleted == false);
+            var entity =  collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
+
+            return TransformToDto(entity);
         }
 
         public virtual async Task<bool> DeleteEntity(Guid id)
@@ -69,17 +84,30 @@ namespace MusicService.Services
             return true;
         }
 
-        public virtual async Task<List<TDto>> GetAllDeletedEntities()
+        public virtual async Task<List<TDto>> GetAllDeletedEntitiesDto()
+        {
+            var collection = await GetAllDeletedEntities();
+
+            List<TDto> resultCollection = null;
+
+            foreach (var item in collection)
+            {
+                resultCollection.Add(TransformToDto(item));
+            }
+
+            return resultCollection;
+        }
+
+        private async Task<List<TEntity>> GetAllDeletedEntities()
         {
             var collection = await GetAllEntities();
-
             return collection.Where(c => c.IsDeleted == true).ToList();
         }
 
         public virtual async Task<bool> RestoreEntity(Guid id)
         {
             var collection = await GetAllDeletedEntities();
-            var item = collection.FirstOrDefault(c => c.Id == id && c.IsDeleted == true);
+            var item = collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == true);
             item.IsDeleted = false;
             return true;
         }
