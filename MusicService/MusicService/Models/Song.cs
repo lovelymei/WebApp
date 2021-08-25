@@ -40,12 +40,6 @@ namespace MusicService.Models
         /// </summary>
         public Guid? PerformerId { get; set; }
 
-
-        /// <summary>
-        /// Исполнитель
-        /// </summary>
-        public Performer Performer { get; set; }
-
         /// <summary>
         /// Слушатели
         /// </summary>

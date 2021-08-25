@@ -153,11 +153,6 @@
             Идентификатор пользователя (внешний ключ)
             </summary>
         </member>
-        <member name="P:MusicService.Models.Album.Performer">
-            <summary>
-            Исполнитель
-            </summary>
-        </member>
         <member name="P:MusicService.Models.Album.Songs">
             <summary>
             Песни в альбоме
@@ -176,16 +171,6 @@
         <member name="P:MusicService.Models.Listener.Albums">
             <summary>
             Добавленные альбомы
-            </summary>
-        </member>
-        <member name="P:MusicService.Models.Performer.Songs">
-            <summary>
-            Песни
-            </summary>
-        </member>
-        <member name="P:MusicService.Models.Performer.Albums">
-            <summary>
-            Альбомы
             </summary>
         </member>
         <member name="P:MusicService.Models.Song.Title">
@@ -216,11 +201,6 @@
         <member name="P:MusicService.Models.Song.PerformerId">
             <summary>
             Идентификатор исполнителя
-            </summary>
-        </member>
-        <member name="P:MusicService.Models.Song.Performer">
-            <summary>
-            Исполнитель
             </summary>
         </member>
         <member name="P:MusicService.Models.Song.Listeners">

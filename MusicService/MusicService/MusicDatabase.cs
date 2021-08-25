@@ -20,7 +20,7 @@ namespace MusicService
             //Database.EnsureCreated();
         }
 
-        public virtual DbSet<Performer> Performers { get; set; }
+        //public virtual DbSet<Performer> Performers { get; set; }
         public virtual DbSet<Song> Songs { get; set; }
         public virtual DbSet<Listener> Listeners { get; set; }
         public virtual DbSet<Album> Albums { get; set; }
@@ -45,19 +45,19 @@ namespace MusicService
             modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
 
 
-            modelBuilder.Entity<Performer>(entity =>
-            {
-                entity.ToTable("Performer");
+            //modelBuilder.Entity<Performer>(entity =>
+            //{
+            //    entity.ToTable("Performer");
          
-            });
+            //});
 
-            modelBuilder.Entity<Performer>().HasKey(e => e.EntityId).HasName("PK_Performer_AccountId");
+            //modelBuilder.Entity<Performer>().HasKey(e => e.EntityId).HasName("PK_Performer_AccountId");
 
-            modelBuilder.Entity<Listener>(entity =>
-            {
-                entity.ToTable("Listener");
+            //modelBuilder.Entity<Listener>(entity =>
+            //{
+            //    entity.ToTable("Listener");
              
-            });
+            //});
 
             modelBuilder.Entity<Listener>().HasKey(e=>e.EntityId).HasName("PK_Listener_AccountId");
 
@@ -88,10 +88,10 @@ namespace MusicService
             {
                 entity.ToTable("Album");
 
-                entity.HasOne(e => e.Performer)
-                    .WithMany(e => e.Albums)
-                    .HasForeignKey(e => e.PerformerId) //AccountId
-                    .HasConstraintName("Performer/Albums");
+                //entity.HasOne(e => e.Performer)
+                //    .WithMany(e => e.Albums)
+                //    .HasForeignKey(e => e.PerformerId) //AccountId
+                //    .HasConstraintName("Performer/Albums");
 
                 entity.HasMany(d => d.Listeners)
                    .WithMany(d => d.Albums)

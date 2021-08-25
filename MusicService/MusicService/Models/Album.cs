@@ -23,11 +23,6 @@ namespace MusicService.Models
         public Guid? PerformerId { get; set; }
 
         /// <summary>
-        /// Исполнитель
-        /// </summary>
-        public Performer Performer { get; set; }
-
-        /// <summary>
         /// Песни в альбоме
         /// </summary>
         public List<Song> Songs { get; set; }
