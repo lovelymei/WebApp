@@ -48,5 +48,9 @@ namespace MusicService.Services
             return true;
         }
 
+        protected override SongDto TransformToDto(Song entity)
+        {
+            return new SongDto(entity);
+        }
     }
 }

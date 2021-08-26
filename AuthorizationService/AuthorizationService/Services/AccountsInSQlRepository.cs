@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AuthorizationService.Services
 {
-    public class AccountsInSQlRepository : IAccounts
+    public class AccountsInSQlRepository : IAccounts, IDisposable
     {
         private readonly AuthorizationDbContext _db;
         private readonly ILogger<AccountsInSQlRepository> _logger;
@@ -217,5 +217,9 @@ namespace AuthorizationService.Services
 
         }
 
+        public void Dispose()
+        {
+            _db.Dispose();
+        }
     }
 }

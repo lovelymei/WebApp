@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 
 namespace MusicService.Services
 {
-    //TODO: mapper 
-    //MSSQLEFRepositoryBase
     public abstract class MsSqlEfRepositoryBase<TEntity, TDto> : IStorage<TDto> 
         where TEntity : EntityBase
         where TDto : EntityBaseDto
@@ -22,99 +20,59 @@ namespace MusicService.Services
             _db = db;
         }
 
-        private static TDto TransformToDto(TEntity account)
-        {
-            //получаем тип TDto 
-            Type type = typeof(TDto);
-
-            //получаем открытый конструктор, в который надо передать объект типа EntityBase
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(EntityBase) });
-
-            if (constructorInfo != null)
-            {
-                try
-                {
-                    return (TDto)Activator.CreateInstance(typeof(TDto), account);
-                }
-                catch (Exception)
-                {
-                    //у заданного типа нет нужного конструктора
-                    throw new NotSupportedException();
-                }
-            }
-            throw new NotSupportedException();
-        }
-
-        private async Task<IEnumerable<TEntity>> GetAllEntities()
-        {
-            await Task.CompletedTask;
-
-            var collection = GetDbSet();
-
-            return collection.Where(c => c.IsDeleted == false);    
-        }
+        protected abstract TDto TransformToDto(TEntity account);
 
         public virtual async Task<IEnumerable<TDto>> GetAllEntitiesDto()
         {
-            var collection = await GetAllEntities();
+            await Task.CompletedTask;
 
-            return collection.Select(c=>TransformToDto(c));
-        }
-
-        private async Task<TEntity> GetEntity(Guid id)
-        {
-            var collection = await GetAllEntities(); 
-
-            var entity =  collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
-
-            return entity;
+            return GetDbSet()
+                .Where(c => c.IsDeleted == false)
+                .Select(c=>TransformToDto(c));
         }
 
         public virtual async Task<TDto> GetEntityDto(Guid id)
         {
-            var collection = await GetAllEntities();
+            await Task.CompletedTask;
 
-            var entity = collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
+            var entity = GetDbSet().FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
 
             return TransformToDto(entity);
         }
 
         public virtual async Task<bool> DeleteEntity(Guid id)
         {
-            var item = await GetEntity(id);
+            var item = GetDbSet()
+                .FirstOrDefault(c => c.EntityId == id && c.IsDeleted == false);
 
             if (item == null) return false;
 
             item.IsDeleted = true;
-
             
             await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+            //await _db.DisposeAsync();
 
             return true;
         }
 
         public virtual async Task<IEnumerable<TDto>> GetAllDeletedEntitiesDto()
         {
-            var collection = await GetAllDeletedEntities();
-
-            return collection.Select(c => TransformToDto(c));
-        }
-
-        private async Task<IEnumerable<TEntity>> GetAllDeletedEntities()
-        {
             await Task.CompletedTask;
 
-            var collection =  GetDbSet();
+            var collection = GetDbSet();
 
-            return collection.Where(c => c.IsDeleted == true);
+            return collection
+                .Where(c => c.IsDeleted == true)
+                .Select(c => TransformToDto(c));
         }
 
         public virtual async Task<bool> RestoreEntity(Guid id)
         {
-            var collection = await GetAllDeletedEntities();
+            await Task.CompletedTask;
 
-            var item = collection.FirstOrDefault(c => c.EntityId == id);
+            var collection = GetDbSet();
+
+            var item = collection.FirstOrDefault(c => c.EntityId == id && c.IsDeleted == true);
 
             if (item == null) return false;
 

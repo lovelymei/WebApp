@@ -53,7 +53,7 @@ namespace AuthorizationService.Controllers
         /// <response code="401">Доступ только для администратора</response>
         /// <returns></returns>
         [HttpGet("allDeleted")]
-        //[AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AccountDto>>> GetAllDeletedAccounts()
@@ -145,7 +145,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpPost("admin")]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        //[AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<AccountDto>> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
         {
@@ -189,7 +189,7 @@ namespace AuthorizationService.Controllers
         /// <response code="401">Доступ только для администратора</response>
         /// <returns></returns>
         [HttpPost("{deletedAccountId}")]
-        //[AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
+        [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> RestoreAccount([Required] Guid deletedAccountId)
