@@ -50,7 +50,6 @@ namespace MusicService.Services
             item.IsDeleted = true;
             
             await _db.SaveChangesAsync();
-            //await _db.DisposeAsync();
 
             return true;
         }
