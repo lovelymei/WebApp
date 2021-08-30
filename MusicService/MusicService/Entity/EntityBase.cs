@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MusicService.Entity
 {
-    public abstract class EntityBase
+    public class EntityBase
     {
         public Guid EntityId { get; set; }
         public bool IsDeleted { get; set; }

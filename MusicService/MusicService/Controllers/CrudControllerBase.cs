@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 namespace MusicService.Controllers
 {
 
-    public abstract class CrudControllerBase<T> : ControllerBase
+    public class CrudControllerBase<T> : ControllerBase
         where T : EntityBaseDto
     {
         protected readonly IStorage<T> _crud;
 
-        protected CrudControllerBase(IStorage<T> crud)
+        public CrudControllerBase(IStorage<T> crud)
         {
             _crud = crud;
         }

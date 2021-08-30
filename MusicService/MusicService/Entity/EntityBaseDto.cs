@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MusicService.Entity
 {
-    public abstract class EntityBaseDto
+    public class EntityBaseDto
     {
         public EntityBaseDto(EntityBase entityBase)
         {

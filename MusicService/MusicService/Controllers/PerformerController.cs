@@ -19,12 +19,10 @@ namespace MusicService.Controllers
     public class PerformerController : ControllerBase
     {
         IPerformers _performers;
-        IMapper _mapper;
 
-        public PerformerController(IPerformers performers, IMapper mapper)
+        public PerformerController(IPerformers performers)
 
         {
-            _mapper = mapper;
             _performers = performers;
         }
 

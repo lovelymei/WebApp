@@ -35,10 +35,10 @@ namespace MusicService.Controllers
         [AuthorizeEnum(Roles.administratior, Roles.superadministrator, Roles.performer)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> AddSong(string title, long duration)
+        public async Task<ActionResult<SongDto>> AddSong(string title, long duration)
         {
-            var isAdded = await _songs.AddSong(title, duration);
-            return isAdded ? Ok() : NotFound();
+            var song = await _songs.AddSong(title, duration);
+            return new SongDto(song);
         }
     }
 }

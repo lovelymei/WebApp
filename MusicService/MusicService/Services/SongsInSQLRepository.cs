@@ -31,7 +31,7 @@ namespace MusicService.Services
             return song;
         }
 
-        public async Task<bool> AddSong(string title, long duration)
+        public async Task<Song> AddSong(string title, long duration)
         {
             var random = new Random();
             var newSong = new Song()
@@ -45,7 +45,7 @@ namespace MusicService.Services
             await _db.SaveChangesAsync();
             await _db.DisposeAsync();
 
-            return true;
+            return newSong;
         }
 
         protected override SongDto TransformToDto(Song entity)
