@@ -42,9 +42,7 @@ namespace MusicService.Tests
                 Assert.AreEqual(expected.Name, actual.Value.Name);
                 Assert.AreEqual(expected.ProductionDate, actual.Value.ProductionDate);
                 Assert.AreEqual(expected.IsDeleted, actual.Value.IsDeleted);
-            });
-
-            
+            });    
         }
     }
 }
