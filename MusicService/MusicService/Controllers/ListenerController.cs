@@ -34,11 +34,11 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [AuthorizeEnum(Roles.administratior, Roles.superadministrator, Roles.listener)]
-        public async Task<ActionResult<List<SongDto>>> GetAllListenersSongs()
+        public async Task<ActionResult<List<SongDto>>> GetAllListenerSongs()
         {
             var listenerId = User.GetAccountId();
             var songs = await _listeners.GetAllListenerSongs(listenerId);
-            return Ok(songs);
+            return songs.ToList();
         }
 
 
@@ -54,11 +54,11 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [AuthorizeEnum(Roles.administratior, Roles.superadministrator, Roles.listener)]
-        public async Task<ActionResult<List<SongDto>>> GetAllListenersAlbums()
+        public async Task<ActionResult<List<AlbumDto>>> GetAllListenerAlbums()
         {
             var listenerId = User.GetAccountId();
             var albums = await _listeners.GetAllListenerAlbums(listenerId);
-            return Ok(albums);
+            return albums.ToList();
         }
 
         /// <summary>

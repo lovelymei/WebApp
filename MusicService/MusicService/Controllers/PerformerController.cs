@@ -35,11 +35,11 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<SongDto>>> GetAllPerformersSongs()
+        public async Task<ActionResult<List<SongDto>>> GetAllPerformerSongs()
         {
             var performerId = User.GetAccountId();
             var songs = await _performers.GetAllPerformerSongs(performerId);
-            return Ok(songs);
+            return songs.ToList();
            
         }
 
@@ -53,11 +53,11 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<SongDto>>> GetAllPerformersAlbums()
+        public async Task<ActionResult<List<AlbumDto>>> GetAllPerformerAlbums()
         {
             var performerId = User.GetAccountId();
             var albums = await _performers.GetAllPerformerAlbums(performerId);
-            return Ok(albums);
+            return albums.ToList();
 
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MusicService.Controllers;
 using MusicService.Dto;
@@ -21,39 +22,78 @@ namespace MusicService.Tests
         private Guid _id = Guid.NewGuid();
 
         [Test]
-        public async Task GetAllPerformerSongs_IdByJwt_ListSngsDto()
+        public async Task GetAllPerformerSongs_Id_ListSngsDto()
         {
             //Arrange
+            var claims = new List<Claim>() { new Claim(ClaimsIdentity.DefaultNameClaimType, _id.ToString()) };
+
+            var mockUser = new Mock<ClaimsPrincipal>();
+            var mockContext = new Mock<HttpContext>();
             var mockPerformers = new Mock<IPerformers>();
-            var performerController = new PerformerController(mockPerformers.Object);
 
-            var claims = new List<Claim>() { new Claim(ClaimsIdentity.DefaultNameClaimType, _id.ToString())};
-            ClaimsIdentity identity = new ClaimsIdentity(claims);
-            User.AddIdentity(identity);
+            mockUser.Setup(c => c.Claims).Returns(claims);
+            mockContext.Setup(c => c.User).Returns(mockUser.Object);
 
-            var song = new Song() { Title = "title", DurationMs = 20000};
+            var song = new Song() { Title = "title", DurationMs = 20000 };
             var songs = new List<SongDto>() { new SongDto(song) };
+            var expected = new List<SongDto>() { new SongDto(song) };
+            mockPerformers.Setup(c => c.GetAllPerformerSongs(It.IsAny<Guid>())).ReturnsAsync(songs);
 
-            mockPerformers.Setup(c => c.GetAllPerformerSongs(_id)).ReturnsAsync(songs);
-
-            var expected = new List<SongDto>() {new SongDto(song)};
+            var performerController = new PerformerController(mockPerformers.Object);
+            performerController.ControllerContext.HttpContext = mockContext.Object; 
+            
 
             //Act
-            var actual = await performerController.GetAllPerformersSongs();
+            var actual = await performerController.GetAllPerformerSongs();
 
             //Assert
-            mockPerformers.Verify(c => c.GetAllPerformerSongs(_id), Times.Once);
+            mockPerformers.Verify(c => c.GetAllPerformerSongs(It.IsAny<Guid>()), Times.Once);
 
             Assert.Multiple(() =>
             {
-                Assert.Equals(expected[0].Title, actual.Value[0].Title);
-                Assert.Equals(expected[0].DurationMs, actual.Value[0].DurationMs);
+                Assert.AreEqual(expected[0].Title, actual.Value[0].Title);
+                Assert.AreEqual(expected[0].DurationMs, actual.Value[0].DurationMs);
             });
 
-
-
-
         }
+
+
+        [Test]
+        public async Task GetAllPerformersAlbums_Id_ListAlbumsDto()
+        {
+            //Arrange
+            var claims = new List<Claim>() { new Claim(ClaimsIdentity.DefaultNameClaimType, _id.ToString()) };
+
+            var mockUser = new Mock<ClaimsPrincipal>();
+            var mockContext = new Mock<HttpContext>();
+            var mockPerformers = new Mock<IPerformers>();
+
+            mockUser.Setup(c => c.Claims).Returns(claims);
+            mockContext.Setup(c => c.User).Returns(mockUser.Object);
+
+            var album = new Album() { Name = "title"};
+            var albums = new List<AlbumDto>() { new AlbumDto(album) };
+            var expected = new List<AlbumDto>() { new AlbumDto(album) };
+            mockPerformers.Setup(c => c.GetAllPerformerAlbums(It.IsAny<Guid>())).ReturnsAsync(albums);
+
+            var performerController = new PerformerController(mockPerformers.Object);
+            performerController.ControllerContext.HttpContext = mockContext.Object;
+
+
+            //Act
+            var actual = await performerController.GetAllPerformerAlbums();
+            
+            //Assert
+            mockPerformers.Verify(c => c.GetAllPerformerAlbums(It.IsAny<Guid>()), Times.Once);
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(expected[0].Name, actual.Value[0].Name);
+            });
+        }
+
+
+
     }
 
     

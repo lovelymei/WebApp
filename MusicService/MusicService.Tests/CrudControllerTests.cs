@@ -41,8 +41,8 @@ namespace MusicService.Tests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expected.FirstOrDefault(c => c.IsDeleted == false),
-                    actual.Value.FirstOrDefault(c => c.IsDeleted == false));
+                Assert.AreEqual(expected[0].IsDeleted,
+                    actual.Value[0].IsDeleted);
             });
 
         }

@@ -58,7 +58,7 @@
               <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Controllers.ListenerController.GetAllListenersSongs">
+        <member name="M:MusicService.Controllers.ListenerController.GetAllListenerSongs">
             <summary>
             Получить все песни слушателя
             </summary>
@@ -67,7 +67,7 @@
             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Controllers.ListenerController.GetAllListenersAlbums">
+        <member name="M:MusicService.Controllers.ListenerController.GetAllListenerAlbums">
             <summary>
             Получить все альбомы слушателя
             </summary>
@@ -96,13 +96,13 @@
             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Controllers.PerformerController.GetAllPerformersSongs">
+        <member name="M:MusicService.Controllers.PerformerController.GetAllPerformerSongs">
             <summary>
             Получить все песни исполнителя
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Controllers.PerformerController.GetAllPerformersAlbums">
+        <member name="M:MusicService.Controllers.PerformerController.GetAllPerformerAlbums">
             <summary>
             Получить все альбомы исполнителя
             </summary>

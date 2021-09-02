@@ -1,5 +1,6 @@
 using AuthorizationService.Extensions;
 using AuthorizationService.SwaggerFilters;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using MusicService.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MusicService
 {
@@ -32,8 +34,6 @@ namespace MusicService
             var connection = Configuration.GetConnectionString("MusicDatabase");
             services.AddDbContext<MusicDatabase>(options =>
                 options.UseSqlServer(connection));
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IStorage<AlbumDto>, AlbumsInSQLRepository>();
             services.AddScoped<IStorage<SongDto>, SongsInSQLRepository>();
@@ -57,7 +57,7 @@ namespace MusicService
                 options.IncludeXmlComments(xmlPath, true);
             });
 
-            services.AddAsymmetricAuthentication(Configuration);
+           services.AddAsymmetricAuthentication(Configuration);
 
 
             services.AddSwaggerGen(c =>

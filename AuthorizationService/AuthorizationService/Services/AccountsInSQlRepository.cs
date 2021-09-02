@@ -53,9 +53,6 @@ namespace AuthorizationService.Services
 
                 _db.Accounts.Add(account);
                 _db.SaveChanges();
-                //_db.Dispose(); ????????????? Из-за этого ошибка
-                // await тоже не работает, 
-                //потому что скорее всего он не успевает выполнить задачу и перехходит к следующему запросу
             }
             else
             {
