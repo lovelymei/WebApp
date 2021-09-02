@@ -42,14 +42,14 @@ namespace AuthorizationService.Tests
             var mockAuthorization = new Mock<AuthorizationDbContext>();
             var accountController = new AccountController(mockAccounts.Object, mockAuthorization.Object);
             var expected = GetAccountsList();
-            mockAccounts.Setup(c => c.GetAllAccounts()).ReturnsAsync(GetAccountsList());
+            mockAccounts.Setup(c=>c.GetAllAccounts()).ReturnsAsync(GetAccountsList());
 
             //Act
+            var actual = await accountController.GetAllAccounts();
+            
+            //Assert
             mockAccounts.Verify(c => c.GetAllAccounts(), Times.Once);
 
-            var actual = await accountController.GetAllAccounts();
-
-            //Assert
             Assert.AreEqual(expected.Count, actual.Value.Count);
             Assert.Multiple(() =>
             {
@@ -62,7 +62,7 @@ namespace AuthorizationService.Tests
         }
 
         [Test]
-        public async void GetAllDeletedAccounts_DeletedAccountsReceived()
+        public async Task GetAllDeletedAccounts_DeletedAccountsReceived()
         {
             //Arrange
             var mockAccounts = new Mock<IAccounts>();
@@ -88,3 +88,4 @@ namespace AuthorizationService.Tests
         }
     }
 }
+
