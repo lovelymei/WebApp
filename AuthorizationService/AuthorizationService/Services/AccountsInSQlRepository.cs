@@ -68,7 +68,7 @@ namespace AuthorizationService.Services
 
             return _db.Accounts
                 .Where(c => c.IsDeleted == false)
-                .Select(c => new AccountDto(c));
+                .Select(c => new AccountDto(c));  
         }
 
 
@@ -76,9 +76,8 @@ namespace AuthorizationService.Services
         {
             _logger.LogTrace($"using {nameof(GetAccount)}");
 
-            var account = await _db.Accounts.FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
-
-            if (account == null) return null;
+            var account = await _db.Accounts
+                .FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
 
             return account;
         }
@@ -86,12 +85,10 @@ namespace AuthorizationService.Services
         public async Task<bool> CheckNameEquality(string name)
         {
             _logger.LogTrace($"using {nameof(CheckNameEquality)}");
+
             var existAccounts = await GetAllAccounts();
-            var existAccount = existAccounts.FirstOrDefault(a => a.NickName == name);
-
-            if (existAccount != null) return true;
-
-            return false;
+            //если хоть один член списка, который удовлетворяет условию
+            return existAccounts.Any(a => a.NickName == name);
         }
 
         public async Task<AccountDto> CreateAccount(AccountCreateDto accountCreateDto, Roles role)
@@ -99,14 +96,14 @@ namespace AuthorizationService.Services
             var salt = GenerateSalt();
             var enteredPassHash = accountCreateDto.Password.ToPasswordHash(salt);
 
-            Login newLoginModel = new Login()
+            var newLoginModel = new Login()
             {
                 Email = accountCreateDto.Email,
                 Salt = Convert.ToBase64String(salt),
                 PasswordHash = Convert.ToBase64String(enteredPassHash),
             };
 
-            Account account = new Account()
+            var account = new Account()
             {
                 Login = newLoginModel,
                 NickName = accountCreateDto.NickName,
@@ -117,8 +114,7 @@ namespace AuthorizationService.Services
             await _db.SaveChangesAsync();
             await _db.DisposeAsync();
 
-            return new AccountDto(account);
-
+            return new (account);
         }
 
 
@@ -126,8 +122,9 @@ namespace AuthorizationService.Services
         {
             _logger.LogTrace($"using {nameof(UpdateAccount)}");
 
-            var account = await _db.Accounts.Include(a => a.Login)
-                                           .FirstOrDefaultAsync(c => c.EntityId == id);
+            var account = await _db.Accounts
+                .Include(a => a.Login)
+                .FirstOrDefaultAsync(c => c.EntityId == id);
 
             if (account == null) return false;
 
@@ -211,7 +208,6 @@ namespace AuthorizationService.Services
             var account = await GetAccount(login.AccountId);
 
             return isValid ? account : null;
-
         }
 
         public void Dispose()
