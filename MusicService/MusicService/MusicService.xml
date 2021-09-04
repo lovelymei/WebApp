@@ -108,7 +108,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:MusicService.Controllers.PerformerController.AttachMusicSongToPerformer(System.Guid)">
+        <member name="M:MusicService.Controllers.PerformerController.AttachSongToPerformer(System.Guid)">
             <summary>
             Прикрепить песню к исполнителю
             </summary>

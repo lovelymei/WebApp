@@ -57,7 +57,7 @@ namespace MusicService.Controllers
         {
             var performerId = User.GetAccountId();
             var albums = await _performers.GetAllPerformerAlbums(performerId);
-            return albums.ToList();
+            return albums.ToList(); 
 
         }
 
@@ -74,7 +74,7 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> AttachMusicSongToPerformer(Guid songId)
+        public async Task<ActionResult> AttachSongToPerformer(Guid songId)
         {
             var performerId = User.GetAccountId();
             var isAttached = await _performers.AttachSong(songId, performerId);
