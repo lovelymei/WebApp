@@ -112,7 +112,7 @@ namespace AuthorizationService.Services
 
             await _db.Accounts.AddAsync(account);
             await _db.SaveChangesAsync();
-            await _db.DisposeAsync();
+           // await _db.DisposeAsync();
 
             return new (account);
         }
@@ -186,7 +186,7 @@ namespace AuthorizationService.Services
             return true;
         }
 
-        public static byte[] GenerateSalt()
+        private static byte[] GenerateSalt()
         {
             using var randomNumberGenerator = new RNGCryptoServiceProvider();
             var randomNumber = new byte[16];

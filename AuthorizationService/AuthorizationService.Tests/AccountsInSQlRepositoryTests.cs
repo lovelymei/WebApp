@@ -43,16 +43,6 @@ namespace AuthorizationService.Tests
             list.Add(account);
             return list;
         }
-
-        private Account GetOneAccount()
-        {
-            var account = new Account();
-
-            account.NickName = "account";
-            account.EntityId = _id1;
-            
-            return account;
-        }
         
         private void FillDatabaseWithData(AuthorizationDbContext db)
         {
@@ -129,15 +119,100 @@ namespace AuthorizationService.Tests
         }
 
         [Test]
-        public async Task CheckNameEquality_Name_Checked()
+        public async Task CheckNameEquality_ExistingNickname_ReturnTrue()
         {
+            //arrange
             var database = GetClearDataBase();
             FillDatabaseWithData(database);
             var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
             var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var existingNickname = "acc1";
+            //act
+            var actual = await repository.CheckNameEquality(existingNickname);
             
+            //assert
+            Assert.IsTrue(actual);
+        }
+        
+        [Test]
+        public async Task CheckNameEquality_NotExistingNickname_ReturnFalse()
+        {
+            //arrange
+            var database = GetClearDataBase();
+            FillDatabaseWithData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var notExistingNickname = "notExistingNickname";
+            //act
+            var actual = await repository.CheckNameEquality(notExistingNickname);
+            
+            //assert
+            Assert.IsFalse(actual);
+        }
+
+        [Test]
+        public async Task CreateAccount_AccountInfo_NewAccountDto()
+        {
+            //arrange
+            var database = GetClearDataBase();
+            FillDatabaseWithData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var nickname = "nickname";
+            var email = "email";
+            var password = "passWORD";
+            
+            var accountCreateDto = new AccountCreateDto
+            {
+                NickName = nickname,
+                Email = email,
+                Password = password
+            };
+            var role = Roles.listener;
+            var expectedLoginViewModel = new Login
+            {
+                Email = email
+            };
+            //QUESTION: что делать с солью?
+            //QUESTION: почему в тесте вылетает ошибка на Dispose или зачем в тестируемом методе это использовалось
+            var expectedDbAccount = new Account
+            {
+                Login = expectedLoginViewModel,
+                Role = role,
+                NickName = nickname
+            };
+            var expectedAccountDto = new AccountDto(expectedDbAccount);
+            //act
+            var actualAccountDto = await repository.CreateAccount(accountCreateDto,role);
+            
+            //assert
+            var actualDbAccount = await database.Accounts
+                .FirstOrDefaultAsync(a => a.NickName == nickname);
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(expectedAccountDto.Role,actualAccountDto.Role);
+                Assert.AreEqual(expectedAccountDto.NickName,actualAccountDto.NickName);
+            
+                var expectedLogin = expectedDbAccount.Login;
+                var actualLogin = actualDbAccount.Login;
+                Assert.AreEqual(expectedLogin.Email,actualLogin.Email);
+                Assert.NotNull(actualLogin.Salt);
+                Assert.NotNull(actualLogin.PasswordHash);
+            
+                Assert.AreEqual(expectedDbAccount.Role,actualDbAccount.Role);
+                Assert.AreEqual(expectedDbAccount.NickName, actualDbAccount.NickName);
+            });
+            
+
+        }
+
+        [Test]
+        public async Task UpdateAccount_ExistingAccountInfo_ReturnTrue()
+        {
             
         }
+       
         
     }
     
