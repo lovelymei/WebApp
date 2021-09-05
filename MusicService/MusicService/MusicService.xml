@@ -55,7 +55,7 @@
             </summary>
              <response code="200"> Успешно</response>
              <response code="404"> Не найдено ни одного удаленного </response>
-              <response code="500"> Ошибка сервера </response>
+             <response code="500"> Ошибка сервера </response>
             <returns></returns>
         </member>
         <member name="M:MusicService.Controllers.ListenerController.GetAllListenerSongs">

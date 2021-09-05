@@ -35,7 +35,8 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public virtual async Task<ActionResult<List<T>>> GetAll()
         {
-            return Ok(await _crud.GetAllEntitiesDto());
+           var entities = (List<T>)await _crud.GetAllEntitiesDto();
+            return entities;
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace MusicService.Controllers
 
             if (entity == null) return NotFound();
 
-            return Ok(entity);
+            return entity;
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace MusicService.Controllers
         /// </summary>
         ///  <response code="200"> Успешно</response>
         ///  <response code="404"> Не найдено ни одного удаленного </response>
-        ///   <response code="500"> Ошибка сервера </response>
+        ///  <response code="500"> Ошибка сервера </response>
         /// <returns></returns>
         [HttpGet("isDeleted")]
         [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
@@ -110,7 +111,8 @@ namespace MusicService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public virtual async Task<ActionResult<List<T>>> GetAllDeleted()
         {
-            return Ok(await _crud.GetAllDeletedEntitiesDto());
+            var entities = (List<T>)await _crud.GetAllDeletedEntitiesDto();
+            return entities;
         }
 
     }

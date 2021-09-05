@@ -6,8 +6,7 @@ using AuthorizationService.Models;
 using AuthorizationService.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
-using NUnit.Framework;
+N
 
 namespace AuthorizationService.Tests
 {
