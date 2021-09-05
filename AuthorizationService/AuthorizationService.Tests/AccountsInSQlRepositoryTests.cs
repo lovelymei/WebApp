@@ -14,53 +14,89 @@ namespace AuthorizationService.Tests
     [TestFixture]
     public class AccountsInSQlRepositoryTests
     {
-        private readonly Guid _serviceStatusId = Guid.NewGuid();
+        private readonly Guid _id0 = Guid.NewGuid();
         private readonly Guid _id1 = Guid.NewGuid();
         private readonly Guid _id2 = Guid.NewGuid();
         private readonly Guid _id3 = Guid.NewGuid();
         private readonly Guid _id4 = Guid.NewGuid();
-        private readonly Guid _id5 = Guid.NewGuid();
-        
+
+
         private AuthorizationDbContext GetClearDataBase()
         {
             var options = new DbContextOptionsBuilder<AuthorizationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
-            
+
             return new AuthorizationDbContext(options);
         }
 
+
+        private Account GetSingleAccount()
+        {
+            var login = new Login
+            {
+                Email = "mail",
+                Salt = "dkjivjdfoijigju958978=",
+                PasswordHash = "passwordHASHSHSHSH",
+                AccountId = _id0
+            };
+            return new Account()
+            {
+                NickName = "single", 
+                EntityId = _id0,
+                Login = login
+            };
+
+        }
         private List<Account> GetAccountsList()
         {
             var list = new List<Account>();
-            var account = new Account {NickName = "acc1", EntityId = _id5};
+            var login = new Login
+            {
+                Email = "mail",
+                Salt = "dkjivjdfoijigju958978=",
+                PasswordHash = "passwordHASHSHSHSH"
+            };
+            var account = new Account {NickName = "acc1", EntityId = _id1,Login = login};
             list.Add(account);
-            account = new Account {NickName = "acc2", EntityId = _id2};
+            account = new Account {NickName = "acc2", EntityId = _id2,Login = login};
             list.Add(account);
-            account = new Account {NickName = "acc3",EntityId = _id3};
+            account = new Account {NickName = "acc3", EntityId = _id3,Login = login};
             list.Add(account);
-            account = new Account {NickName = "acc4",EntityId = _id4};
+            account = new Account {NickName = "acc4", EntityId = _id4,Login = login};
             list.Add(account);
             return list;
         }
-        
+
+        private List<Account> GetDeletedAccountsList()
+        {
+            var list = GetAccountsList();
+            list.ForEach(c => c.IsDeleted = true);
+            return list;
+        }
+
         private void FillDatabaseWithData(AuthorizationDbContext db)
         {
             var list = GetAccountsList();
-            foreach(var account in list)
+            foreach (var account in list)
             {
                 db.Add(account);
             }
+
             db.SaveChanges();
         }
-        
-        [Test]
-        public void CreateSuperAdmin_AdminCreated()
-        {
-            var mockAuthorization = new Mock<AuthorizationDbContext>();
-            
 
+        private void FillDatabaseWithDeletedData(AuthorizationDbContext db)
+        {
+            var list = GetDeletedAccountsList();
+            foreach (var account in list)
+            {
+                db.Add(account);
+            }
+
+            db.SaveChanges();
         }
+
 
         [Test]
         public async Task GetAllAccounts_AccountsReceived()
@@ -70,25 +106,25 @@ namespace AuthorizationService.Tests
             var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
             var repository = new AccountsInSQlRepository(database, mockLogger.Object);
             var expected = GetAccountsList();
-            
+
             //act
             var actualIEnumerable = await repository.GetAllAccounts();
-            
+
             //assert
             List<AccountDto> actual = new List<AccountDto>();
-            
-            foreach(var account in actualIEnumerable)
+
+            foreach (var account in actualIEnumerable)
             {
                 actual.Add(account);
             }
-            
-            Assert.AreEqual(expected.Count,actual.Count);
+
+            Assert.AreEqual(expected.Count, actual.Count);
             Assert.Multiple(() =>
             {
                 for (int i = 0; i < expected.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].NickName,actual[i].NickName);
-                    Assert.AreEqual(expected[i].Role.ToString(),actual[i].Role);
+                    Assert.AreEqual(expected[i].NickName, actual[i].NickName);
+                    Assert.AreEqual(expected[i].Role.ToString(), actual[i].Role);
                 }
             });
         }
@@ -104,16 +140,16 @@ namespace AuthorizationService.Tests
 
             var expected = GetAccountsList();
             var expectedInstance = expected[1];
-           
+
 
             var actual = await repository.GetAccount(_id2);
-            
-            
+
+
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedInstance.NickName,actual.NickName);
-                Assert.AreEqual(expectedInstance.Role,actual.Role);
-                Assert.AreEqual(expectedInstance.EntityId,actual.EntityId);
+                Assert.AreEqual(expectedInstance.NickName, actual.NickName);
+                Assert.AreEqual(expectedInstance.Role, actual.Role);
+                Assert.AreEqual(expectedInstance.EntityId, actual.EntityId);
                 Assert.AreEqual(expectedInstance.IsDeleted, actual.IsDeleted);
             });
         }
@@ -129,11 +165,11 @@ namespace AuthorizationService.Tests
             var existingNickname = "acc1";
             //act
             var actual = await repository.CheckNameEquality(existingNickname);
-            
+
             //assert
             Assert.IsTrue(actual);
         }
-        
+
         [Test]
         public async Task CheckNameEquality_NotExistingNickname_ReturnFalse()
         {
@@ -145,7 +181,7 @@ namespace AuthorizationService.Tests
             var notExistingNickname = "notExistingNickname";
             //act
             var actual = await repository.CheckNameEquality(notExistingNickname);
-            
+
             //assert
             Assert.IsFalse(actual);
         }
@@ -161,7 +197,7 @@ namespace AuthorizationService.Tests
             var nickname = "nickname";
             var email = "email";
             var password = "passWORD";
-            
+
             var accountCreateDto = new AccountCreateDto
             {
                 NickName = nickname,
@@ -183,65 +219,167 @@ namespace AuthorizationService.Tests
             };
             var expectedAccountDto = new AccountDto(expectedDbAccount);
             //act
-            var actualAccountDto = await repository.CreateAccount(accountCreateDto,role);
-            
+            var actualAccountDto = await repository.CreateAccount(accountCreateDto, role);
+
             //assert
             var actualDbAccount = await database.Accounts
                 .FirstOrDefaultAsync(a => a.NickName == nickname);
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedAccountDto.Role,actualAccountDto.Role);
-                Assert.AreEqual(expectedAccountDto.NickName,actualAccountDto.NickName);
-            
+                Assert.AreEqual(expectedAccountDto.Role, actualAccountDto.Role);
+                Assert.AreEqual(expectedAccountDto.NickName, actualAccountDto.NickName);
+
                 var expectedLogin = expectedDbAccount.Login;
                 var actualLogin = actualDbAccount.Login;
-                Assert.AreEqual(expectedLogin.Email,actualLogin.Email);
+                Assert.AreEqual(expectedLogin.Email, actualLogin.Email);
                 Assert.NotNull(actualLogin.Salt);
                 Assert.NotNull(actualLogin.PasswordHash);
-            
-                Assert.AreEqual(expectedDbAccount.Role,actualDbAccount.Role);
+
+                Assert.AreEqual(expectedDbAccount.Role, actualDbAccount.Role);
                 Assert.AreEqual(expectedDbAccount.NickName, actualDbAccount.NickName);
             });
-            
-
         }
 
         [Test]
         public async Task UpdateAccount_ExistingAccountInfo_ReturnTrue()
         {
-            
+            //arrange
+            var database = GetClearDataBase();
+            database.Add(GetSingleAccount());
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var existingId = _id0;
+
+            var accountCreateDto = new AccountCreateDto
+            {
+                Email = "newEmail",
+                Password = "newPassword",
+                NickName = "newNickname"
+            };
+
+            //act
+            var actual = await repository.UpdateAccount(existingId, accountCreateDto);
+
+            //assert
+            Assert.IsTrue(actual);
         }
-       
-        
+
+        [Test]
+        public async Task UpdateAccount_ExistingAccountInfo_ReturnFalse()
+        {
+            var database = GetClearDataBase();
+            database.Add(GetSingleAccount());
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var notExistingId = _id2;
+
+            var accountCreateDto = new AccountCreateDto
+            {
+                Email = "newEmail",
+                Password = "newPassword",
+                NickName = "newNickname"
+            };
+
+            //act
+            var actual = await repository.UpdateAccount(notExistingId, accountCreateDto);
+
+            //assert
+            Assert.IsFalse(actual);
+        }
+
+        [Test]
+        public async Task DeleteAccount_ExistingAccountId_ReturnTrue()
+        {
+            var database = GetClearDataBase();
+            FillDatabaseWithData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var existingId = _id1;
+
+            var actual = await repository.DeleteAccount(existingId);
+
+            Assert.IsTrue(actual);
+        }
+
+        [Test]
+        public async Task DeleteAccount_NotExistingAccountId_ReturnFalse()
+        {
+            var database = GetClearDataBase();
+            FillDatabaseWithData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var existingId = _id0;
+
+            var actual = await repository.DeleteAccount(existingId);
+
+            Assert.IsFalse(actual);
+        }
+
+
+        [Test]
+        public async Task GetAllDeletedAccounts_AccountReceived()
+        {
+            var database = GetClearDataBase();
+            FillDatabaseWithDeletedData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var expected = GetDeletedAccountsList();
+
+            //act
+            var actualIEnumerable = await repository.GetAllDeletedAccounts();
+
+            //assert
+            List<AccountDto> actual = new List<AccountDto>();
+
+            foreach (var account in actualIEnumerable)
+            {
+                actual.Add(account);
+            }
+
+            Assert.AreEqual(expected.Count, actual.Count);
+            Assert.Multiple(() =>
+            {
+                for (int i = 0; i < expected.Count; i++)
+                {
+                    Assert.AreEqual(expected[i].NickName, actual[i].NickName);
+                    Assert.AreEqual(expected[i].Role.ToString(), actual[i].Role);
+                }
+            });
+        }
+
+        [Test]
+        public async Task RestoreAccount_ExistingId_ReturnTrue()
+        {
+            var database = GetClearDataBase();
+            FillDatabaseWithDeletedData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var existingId = _id1;
+
+            var actual = await repository.RestoreAccount(existingId);
+
+            Assert.IsTrue(actual);
+        }
+
+        [Test]
+        public async Task RestoreAccount_NotExistingId_ReturnFalse()
+        {
+            var database = GetClearDataBase();
+            FillDatabaseWithDeletedData(database);
+            var mockLogger = new Mock<ILogger<AccountsInSQlRepository>>();
+            var repository = new AccountsInSQlRepository(database, mockLogger.Object);
+            var notExistingId = _id0;
+
+            var actual = await repository.RestoreAccount(notExistingId);
+
+            Assert.IsFalse(actual);
+        }
+
+        [Test]
+        public async Task Authenticate_LoginInfo_ReturnAuthenticated_Account()
+        {
+            //не уверена, что здесь можно что-либо протестировать
+        }
     }
-    
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
