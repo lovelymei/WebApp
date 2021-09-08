@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AuthorizationService.Controllers
@@ -21,10 +20,12 @@ namespace AuthorizationService.Controllers
     [ProducesResponseType(StatusCodes.Status200OK)]
     public class AccountController : Controller
     {
+        private readonly AuthorizationDbContext _db;
         private readonly IAccounts _accounts;
 
-        public AccountController(IAccounts accounts)
+        public AccountController(IAccounts accounts, AuthorizationDbContext db)
         {
+            _db = db;
             _accounts = accounts;
         }
 
@@ -38,11 +39,11 @@ namespace AuthorizationService.Controllers
         //[AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<List<AccountDto>> GetAllAccounts()
+        public async Task<ActionResult<List<AccountDto>>> GetAllAccounts()
         {
-            var accounts = await _accounts.GetAllAccountsDto();
-            
-            return accounts.ToList();
+            var accounts = await _accounts.GetAllAccounts();
+
+            return Ok(accounts);
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace AuthorizationService.Controllers
         {
             var deletedAccounts = await _accounts.GetAllDeletedAccounts();
 
-            return deletedAccounts.ToList();
+            return Ok(deletedAccounts);
         }
 
 
@@ -73,9 +74,9 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AccountDto>> GetCurrentAccount([Required] Guid id)
         {
-            var account = await _accounts.GetCurrentAccount(id);
+            var account = await _accounts.GetAccount(id);
 
-            if (account == null) return null;//NotFound();
+            if (account == null) return NotFound();
 
             return new AccountDto(account);
         }
@@ -103,16 +104,17 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpPost("listener")]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> RegisterListenerAccount([FromBody] AccountCreateDto listenerCreateDto)
+        public async Task<ActionResult<AccountDto>> RegisterListenerAccount([FromBody] AccountCreateDto listenerCreateDto)
         {
             var isEqual = await _accounts.CheckNameEquality(listenerCreateDto.NickName);
 
-            if (isEqual) return Conflict(); //"Such name exists"
+            if (isEqual) return Conflict("Such name exists");
 
             //Мы не може переносить пароль в сыром виде на это нет соответствующего поля в моделях 
             //В данном случае можно использовать автомаппер перенося пароль отдельно, но тогда это еще хуже и грязней 
             var createdListener = await _accounts.CreateAccount(listenerCreateDto, Roles.listener);
-            return Ok();
+
+            return Ok(createdListener);
         }
 
         /// <summary>
@@ -123,15 +125,15 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpPost("performer")]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> RegisterPerformerAccount([FromBody] AccountCreateDto performerCreateDto)
+        public async Task<ActionResult<AccountDto>> RegisterPerformerAccount([FromBody] AccountCreateDto performerCreateDto)
         {
             var isEqual = await _accounts.CheckNameEquality(performerCreateDto.NickName);
 
-            if (isEqual) return Conflict(); //"Such name exists"
+            if (isEqual) return Conflict("Such name exists");
 
             var createdPerformer = await _accounts.CreateAccount(performerCreateDto, Roles.performer);
 
-            return Ok();
+            return Ok(createdPerformer);
         }
 
 
@@ -145,15 +147,15 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
+        public async Task<ActionResult<AccountDto>> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
         {
             var isEqual = await _accounts.CheckNameEquality(adminCreateDto.NickName);
 
-            if (isEqual) return Conflict(); //"Such name exists"
+            if (isEqual) return Conflict("Such name exists");
 
             var createdPerformer = await _accounts.CreateAccount(adminCreateDto, Roles.administratior);
 
-            return Ok();
+            return Ok(createdPerformer);
         }
 
 
@@ -161,20 +163,20 @@ namespace AuthorizationService.Controllers
         /// Обновить аккаунт
         /// </summary>
         /// <param name="id"> Идентификатор</param>
-        /// <param name="accountCreateDto"> Данные для обновления </param>
+        /// <param name="accounCreateDto"> Данные для обновления </param>
         /// <response code="404">Аккаунт не найден</response> 
         /// <response code="409">Аккаунт с таким именем уже существует</response>
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> UpdateAccount([Required] Guid id, [FromBody] AccountCreateDto accountCreateDto)
+        public async Task<ActionResult> UpdateAccount([Required] Guid id, [FromBody] AccountCreateDto accounCreateDto)
         {
-            var isEqual = await _accounts.CheckNameEquality(accountCreateDto.NickName);
+            var isEqual = await _accounts.CheckNameEquality(accounCreateDto.NickName);
 
-            if (isEqual) return Conflict(); //"Such name exists"`
+            if (isEqual) return Conflict("Such name exists");
 
-            var isUpdated = await _accounts.UpdateAccount(id, accountCreateDto);
+            var isUpdated = await _accounts.UpdateAccount(id, accounCreateDto);
 
             return isUpdated ? Ok() : NotFound();
         }
