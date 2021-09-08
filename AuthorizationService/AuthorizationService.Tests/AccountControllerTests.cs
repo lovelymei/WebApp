@@ -97,14 +97,14 @@ namespace AuthorizationService.Tests
             //Assert
             mockAccounts.Verify(c => c.GetAllAccountsDto(), Times.Once);
 
-            Assert.AreEqual(expected.Count, actual.Count);
+            Assert.AreEqual(expected.Count, actual.Value.Count);
 
             Assert.Multiple(() =>
             {
                 for (int i = 0; i < expected.Count; i++)
                 {
-                    Assert.AreEqual(expected[i].NickName, actual[i].NickName);
-                    Assert.AreEqual(expected[i].Role, actual[i].Role);
+                    Assert.AreEqual(expected[i].NickName, actual.Value[i].NickName);
+                    Assert.AreEqual(expected[i].Role, actual.Value[i].Role);
                 }
             });
         }

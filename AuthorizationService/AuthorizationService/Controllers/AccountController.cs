@@ -20,12 +20,10 @@ namespace AuthorizationService.Controllers
     [ProducesResponseType(StatusCodes.Status200OK)]
     public class AccountController : Controller
     {
-        private readonly AuthorizationDbContext _db;
         private readonly IAccounts _accounts;
 
-        public AccountController(IAccounts accounts, AuthorizationDbContext db)
+        public AccountController(IAccounts accounts)
         {
-            _db = db;
             _accounts = accounts;
         }
 
@@ -41,7 +39,7 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AccountDto>>> GetAllAccounts()
         {
-            var accounts = await _accounts.GetAllAccounts();
+            var accounts = await _accounts.GetAllAccountsDto();
 
             return Ok(accounts);
         }
@@ -74,7 +72,7 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AccountDto>> GetCurrentAccount([Required] Guid id)
         {
-            var account = await _accounts.GetAccount(id);
+            var account = await _accounts.GetCurrentAccount(id);
 
             if (account == null) return NotFound();
 
@@ -104,7 +102,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpPost("listener")]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<AccountDto>> RegisterListenerAccount([FromBody] AccountCreateDto listenerCreateDto)
+        public async Task<ActionResult> RegisterListenerAccount([FromBody] AccountCreateDto listenerCreateDto)
         {
             var isEqual = await _accounts.CheckNameEquality(listenerCreateDto.NickName);
 
@@ -114,7 +112,7 @@ namespace AuthorizationService.Controllers
             //В данном случае можно использовать автомаппер перенося пароль отдельно, но тогда это еще хуже и грязней 
             var createdListener = await _accounts.CreateAccount(listenerCreateDto, Roles.listener);
 
-            return Ok(createdListener);
+            return Ok();
         }
 
         /// <summary>
@@ -125,7 +123,7 @@ namespace AuthorizationService.Controllers
         /// <returns></returns>
         [HttpPost("performer")]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
-        public async Task<ActionResult<AccountDto>> RegisterPerformerAccount([FromBody] AccountCreateDto performerCreateDto)
+        public async Task<ActionResult> RegisterPerformerAccount([FromBody] AccountCreateDto performerCreateDto)
         {
             var isEqual = await _accounts.CheckNameEquality(performerCreateDto.NickName);
 
@@ -133,7 +131,7 @@ namespace AuthorizationService.Controllers
 
             var createdPerformer = await _accounts.CreateAccount(performerCreateDto, Roles.performer);
 
-            return Ok(createdPerformer);
+            return Ok();
         }
 
 
@@ -147,7 +145,7 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
         [AuthorizeEnum(Roles.administratior, Roles.superadministrator)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<AccountDto>> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
+        public async Task<ActionResult> RegisterAdminAccount([FromBody] AccountCreateDto adminCreateDto)
         {
             var isEqual = await _accounts.CheckNameEquality(adminCreateDto.NickName);
 
@@ -155,7 +153,7 @@ namespace AuthorizationService.Controllers
 
             var createdPerformer = await _accounts.CreateAccount(adminCreateDto, Roles.administratior);
 
-            return Ok(createdPerformer);
+            return Ok();
         }
 
 
