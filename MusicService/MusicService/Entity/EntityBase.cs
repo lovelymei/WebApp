@@ -10,9 +10,5 @@ namespace MusicService.Entity
         public Guid EntityId { get; set; }
         public bool IsDeleted { get; set; }
 
-        public EntityBase()
-        {
-            IsDeleted = false;
-        }
     }
 }

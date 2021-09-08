@@ -12,8 +12,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MusicService.Tests.TestsServices;
 
-namespace MusicService.Tests
+namespace MusicService.Tests.ControllerTests
 {
     public class ListenerControllerTests
     {
@@ -30,7 +31,7 @@ namespace MusicService.Tests
             var expected = new List<SongDto>() {new SongDto(song)};
             mockListener.Setup(c => c.GetAllListenerSongs(It.IsAny<Guid>())).ReturnsAsync(songs);
             var listenerController = new ListenerController(mockListener.Object);
-            listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            listenerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
             //Act
             var actual = await listenerController.GetAllListenerSongs();
@@ -52,7 +53,7 @@ namespace MusicService.Tests
             var expected = new List<AlbumDto>() {new AlbumDto(album)};
             mockListener.Setup(c => c.GetAllListenerAlbums(It.IsAny<Guid>())).ReturnsAsync(albums);
             var listenerController = new ListenerController(mockListener.Object);
-            listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            listenerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
             //Act
             var actual = await listenerController.GetAllListenerAlbums();
@@ -71,7 +72,7 @@ namespace MusicService.Tests
             var expected = new OkResult();
             mockPerformers.Setup(c => c.AttachSong(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
             var listenerController = new ListenerController(mockPerformers.Object);
-            listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            listenerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
             //Act
             var actual = await listenerController.AttachSongToListener(_songId) as OkResult;
@@ -92,7 +93,7 @@ namespace MusicService.Tests
             mockListeners.Setup(c => c.AttachAlbum(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
 
             var listenerController = new ListenerController(mockListeners.Object);
-            listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            listenerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
             //Act
             var actual = await listenerController.AttachAlbumToListener(_albumId) as OkResult;

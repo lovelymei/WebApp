@@ -13,9 +13,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using MusicService.Tests.TestsServices;
 
-
-namespace MusicService.Tests
+namespace MusicService.Tests.ControllerTests
 {
     public class PerformerControllerTests : ControllerBase
     {
@@ -34,7 +34,7 @@ namespace MusicService.Tests
             mockPerformers.Setup(c => c.GetAllPerformerSongs(It.IsAny<Guid>())).ReturnsAsync(songs);
 
             var performerController = new PerformerController(mockPerformers.Object);
-            performerController.ControllerContext.HttpContext = TestsService.SetHttpContext(); 
+            performerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext(); 
             
 
             //Act
@@ -61,7 +61,7 @@ namespace MusicService.Tests
             mockPerformers.Setup(c => c.GetAllPerformerAlbums(It.IsAny<Guid>())).ReturnsAsync(albums);
 
             var performerController = new PerformerController(mockPerformers.Object);
-            performerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            performerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
 
             //Act
@@ -85,7 +85,7 @@ namespace MusicService.Tests
             mockPerformers.Setup(c => c.AttachSong(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
 
             var performerController = new PerformerController(mockPerformers.Object);
-            performerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            performerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
             //Act
             var actual = await performerController.AttachSongToPerformer(_songId) as OkResult;
@@ -111,7 +111,7 @@ namespace MusicService.Tests
             mockPerformers.Setup(c => c.AttachAlbum(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
 
             var performerController = new PerformerController(mockPerformers.Object);
-            performerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
+            performerController.ControllerContext.HttpContext = TestsControllerService.SetHttpContext();
 
             //Act
             var actual = await performerController.AttachAlbumToPerformer(_albumId) as OkResult;

@@ -6,7 +6,7 @@ using MusicService.Services;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace MusicService.Tests
+namespace MusicService.Tests.ControllerTests
 {
     [TestFixture] //класс для тестов
     public class AlbumControllerTests
