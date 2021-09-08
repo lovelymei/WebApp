@@ -104,10 +104,10 @@ namespace AuthorizationService.Services
 
         }
 
-        public async Task<IEnumerable<RefreshTokenDto>> GetAllRefreshTokens(Guid accountId)
+        public async Task<IEnumerable<RefreshTokenDto>> GetAllAccountRefreshTokens(Guid accountId)
         {
             await Task.CompletedTask;
-            _logger.LogTrace($"using {nameof(GetAllRefreshTokens)} for id = {accountId}");
+            _logger.LogTrace($"using {nameof(GetAllAccountRefreshTokens)} for id = {accountId}");
 
             return _db.RefreshTokens
                 .Where(r => r.AccountId == accountId)

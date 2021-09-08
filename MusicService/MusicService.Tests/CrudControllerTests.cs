@@ -54,6 +54,7 @@ namespace MusicService.Tests
             mockStorage.Setup(c => c.GetAllEntitiesDto()).ReturnsAsync(entityBaseList);
 
             var actual = await crudController.GetAll();
+           
 
             mockStorage.Verify(c => c.GetAllEntitiesDto(), Times.Once);
 
@@ -131,8 +132,8 @@ namespace MusicService.Tests
             {
                 Assert.AreEqual(expected.StatusCode, actual.StatusCode);
             });
-
         }
+        
 
         [Test]
         public async Task Restore_Id_CodeResponse()

@@ -69,7 +69,7 @@
             Обновить аккаунт
             </summary>
             <param name="id"> Идентификатор</param>
-            <param name="accounCreateDto"> Данные для обновления </param>
+            <param name="accountCreateDto"> Данные для обновления </param>
             <response code="404">Аккаунт не найден</response> 
             <response code="409">Аккаунт с таким именем уже существует</response>
             <returns></returns>

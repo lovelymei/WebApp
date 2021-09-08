@@ -109,7 +109,7 @@ namespace AuthorizationService.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<RefreshToken[]>> GetAll(Guid accountId)
         {
-            var tokens = await _refreshTokens.GetAllRefreshTokens(accountId);
+            var tokens = await _refreshTokens.GetAllAccountRefreshTokens(accountId);
 
             return Ok(tokens);
         }

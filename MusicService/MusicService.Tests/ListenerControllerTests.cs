@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MusicService.Tests
 {
-
     public class ListenerControllerTests
     {
         private Guid _songId = Guid.NewGuid();
@@ -26,25 +25,20 @@ namespace MusicService.Tests
         {
             //Arrange;
             var mockListener = new Mock<IListeners>();
-
-            var song = new Song() { Title = "title", DurationMs = 20000 };
-            var songs = new List<SongDto>() { new SongDto(song) };
-            var expected = new List<SongDto>() { new SongDto(song) };
+            var song = new Song() {Title = "title", DurationMs = 20000};
+            var songs = new List<SongDto>() {new SongDto(song)};
+            var expected = new List<SongDto>() {new SongDto(song)};
             mockListener.Setup(c => c.GetAllListenerSongs(It.IsAny<Guid>())).ReturnsAsync(songs);
-
             var listenerController = new ListenerController(mockListener.Object);
             listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
-
 
             //Act
             var actual = await listenerController.GetAllListenerSongs();
 
             //Assert
             mockListener.Verify(c => c.GetAllListenerSongs(It.IsAny<Guid>()), Times.Once);
-
             Assert.Equal(expected[0].Title, actual.Value[0].Title);
             Assert.Equal(expected[0].DurationMs, actual.Value[0].DurationMs);
-
         }
 
 
@@ -53,25 +47,19 @@ namespace MusicService.Tests
         {
             //Arrange
             var mockListener = new Mock<IListeners>();
-
-            var album = new Album() { Name = "title" };
-            var albums = new List<AlbumDto>() { new AlbumDto(album) };
-            var expected = new List<AlbumDto>() { new AlbumDto(album) };
+            var album = new Album() {Name = "title"};
+            var albums = new List<AlbumDto>() {new AlbumDto(album)};
+            var expected = new List<AlbumDto>() {new AlbumDto(album)};
             mockListener.Setup(c => c.GetAllListenerAlbums(It.IsAny<Guid>())).ReturnsAsync(albums);
-
             var listenerController = new ListenerController(mockListener.Object);
             listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
-
 
             //Act
             var actual = await listenerController.GetAllListenerAlbums();
 
             //Assert
             mockListener.Verify(c => c.GetAllListenerAlbums(It.IsAny<Guid>()), Times.Once);
-
-
             Assert.Equal(expected[0].Name, actual.Value[0].Name);
-
         }
 
         [Fact]
@@ -79,11 +67,9 @@ namespace MusicService.Tests
         {
             //Arrange
             var mockPerformers = new Mock<IListeners>();
-
-            var song = new Song() { Title = "title", DurationMs = 20000 };
+            var song = new Song() {Title = "title", DurationMs = 20000};
             var expected = new OkResult();
             mockPerformers.Setup(c => c.AttachSong(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
-
             var listenerController = new ListenerController(mockPerformers.Object);
             listenerController.ControllerContext.HttpContext = TestsService.SetHttpContext();
 
@@ -92,12 +78,7 @@ namespace MusicService.Tests
 
             //Assert
             mockPerformers.Verify(c => c.AttachSong(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
-
-
             Assert.Equal(expected.StatusCode, actual.StatusCode);
-
-
-
         }
 
         [Fact]
@@ -106,7 +87,7 @@ namespace MusicService.Tests
             //Arrange
             var mockListeners = new Mock<IListeners>();
 
-            var album = new Album() { Name = "title" };
+            var album = new Album() {Name = "title"};
             var expected = new OkResult();
             mockListeners.Setup(c => c.AttachAlbum(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
 
@@ -121,8 +102,6 @@ namespace MusicService.Tests
 
 
             Assert.Equal(expected.StatusCode, actual.StatusCode);
-
         }
-
     }
 }

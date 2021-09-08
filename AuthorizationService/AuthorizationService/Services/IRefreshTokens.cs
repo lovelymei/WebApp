@@ -14,7 +14,7 @@ namespace AuthorizationService.Services
         Task<bool> DeleteRefreshToken(Guid id);
         Task<bool> DeleteRefreshTokensForAccount(Guid accountId);
         Task<IEnumerable<RefreshTokenDto>> GetAllRefreshTokens();
-        Task<IEnumerable<RefreshTokenDto>> GetAllRefreshTokens(Guid accountId);
+        Task<IEnumerable<RefreshTokenDto>> GetAllAccountRefreshTokens(Guid accountId);
         Task<RefreshToken> ReCreateRefreshToken(Guid previousRefreshId, int expiresSec);
     }
 }
