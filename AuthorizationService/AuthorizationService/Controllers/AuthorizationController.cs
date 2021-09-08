@@ -44,19 +44,19 @@ namespace AuthorizationService.Controllers
         /// <response code="401">Не верные логин/пароль</response>
         [HttpPost("signin")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<TokenDto>> CreateToken([FromBody] SignIn signIn)
+        public async Task<ActionResult> CreateToken([FromBody] SignIn signIn)
         {
             var account = await _accounts.Authenticate(signIn.Email, signIn.Password);
 
             if (account == null) return Unauthorized();
 
-            var expiresSec = int.Parse(_config["Jwt:ExpiresSec"]);
+            var expiresSec = int.Parse(_config["Jwt:ExpiresSec"]) + 1;
 
             var refresh = await _refreshTokens.CreateRefreshToken(account, 864000); 
 
             var token = await BuildToken(new AccountDtoForAuthorization(account), refresh.RefreshTokenId, expiresSec);
 
-            return Ok(token);
+            return Ok();
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace AuthorizationService.Controllers
         [HttpPost("refreshId={id}")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<TokenDto>> RefreshToken(Guid id)
+        public async Task<ActionResult> RefreshToken(Guid id)
         {
             var expiresSec = int.Parse(_config["Jwt:ExpiresSec"]);
             var newRefreshToken = await _refreshTokens.ReCreateRefreshToken(id, 864000); //TODO В конфиг
             if (newRefreshToken == null) return Unauthorized();
 
-            var account = await _accounts.GetAccount(newRefreshToken.AccountId);
+            var account = await _accounts.GetCurrentAccount(newRefreshToken.AccountId);
             if (account == null) return Forbid();
 
             var token = await BuildToken(new AccountDtoForAuthorization(account), newRefreshToken.RefreshTokenId, expiresSec);
-            return Ok(token);
+            return Ok();
         }
 
         /// <summary>
@@ -145,7 +145,6 @@ namespace AuthorizationService.Controllers
         private async Task<TokenDto> BuildToken(AccountDtoForAuthorization account, Guid refreshId, int expiresSec)
         {
             var expiresDt = GetCurrentDtFunc.Invoke().AddSeconds(expiresSec);
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, account.NickName),
@@ -162,9 +161,6 @@ namespace AuthorizationService.Controllers
                 claims,
                 expires: expiresDt,
                 signingCredentials: creds);
-
-
-
             return new TokenDto()
             {
                 Expires = expiresDt,

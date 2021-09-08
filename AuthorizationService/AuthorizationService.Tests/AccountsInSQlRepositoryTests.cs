@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AuthorizationService.Dto;
 using AuthorizationService.Models;
 using AuthorizationService.Services;
+using Moq;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -108,7 +110,7 @@ namespace AuthorizationService.Tests
             var expected = GetAccountsList();
 
             //act
-            var actualIEnumerable = await repository.GetAllAccounts();
+            var actualIEnumerable = await repository.GetAllAccountsDto();
 
             //assert
             List<AccountDto> actual = new List<AccountDto>();
@@ -142,7 +144,7 @@ namespace AuthorizationService.Tests
             var expectedInstance = expected[1];
 
 
-            var actual = await repository.GetAccount(_id2);
+            var actual = await repository.GetCurrentAccount(_id2);
 
 
             Assert.Multiple(() =>

@@ -61,10 +61,10 @@ namespace AuthorizationService.Services
         }
 
 
-        public async Task<IEnumerable<AccountDto>> GetAllAccounts()
+        public async Task<IEnumerable<AccountDto>> GetAllAccountsDto()
         {
             await Task.CompletedTask;
-            _logger.LogTrace($"using {nameof(GetAllAccounts)}");
+            _logger.LogTrace($"using {nameof(GetAllAccountsDto)}");
 
             return _db.Accounts
                 .Where(c => c.IsDeleted == false)
@@ -72,9 +72,9 @@ namespace AuthorizationService.Services
         }
 
 
-        public async Task<Account> GetAccount(Guid id)
+        public async Task<Account> GetCurrentAccount(Guid id)
         {
-            _logger.LogTrace($"using {nameof(GetAccount)}");
+            _logger.LogTrace($"using {nameof(GetCurrentAccount)}");
 
             var account = await _db.Accounts
                 .FirstOrDefaultAsync(c => c.EntityId == id && c.IsDeleted == false);
@@ -86,7 +86,7 @@ namespace AuthorizationService.Services
         {
             _logger.LogTrace($"using {nameof(CheckNameEquality)}");
 
-            var existAccounts = await GetAllAccounts();
+            var existAccounts = await GetAllAccountsDto();
             //если хоть один член списка, который удовлетворяет условию
             return existAccounts.Any(a => a.NickName == name);
         }
@@ -205,7 +205,7 @@ namespace AuthorizationService.Services
 
             var isValid = Convert.ToBase64String(enteredPassHash) == login.PasswordHash;
 
-            var account = await GetAccount(login.AccountId);
+            var account = await GetCurrentAccount(login.AccountId);
 
             return isValid ? account : null;
         }

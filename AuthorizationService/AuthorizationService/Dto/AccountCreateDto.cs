@@ -12,6 +12,8 @@ namespace AuthorizationService.Dto
         [Length(MinLen = 1, MaxLen = 100, ErrMes = "must be in range")]
         public string NickName { get; set; }
 
+
+
         /// <summary>
         /// почта
         /// </summary>
@@ -25,8 +27,6 @@ namespace AuthorizationService.Dto
         [Required]
         [Length(MinLen = 1, MaxLen = 100, ErrMes = "must be in range")]
         public string Password { get; set; }
-
-
 
     }
 }
