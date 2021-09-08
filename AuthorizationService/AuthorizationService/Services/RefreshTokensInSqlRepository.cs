@@ -1,5 +1,4 @@
 ﻿using AuthorizationService.Dto;
-using AuthorizationService.Extensions;
 using AuthorizationService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -114,5 +113,7 @@ namespace AuthorizationService.Services
                 .Where(r => r.AccountId == accountId)
                 .Select(r => new RefreshTokenDto(r));
         }
+        
+        
     }
 }
