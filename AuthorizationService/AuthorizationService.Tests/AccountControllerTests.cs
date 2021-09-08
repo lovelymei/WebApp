@@ -134,7 +134,6 @@ namespace AuthorizationService.Tests
             });
         }
 
-        //добавить второй тест, где аккаунт не найден
         [Test]
         public async Task GetCurrentAccount_ExistingId_AccountReceived()
         {
@@ -175,7 +174,7 @@ namespace AuthorizationService.Tests
             var actual = await accountController.GetCurrentAccount(_id2);
             
             //Assert
-            Assert.IsNull(actual);
+            Assert.IsNull(actual.Value);
         }
         
         [Test]
