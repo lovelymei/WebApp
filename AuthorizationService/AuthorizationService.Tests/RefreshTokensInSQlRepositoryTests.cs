@@ -175,10 +175,23 @@ namespace AuthorizationService.Tests
             FillDatabaseWithData(database);
             var mockLogger = new Mock<ILogger<RefreshTokensInSqlRepository>>();
             var repository = new RefreshTokensInSqlRepository(database, mockLogger.Object);
-            var expected = GetRefreshTokenList();
+
+            var actual = await repository.DeleteRefreshTokensForAccount(_id0);
             
+            Assert.IsTrue(actual);
+        }
+        
+        [Test]
+        public async Task DeleteRefreshTokenForAccount_NotExistingId_ReturnFalse()
+        {
+            var database = GetClearDataBase();
+            FillDatabaseWithData(database);
+            var mockLogger = new Mock<ILogger<RefreshTokensInSqlRepository>>();
+            var repository = new RefreshTokensInSqlRepository(database, mockLogger.Object);
+
+            var actual = await repository.DeleteRefreshTokensForAccount(_id1);
             
-            
+            Assert.IsFalse(actual);
         }
         
     }
