@@ -2,20 +2,16 @@
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MusicService.Tests
+
+namespace MusicService.Tests.TestsServices
 {
-    public static class TestsService
+    public static class TestsControllerService
     {
-        private static Guid _id = Guid.NewGuid();
-
         public static HttpContext SetHttpContext()
         {
-            var claims = new List<Claim>() { new Claim(ClaimTypes.PrimarySid, _id.ToString()) };
+            var claims = new List<Claim>() { new Claim(ClaimTypes.PrimarySid, Guid.NewGuid().ToString())};
 
             var mockUser = new Mock<ClaimsPrincipal>();
             var mockContext = new Mock<HttpContext>();
@@ -25,5 +21,6 @@ namespace MusicService.Tests
 
             return mockContext.Object;
         }
+
     }
 }

@@ -23,6 +23,11 @@ namespace MusicService.Models
         public Guid? PerformerId { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Performer Performer { get; set; }
+
+        /// <summary>
         /// Песни в альбоме
         /// </summary>
         public List<Song> Songs { get; set; }
@@ -32,7 +37,7 @@ namespace MusicService.Models
         /// </summary>
         public List<Listener> Listeners { get; set; }
 
-        public Album() : base()
+        public Album()
         {
             Listeners = new List<Listener>();
             Songs = new List<Song>();

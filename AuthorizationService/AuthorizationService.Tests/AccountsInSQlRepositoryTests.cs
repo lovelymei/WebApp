@@ -6,7 +6,8 @@ using AuthorizationService.Models;
 using AuthorizationService.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-N
+using Moq;
+using NUnit.Framework;
 
 namespace AuthorizationService.Tests
 {
@@ -73,6 +74,7 @@ namespace AuthorizationService.Tests
             //act
             var actualIEnumerable = await repository.GetAllAccounts();
             
+
             //assert
             List<AccountDto> actual = new List<AccountDto>();
             

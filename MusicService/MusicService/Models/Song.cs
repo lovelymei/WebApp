@@ -41,14 +41,14 @@ namespace MusicService.Models
         public Guid? PerformerId { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Performer Performer { get; set; }
+
+        /// <summary>
         /// Слушатели
         /// </summary>
         public List<Listener> Listeners { get; set; }
-
-        public Song()
-        {
-            IsDeleted = false;
-        }
 
     }
 }

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicService.Tests
+namespace MusicService.Tests.ControllerTests
 {
     [TestFixture]
     class SongControllerTests
